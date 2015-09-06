@@ -12,6 +12,7 @@ class (Strong p, Choice p) <= Wander p where
 ##### Instances
 ``` purescript
 instance wanderFunction :: Wander Function
+instance wanderStar :: (Applicative f) => Wander (Star f)
 ```
 
 
