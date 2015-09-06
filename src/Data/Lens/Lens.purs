@@ -4,6 +4,7 @@ module Data.Lens.Lens
   ( lens
   , lens'
   , view
+  , over
   ) where
     
 import Prelude
@@ -35,4 +36,8 @@ instance strongView :: Strong (View a) where
 
 -- | View the focus of a `Lens`.
 view :: forall s t a b. Lens s t a b -> s -> a
-view lens s = runView (lens (View id)) s
+view l s = runView (l (View id)) s
+
+-- | Apply a function to the focus.
+over :: forall s t a b. Lens s t a b -> (a -> b) -> s -> t
+over l = l
