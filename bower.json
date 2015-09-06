@@ -1,0 +1,19 @@
+{
+  "name": "purescript-profunctor-lenses",
+  "version": "1.0.0",
+  "moduleType": [
+    "node"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "output"
+  ],
+  "devDependencies": {
+    "purescript-console": "^0.1.0"
+  },
+  "dependencies": {
+    "purescript-profunctor": "~0.3.0"
+  }
+}
