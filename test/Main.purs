@@ -22,9 +22,9 @@ _Just = prism Just (maybe (Right Nothing) Left)
 type Foo a = { foo :: Maybe { bar :: Array a } }
 
 doc :: Foo String
-doc = { foo: Just { bar: [ "Hello", "World" ]} }
+doc = { foo: Just { bar: [ "Hello", " ", "World" ]} }
 
 bars :: forall a b. Traversal (Foo a) (Foo b) a b
 bars = foo <<< _Just <<< bar <<< traverse
 
-main = traverseOf bars log doc
+main = print $ viewAll bars id doc
