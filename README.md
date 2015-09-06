@@ -1,5 +1,10 @@
 # purescript-profunctor-lenses
 
-Pure profunctor lenses
+Pure profunctor lenses.
 
-![something something traversal complete](http://i.giphy.com/RIECDaCdxqKha.gif)
+- [Module Documentation](docs/Data/Lens.md)
+- [Example](test/Main.purs)
+
+## Usage
+
+    bower install purescript-profunctor-lenses

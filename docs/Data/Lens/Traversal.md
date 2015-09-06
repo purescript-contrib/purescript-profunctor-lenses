@@ -18,4 +18,12 @@ traverseOf :: forall f s t a b. (Applicative f) => Traversal s t a b -> (a -> f 
 
 Turn a pure profunctor `Traversal` into a `lens`-like `Traversal`.
 
+#### `over`
+
+``` purescript
+over :: forall s t a b. Traversal s t a b -> (a -> b) -> s -> t
+```
+
+Apply a function to the foci of a `Traversal`.
+
 
