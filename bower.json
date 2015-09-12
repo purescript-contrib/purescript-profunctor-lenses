@@ -10,15 +10,17 @@
     "bower_components",
     "output"
   ],
-  "repository": {                                              
-    "type": "git",                                             
+  "repository": {
+    "type": "git",
     "url": "git://github.com/paf31/purescript-profunctor-lenses.git"
-  },                                                            
+  },
   "devDependencies": {
     "purescript-console": "^0.1.0"
   },
   "dependencies": {
     "purescript-const": "~0.5.0",
-    "purescript-profunctor": "~0.3.0"
+    "purescript-identity": "~0.4.0",
+    "purescript-profunctor": "~0.3.0",
+    "purescript-lists": "~0.7.0"
   }
 }

@@ -5,13 +5,19 @@
 -- | - [`module Data.Lens.Prism`](Lens/Prism.md)
 -- | - [`module Data.Lens.Traversal`](Lens/Traversal.md)
 -- | - [`module Data.Lens.Types`](Lens/Types.md)
+-- | - [`module Data.Lens.Setter`](Lens/Setter.md)
+-- | - [`module Data.Lens.Getter`](Lens/Getter.md)
+-- | - [`module Data.Lens.Fold`](Lens/Fold.md)
 
-module Data.Lens 
+module Data.Lens
   ( module Data.Lens.Iso
   , module Data.Lens.Lens
   , module Data.Lens.Prism
   , module Data.Lens.Traversal
   , module Data.Lens.Types
+  , module Data.Lens.Setter
+  , module Data.Lens.Getter
+  , module Data.Lens.Fold
   ) where
 
 import Data.Lens.Iso
@@ -19,3 +25,6 @@ import Data.Lens.Lens
 import Data.Lens.Prism
 import Data.Lens.Traversal
 import Data.Lens.Types
+import Data.Lens.Setter
+import Data.Lens.Getter
+import Data.Lens.Fold
