@@ -3,8 +3,6 @@
 module Data.Lens.Traversal
   ( traverse
   , traverseOf
-  , over
-  , viewAll
   ) where
 
 import Prelude
