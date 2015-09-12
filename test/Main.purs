@@ -17,7 +17,7 @@ bar :: forall a b r. Lens { bar :: a | r } { bar :: b | r } a b
 bar = lens _.bar (_ { bar = _ })
 
 _Just :: forall a b r. Prism (Maybe a) (Maybe b) a b
-_Just = prism Just (maybe (Right Nothing) Left)
+_Just = prism Just (maybe (Left Nothing) Right)
 
 type Foo a = { foo :: Maybe { bar :: Array a } }
 
@@ -27,4 +27,4 @@ doc = { foo: Just { bar: [ "Hello", " ", "World" ]} }
 bars :: forall a b. Traversal (Foo a) (Foo b) a b
 bars = foo <<< _Just <<< bar <<< traverse
 
-main = print $ viewAll bars id doc
+main = print $ view bars doc
