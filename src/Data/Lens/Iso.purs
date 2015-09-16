@@ -23,7 +23,7 @@ withIso l f = case l (Exchange id id) of
 
 -- | Extracts an `Iso` from `AnIso`.
 cloneIso :: forall s t a b. AnIso s t a b -> Iso s t a b
-cloneIso l = withIso l dimap
+cloneIso l = withIso l \x y p -> iso x y p
 
 au :: forall s t a b e. AnIso s t a b -> ((b -> t) -> e -> s) -> e -> a
 au l = withIso l \sa bt f e -> sa (f bt e)
