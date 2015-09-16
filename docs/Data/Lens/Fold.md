@@ -86,4 +86,20 @@ hasn't :: forall s t a b r. (BooleanAlgebra r) => Fold (Conj r) s t a b -> s -> 
 
 Determines whether a `Fold` does not have a focus.
 
+#### `filtered`
+
+``` purescript
+filtered :: forall p a. (Choice p) => (a -> Boolean) -> OpticP p a a
+```
+
+Filters on a predicate.
+
+#### `replicated`
+
+``` purescript
+replicated :: forall r a b t f. (Applicative f, Contravariant f) => Int -> Optic (Star f) a b a t
+```
+
+Replicates the elements of a fold.
+
 

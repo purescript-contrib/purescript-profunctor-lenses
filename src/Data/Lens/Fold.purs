@@ -3,20 +3,29 @@
 module Data.Lens.Fold
   ( (^?), (^..)
   , preview, foldOf, foldMapOf, foldrOf, foldlOf, toListOf, has, hasn't
+  , replicated, filtered
   ) where
 
 import Prelude
 import Data.Const
 import Data.Maybe
 import Data.List
+import Data.Either
+import Data.Monoid
 import Data.Maybe.First
 import Data.Monoid.Endo
 import Data.Monoid.Conj
 import Data.Monoid.Disj
 import Data.Monoid.Dual
+import Data.Functor.Contravariant
+import Data.Foldable
+import Data.Profunctor
 import Data.Profunctor.Star
+import Data.Profunctor.Choice
 import Data.Lens.Types
 import Data.Lens.Internal.Tagged
+import Data.Lens.Internal.Void
+import Control.Apply
 
 infixl 8 ^?
 infixl 8 ^..
@@ -60,3 +69,21 @@ has p = runDisj <<< foldMapOf p (const (Disj top))
 -- | Determines whether a `Fold` does not have a focus.
 hasn't :: forall s t a b r. (BooleanAlgebra r) => Fold (Conj r) s t a b -> s -> r
 hasn't p = runConj <<< foldMapOf p (const (Conj bottom))
+
+-- | Filters on a predicate.
+filtered :: forall p a. (Choice p) => (a -> Boolean) -> OpticP p a a
+filtered f = dimap (\x -> if f x then Right x else Left x) (either id id) <<< right
+
+-- | Replicates the elements of a fold.
+replicated
+  :: forall r a b t f. (Applicative f, Contravariant f)
+  => Int -> Optic (Star f) a b a t
+replicated n p = Star (flip go n <<< runStar p) where
+  go x 0 = coerce (pure unit)
+  go x n = x *> go x (n - 1)
+
+-- | Folds over a `Foldable` container.
+folded
+  :: forall f g a b t r. (Applicative f, Contravariant f, Foldable g)
+  => Optic (Star f) (g a) b a t
+folded p = Star $ foldr (\a r -> runStar p a *> r) (coerce $ pure unit)
