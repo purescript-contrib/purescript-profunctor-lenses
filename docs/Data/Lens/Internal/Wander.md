@@ -5,7 +5,7 @@ This module defines the `Wander` type class, which is used to define `Traversal`
 #### `Wander`
 
 ``` purescript
-class (Strong p) <= Wander p where
+class (Strong p, Choice p) <= Wander p where
   wander :: forall f s t a b. (forall f. (Applicative f) => (a -> f b) -> s -> f t) -> p a b -> p s t
 ```
 
