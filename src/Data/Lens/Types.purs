@@ -15,6 +15,7 @@ import Data.Lens.Internal.Wander
 import Data.Lens.Internal.Tagged
 import Data.Lens.Internal.Exchange
 import Data.Lens.Internal.Market
+import Data.Lens.Internal.Shop
 
 -- | A general-purpose optic.
 type Optic p s t a b = p a b -> p s t
@@ -30,6 +31,9 @@ type AnIsoP s a = AnIso s s a a
 -- | A lens.
 type Lens s t a b = forall p. (Strong p) => Optic p s t a b
 type LensP s a = Lens s s a a
+
+type ALens s t a b = Optic (Shop a b) s t a b
+type ALensP s a = ALens s s a a
 
 -- | A prism.
 type Prism s t a b = forall p. (Choice p) => Optic p s t a b

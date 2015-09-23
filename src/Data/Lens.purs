@@ -8,6 +8,7 @@
 -- | - [`module Data.Lens.Setter`](Lens/Setter.md)
 -- | - [`module Data.Lens.Getter`](Lens/Getter.md)
 -- | - [`module Data.Lens.Fold`](Lens/Fold.md)
+-- | - [`module Data.Lens.Common`](Lens/Common.md)
 
 module Data.Lens
   ( module Data.Lens.Iso
@@ -18,6 +19,7 @@ module Data.Lens
   , module Data.Lens.Setter
   , module Data.Lens.Getter
   , module Data.Lens.Fold
+  , module Data.Lens.Common
   ) where
 
 import Data.Lens.Iso
@@ -28,3 +30,4 @@ import Data.Lens.Types
 import Data.Lens.Setter
 import Data.Lens.Getter
 import Data.Lens.Fold
+import Data.Lens.Common
