@@ -56,6 +56,18 @@ A lens.
 type LensP s a = Lens s s a a
 ```
 
+#### `ALens`
+
+``` purescript
+type ALens s t a b = Optic (Shop a b) s t a b
+```
+
+#### `ALensP`
+
+``` purescript
+type ALensP s a = ALens s s a a
+```
+
 #### `Prism`
 
 ``` purescript

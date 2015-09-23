@@ -37,9 +37,7 @@ only :: forall a. (Eq a) => a -> Prism a a Unit Unit
 only x = nearly x (== x)
 
 clonePrism :: forall s t a b. APrism s t a b -> Prism s t a b
-clonePrism l = withPrism l go where
-  -- the type checker doesn't like `prism` for `go`...
-  go to fro pab = dimap fro (either id id) (right (rmap to pab))
+clonePrism l = withPrism l \x y p -> prism x y p
 
 withPrism :: forall s t a b r. APrism s t a b -> ((b -> t) -> (s -> Either t a) -> r) -> r
 withPrism l f = case l (Market id Right) of
