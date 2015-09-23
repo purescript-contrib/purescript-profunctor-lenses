@@ -28,20 +28,20 @@ traversed = wander traverse
 traverseOf
   :: forall f s t a b. (Applicative f)
   => Optic (Star f) s t a b -> (a -> f b) -> s -> f t
-traverseOf t f = runStar (t (Star f))
+traverseOf t = runStar <<< t <<< Star
 
 -- | Sequence the foci of a `Traversal`, pulling out an `Applicative` effect.
 -- | If you do not need the result, see `sequenceOf_` for `Fold`s.
 sequenceOf
   :: forall f s t a. (Applicative f)
   => Optic (Star f) s t (f a) a -> s -> f t
-sequenceOf t = runStar $ wander id $ t (Star id)
+sequenceOf t = traverseOf t id
 
 -- | Tries to map over a `Traversal`; returns `empty`, if the traversal did
 -- | not have any new focus.
 failover
   :: forall f s t a b. (Alternative f)
   => Optic (Star (Tuple (Disj Boolean))) s t a b -> (a -> b) -> s -> f t
-failover t f s = case runStar (wander id $ t $ Star $ Tuple (Disj true) <<< f) s of
+failover t f s = case runStar (t $ Star $ Tuple (Disj true) <<< f) s of
   Tuple (Disj true) x  -> pure x
   Tuple (Disj false) _ -> empty
