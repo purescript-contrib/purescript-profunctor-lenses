@@ -102,6 +102,12 @@ type Traversal s t a b = forall p. (Wander p) => Optic p s t a b
 
 A traversal.
 
+#### `TraversalP`
+
+``` purescript
+type TraversalP s a = Traversal s s a a
+```
+
 #### `Getter`
 
 ``` purescript

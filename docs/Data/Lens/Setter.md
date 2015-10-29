@@ -41,7 +41,7 @@ Synonym for `set`.
 #### `(+~)`
 
 ``` purescript
-(+~) :: forall s t a a. (Semiring a) => Setter s t a a -> a -> s -> t
+(+~) :: forall s t a. (Semiring a) => Setter s t a a -> a -> s -> t
 ```
 
 _right-associative / precedence 4_
@@ -49,7 +49,7 @@ _right-associative / precedence 4_
 #### `(*~)`
 
 ``` purescript
-(*~) :: forall s t a a. (Semiring a) => Setter s t a a -> a -> s -> t
+(*~) :: forall s t a. (Semiring a) => Setter s t a a -> a -> s -> t
 ```
 
 _right-associative / precedence 4_
@@ -57,7 +57,7 @@ _right-associative / precedence 4_
 #### `(-~)`
 
 ``` purescript
-(-~) :: forall s t a a. (Ring a) => Setter s t a a -> a -> s -> t
+(-~) :: forall s t a. (Ring a) => Setter s t a a -> a -> s -> t
 ```
 
 _right-associative / precedence 4_
@@ -65,7 +65,7 @@ _right-associative / precedence 4_
 #### `(//~)`
 
 ``` purescript
-(//~) :: forall s t a a. (DivisionRing a) => Setter s t a a -> a -> s -> t
+(//~) :: forall s t a. (DivisionRing a) => Setter s t a a -> a -> s -> t
 ```
 
 _right-associative / precedence 4_
@@ -73,7 +73,7 @@ _right-associative / precedence 4_
 #### `(||~)`
 
 ``` purescript
-(||~) :: forall s t a a. (BooleanAlgebra a) => Setter s t a a -> a -> s -> t
+(||~) :: forall s t a. (BooleanAlgebra a) => Setter s t a a -> a -> s -> t
 ```
 
 _right-associative / precedence 4_
@@ -81,7 +81,7 @@ _right-associative / precedence 4_
 #### `(&&~)`
 
 ``` purescript
-(&&~) :: forall s t a a. (BooleanAlgebra a) => Setter s t a a -> a -> s -> t
+(&&~) :: forall s t a. (BooleanAlgebra a) => Setter s t a a -> a -> s -> t
 ```
 
 _right-associative / precedence 4_
@@ -89,7 +89,7 @@ _right-associative / precedence 4_
 #### `(<>~)`
 
 ``` purescript
-(<>~) :: forall s t a a. (Semigroup a) => Setter s t a a -> a -> s -> t
+(<>~) :: forall s t a. (Semigroup a) => Setter s t a a -> a -> s -> t
 ```
 
 _right-associative / precedence 4_
@@ -97,7 +97,7 @@ _right-associative / precedence 4_
 #### `(++~)`
 
 ``` purescript
-(++~) :: forall s t a a. (Semigroup a) => Setter s t a a -> a -> s -> t
+(++~) :: forall s t a. (Semigroup a) => Setter s t a a -> a -> s -> t
 ```
 
 _right-associative / precedence 4_

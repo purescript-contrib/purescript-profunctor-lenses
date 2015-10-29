@@ -218,7 +218,7 @@ Filters on a predicate.
 #### `replicated`
 
 ``` purescript
-replicated :: forall r a b t f. (Applicative f, Contravariant f) => Int -> Optic (Star f) a b a t
+replicated :: forall a b t f. (Applicative f, Contravariant f) => Int -> Optic (Star f) a b a t
 ```
 
 Replicates the elements of a fold.
