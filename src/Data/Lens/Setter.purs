@@ -39,28 +39,28 @@ set l b = over l (const b)
 (.~) :: forall s t a b. Setter s t a b -> b -> s -> t
 (.~) = set
 
-(+~) :: forall s t a a. (Semiring a) => Setter s t a a -> a -> s -> t
+(+~) :: forall s t a. (Semiring a) => Setter s t a a -> a -> s -> t
 (+~) p = over p <<< flip (+)
 
-(*~) :: forall s t a a. (Semiring a) => Setter s t a a -> a -> s -> t
+(*~) :: forall s t a. (Semiring a) => Setter s t a a -> a -> s -> t
 (*~) p = over p <<< flip (*)
 
-(-~) :: forall s t a a. (Ring a) => Setter s t a a -> a -> s -> t
+(-~) :: forall s t a. (Ring a) => Setter s t a a -> a -> s -> t
 (-~) p = over p <<< flip (-)
 
-(//~) :: forall s t a a. (DivisionRing a) => Setter s t a a -> a -> s -> t
+(//~) :: forall s t a. (DivisionRing a) => Setter s t a a -> a -> s -> t
 (//~) p = over p <<< flip (/)
 
-(||~) :: forall s t a a. (BooleanAlgebra a) => Setter s t a a -> a -> s -> t
+(||~) :: forall s t a. (BooleanAlgebra a) => Setter s t a a -> a -> s -> t
 (||~) p = over p <<< flip (||)
 
-(&&~) :: forall s t a a. (BooleanAlgebra a) => Setter s t a a -> a -> s -> t
+(&&~) :: forall s t a. (BooleanAlgebra a) => Setter s t a a -> a -> s -> t
 (&&~) p = over p <<< flip (&&)
 
-(<>~) :: forall s t a a. (Semigroup a) => Setter s t a a -> a -> s -> t
+(<>~) :: forall s t a. (Semigroup a) => Setter s t a a -> a -> s -> t
 (<>~) p = over p <<< flip (<>)
 
-(++~) :: forall s t a a. (Semigroup a) => Setter s t a a -> a -> s -> t
+(++~) :: forall s t a. (Semigroup a) => Setter s t a a -> a -> s -> t
 (++~) p = over p <<< flip (++)
 
 (?~) :: forall s t a b. Setter s t a (Maybe b) -> b -> s -> t

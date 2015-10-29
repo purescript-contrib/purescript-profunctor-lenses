@@ -144,7 +144,7 @@ filtered f = dimap (\x -> if f x then Right x else Left x) (either id id) <<< ri
 
 -- | Replicates the elements of a fold.
 replicated
-  :: forall r a b t f. (Applicative f, Contravariant f)
+  :: forall a b t f. (Applicative f, Contravariant f)
   => Int -> Optic (Star f) a b a t
 replicated n p = Star (flip go n <<< runStar p) where
   go x 0 = coerce (pure unit)
@@ -152,7 +152,7 @@ replicated n p = Star (flip go n <<< runStar p) where
 
 -- | Folds over a `Foldable` container.
 folded
-  :: forall f g a b t r. (Applicative f, Contravariant f, Foldable g)
+  :: forall f g a b t. (Applicative f, Contravariant f, Foldable g)
   => Optic (Star f) (g a) b a t
 folded p = Star $ foldr (\a r -> runStar p a *> r) (coerce $ pure unit)
 

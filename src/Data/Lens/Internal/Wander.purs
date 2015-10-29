@@ -12,7 +12,7 @@ import Data.Identity (Identity (..), runIdentity)
 -- | Class for profunctors that support polymorphic traversals.
 class (Strong p, Choice p) <= Wander p where
   wander
-    :: forall f s t a b. (forall f. (Applicative f) => (a -> f b) -> s -> f t)
+    :: forall s t a b. (forall f. (Applicative f) => (a -> f b) -> s -> f t)
     -> p a b -> p s t
 
 instance wanderFunction :: Wander Function where
