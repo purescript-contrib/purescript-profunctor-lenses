@@ -3,7 +3,7 @@
 #### `Index`
 
 ``` purescript
-class (IndexKey m a, IndexValue m b) <= Index m a b where
+class Index m a b where
   ix :: a -> TraversalP m b
 ```
 

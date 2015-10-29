@@ -13,11 +13,10 @@ import Data.StrMap as SM
 import Data.Array as A
 
 import Data.Traversable (traverse)
-import Data.Lens.Index.Class (IndexKey, IndexValue)
 import Data.Lens.Internal.Wander
 import Data.Lens.Types (TraversalP())
 
-class (IndexKey m a, IndexValue m b) <= Index m a b where
+class Index m a b where
   ix :: a -> TraversalP m b
 
 instance indexArr :: (Eq i) => Index (i -> a) i a where
