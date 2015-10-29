@@ -44,6 +44,7 @@ type APrismP s a = APrism s s a a
 
 -- | A traversal.
 type Traversal s t a b = forall p. (Wander p) => Optic p s t a b
+type TraversalP s a = Traversal s s a a
 
 -- | A getter.
 type Getter s t a b = Fold a s t a b
