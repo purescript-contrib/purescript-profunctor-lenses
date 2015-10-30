@@ -8,10 +8,10 @@ import Data.Lens.Iso.Product (_Product)
 import Data.Lens.Lens (Lens())
 import Data.Lens.Lens.Tuple as T
 
--- | Lens for the `left` of a `Product`.
+-- | Lens for the first component of a `Product`.
 _1 :: forall f g h a. Lens (Product f g a) (Product h g a) (f a) (h a)
 _1 = _Product <<< T._1
 
--- | Lens for the `right` of a `Product`.
+-- | Lens for the second component of a `Product`.
 _2 :: forall f g h a. Lens (Product f g a) (Product f h a) (g a) (h a)
 _2 = _Product <<< T._2
