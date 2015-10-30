@@ -3,13 +3,16 @@
 module Data.Lens.Getter
   ( (^.)
   , view, to
+  , module Data.Lens.Types
   ) where
 
-import Prelude
-import Data.Const
-import Data.Profunctor.Star
-import Data.Lens.Types
-import Data.Functor.Contravariant
+import Prelude ((<<<))
+
+import Data.Const (Const(..), getConst)
+import Data.Functor.Contravariant (Contravariant, cmap)
+import Data.Profunctor.Star (Star(..), runStar)
+
+import Data.Lens.Types (Getter(), Optic())
 
 infixl 8 ^.
 

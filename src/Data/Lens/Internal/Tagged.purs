@@ -2,9 +2,9 @@
 
 module Data.Lens.Internal.Tagged where
 
-import Data.Profunctor
-import Data.Profunctor.Choice
-import Data.Either
+import Data.Profunctor (Profunctor)
+import Data.Profunctor.Choice (Choice)
+import Data.Either (Either(..))
 
 newtype Tagged a b = Tagged b
 

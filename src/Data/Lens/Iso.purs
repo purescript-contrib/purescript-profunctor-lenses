@@ -2,15 +2,15 @@
 
 module Data.Lens.Iso
   ( iso, withIso, cloneIso, au, auf, under, curried, uncurried, flipped
+  , module Data.Lens.Types
   ) where
 
-import Prelude
+import Prelude ((<<<), flip, id)
 
-import Data.Tuple
-import Data.Lens.Types
-import Data.Lens.Internal.Exchange
-import Data.Profunctor
-import Data.Profunctor.Strong
+import Data.Profunctor (Profunctor, dimap, rmap)
+import Data.Tuple (Tuple(), curry, uncurry)
+
+import Data.Lens.Types (Iso(), IsoP(), AnIso(), AnIsoP(), Exchange(..))
 
 -- | Create an `Iso` from a pair of morphisms.
 iso :: forall s t a b. (s -> a) -> (b -> t) -> Iso s t a b

@@ -2,10 +2,11 @@
 
 module Data.Lens.Internal.Shop where
 
-import Prelude
-import Data.Tuple
-import Data.Profunctor
-import Data.Profunctor.Strong
+import Prelude ((<<<))
+
+import Data.Profunctor (Profunctor)
+import Data.Profunctor.Strong (Strong)
+import Data.Tuple (Tuple(..))
 
 -- | The `Shop` profunctor characterizes a `Lens`.
 data Shop a b s t = Shop (s -> a) (s -> b -> t)

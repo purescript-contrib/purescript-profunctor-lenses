@@ -1,23 +1,28 @@
--- | This module defines functions for working with lenses.
+-- | This module defines types for working with lenses.
 
-module Data.Lens.Types where
+module Data.Lens.Types
+  ( module Data.Lens.Types
+  , module Data.Lens.Internal.Exchange
+  , module Data.Lens.Internal.Market
+  , module Data.Lens.Internal.Shop
+  , module Data.Lens.Internal.Tagged
+  , module Data.Lens.Internal.Wander
+  ) where
 
-import Prelude
+import Data.Const (Const())
+import Data.Maybe.First (First())
+import Data.Profunctor (Profunctor)
+import Data.Profunctor.Choice (Choice)
+import Data.Profunctor.Star (Star())
+import Data.Profunctor.Strong (Strong)
 
-import Data.Profunctor
-import Data.Profunctor.Star
-import Data.Profunctor.Strong
-import Data.Profunctor.Choice
-import Data.Maybe.First
-import Data.Const
+import Data.Lens.Internal.Exchange (Exchange(..))
+import Data.Lens.Internal.Market (Market(..))
+import Data.Lens.Internal.Shop (Shop(..))
+import Data.Lens.Internal.Tagged (Tagged(..), unTagged)
+import Data.Lens.Internal.Wander (Wander, wander)
 
-import Data.Lens.Internal.Wander
-import Data.Lens.Internal.Tagged
-import Data.Lens.Internal.Exchange
-import Data.Lens.Internal.Market
-import Data.Lens.Internal.Shop
-
--- | A general-purpose optic.
+-- | A general-purpose Data.Lens.
 type Optic p s t a b = p a b -> p s t
 type OpticP p s a = Optic p s s a a
 

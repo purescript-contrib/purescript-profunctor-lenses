@@ -5,20 +5,21 @@ module Data.Lens.Traversal
   , traverseOf
   , sequenceOf
   , failover
+  , module ExportTypes
   ) where
 
-import Prelude
+import Prelude (Applicative, (<<<), ($), pure, id)
 
-import Data.Const
-import Data.Monoid
-import Data.Monoid.Disj
-import Data.Tuple
-import Data.Lens.Types
-import Data.Profunctor.Star
-import Control.Alternative
-import Control.Plus
+import Control.Alternative (Alternative)
+import Control.Plus (empty)
+
+import Data.Monoid.Disj (Disj(..))
+import Data.Profunctor.Star (Star(..), runStar)
 import Data.Traversable (Traversable, traverse)
-import Data.Lens.Internal.Wander (wander)
+import Data.Tuple (Tuple(..))
+
+import Data.Lens.Types (Traversal(), TraversalP()) as ExportTypes
+import Data.Lens.Types (Traversal(), Optic(), wander)
 
 -- | Create a `Traversal` which traverses the elements of a `Traversable` functor.
 traversed :: forall t a b. (Traversable t) => Traversal (t a) (t b) a b
@@ -37,7 +38,7 @@ sequenceOf
   => Optic (Star f) s t (f a) a -> s -> f t
 sequenceOf t = traverseOf t id
 
--- | Tries to map over a `Traversal`; returns `empty`, if the traversal did
+-- | Tries to map over a `Traversal`; returns `empty` if the traversal did
 -- | not have any new focus.
 failover
   :: forall f s t a b. (Alternative f)

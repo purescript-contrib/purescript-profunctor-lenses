@@ -2,9 +2,11 @@
 
 module Data.Lens.Internal.Void where
 
-import Prelude
-import Data.Functor.Contravariant
-import Unsafe.Coerce
+import Prelude (Functor, (<$>))
+
+import Data.Functor.Contravariant (Contravariant, (>$<))
+
+import Unsafe.Coerce (unsafeCoerce)
 
 data Void
 

@@ -5,15 +5,17 @@ module Data.Lens.Lens
   , lens'
   , withLens
   , cloneLens
+  , module Data.Lens.Types
   ) where
 
-import Prelude
+import Prelude (id)
 
-import Data.Tuple
-import Data.Lens.Types
-import Data.Lens.Internal.Shop
-import Data.Profunctor
-import Data.Profunctor.Strong
+import Data.Profunctor (dimap)
+import Data.Profunctor.Strong (first)
+import Data.Tuple (Tuple(..))
+
+import Data.Lens.Internal.Shop (Shop(..))
+import Data.Lens.Types (Lens(), LensP(), ALens(), ALensP())
 
 lens' :: forall s t a b. (s -> Tuple a (b -> t)) -> Lens s t a b
 lens' to pab = dimap to (\(Tuple b f) -> f b) (first pab)
