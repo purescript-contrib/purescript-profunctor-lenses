@@ -1,16 +1,15 @@
 -- | This module defines common lenses and prisms.
 
 module Data.Lens.Common where
---------------------------------------------------------------------------------
-import Prelude
-import Data.Maybe
-import Data.Either
-import Data.Tuple
-import Data.Lens.Types
-import Data.Lens.Prism
-import Data.Lens.Lens
-import Data.Lens.Internal.Void
---------------------------------------------------------------------------------
+
+import Prelude (Unit(), unit, const, ($), (<<<))
+
+import Data.Either (Either(..), either)
+import Data.Lens.Internal.Void (Void(), absurd)
+import Data.Lens.Lens (Lens(), LensP(), lens)
+import Data.Lens.Prism (Prism(), prism)
+import Data.Maybe (Maybe(..), maybe)
+import Data.Tuple (Tuple(..))
 
 -- | Prism for the `Nothing` constructor of `Maybe`.
 _Nothing :: forall a b. Prism (Maybe a) (Maybe b) Unit Unit

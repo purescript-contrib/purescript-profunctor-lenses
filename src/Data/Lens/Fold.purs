@@ -1,36 +1,39 @@
--- | This module defines functions for working with getters.
+-- | This module defines functions for working with folds.
 
 module Data.Lens.Fold
   ( (^?), (^..)
   , preview, foldOf, foldMapOf, foldrOf, foldlOf, toListOf, firstOf, lastOf
   , maximumOf, minimumOf, allOf, anyOf, andOf, orOf, elemOf, notElemOf, sumOf
   , productOf, lengthOf, findOf, sequenceOf_, has, hasn't, replicated, filtered
+  , module ExportTypes
   ) where
 
 import Prelude
-import Data.Const
-import Data.Maybe
-import Data.List
-import Data.Either
-import Data.Tuple
-import Data.Monoid
-import Data.Maybe.First
-import Data.Maybe.Last
-import Data.Monoid.Endo
-import Data.Monoid.Conj
-import Data.Monoid.Disj
-import Data.Monoid.Dual
-import Data.Monoid.Additive
-import Data.Monoid.Multiplicative
-import Data.Functor.Contravariant
-import Data.Foldable
-import Data.Profunctor
-import Data.Profunctor.Star
-import Data.Profunctor.Choice
-import Data.Lens.Types
-import Data.Lens.Internal.Tagged
-import Data.Lens.Internal.Void
-import Control.Apply
+
+import Control.Apply ((*>))
+
+import Data.Const (Const(..), getConst)
+import Data.Either (Either(..), either)
+import Data.Foldable (Foldable, foldr)
+import Data.Functor.Contravariant (Contravariant)
+import Data.List (List(..), (:))
+import Data.Maybe (Maybe(..), maybe)
+import Data.Maybe.First (First(..), runFirst)
+import Data.Maybe.Last (Last(..), runLast)
+import Data.Monoid.Additive (Additive(..), runAdditive)
+import Data.Monoid.Conj (Conj(..), runConj)
+import Data.Monoid.Disj (Disj(..), runDisj)
+import Data.Monoid.Dual (Dual(..), runDual)
+import Data.Monoid.Endo (Endo(..), runEndo)
+import Data.Monoid.Multiplicative (Multiplicative(..), runMultiplicative)
+import Data.Profunctor (dimap)
+import Data.Profunctor.Choice (Choice, right)
+import Data.Profunctor.Star (Star(..), runStar)
+import Data.Tuple (Tuple(..))
+
+import Data.Lens.Internal.Void (Void(), coerce)
+import Data.Lens.Types (Fold(), FoldP()) as ExportTypes
+import Data.Lens.Types (Optic(), OpticP(), Fold(), FoldP())
 
 infixl 8 ^?
 infixl 8 ^..

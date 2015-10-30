@@ -1,23 +1,22 @@
--- | This module defines functions for working with lenses.
+-- | This module defines functions for working with prisms.
 
 module Data.Lens.Prism
   ( prism, prism', review, nearly, only, clonePrism, withPrism, matching
   , is, isn't
+  , module ExportTypes
   ) where
 
 import Prelude
 
-import Data.Either
-import Data.Profunctor.Star
-import Data.Const
-import Data.Maybe
-import Data.Maybe.First
-import Data.Lens.Types
-import Data.Lens.Internal.Tagged
-import Data.Lens.Internal.Market
-import Control.MonadPlus
+import Control.MonadPlus (MonadPlus, guard)
+
+import Data.Either (Either(..), either)
+import Data.Maybe (Maybe(), maybe)
 import Data.Profunctor (dimap, rmap)
-import Data.Profunctor.Choice
+import Data.Profunctor.Choice (right)
+
+import Data.Lens.Types (Prism(), PrismP(), APrism(), APrismP(), Review(), ReviewP()) as ExportTypes
+import Data.Lens.Types (Prism(), PrismP(), APrism(), APrismP(), Market(..), Review(), Tagged(..), unTagged)
 
 -- | Create a `Prism` from a constructor/pattern pair.
 prism :: forall s t a b. (b -> t) -> (s -> Either t a) -> Prism s t a b
