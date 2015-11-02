@@ -31,9 +31,9 @@ import Data.Profunctor.Choice (Choice, right)
 import Data.Profunctor.Star (Star(..), runStar)
 import Data.Tuple (Tuple(..))
 
-import Data.Lens.Internal.Void (Void(), coerce)
+import Data.Lens.Internal.Void (coerce)
 import Data.Lens.Types (Fold(), FoldP()) as ExportTypes
-import Data.Lens.Types (Optic(), OpticP(), Fold(), FoldP())
+import Data.Lens.Types (Optic(), OpticP(), Fold())
 
 infixl 8 ^?
 infixl 8 ^..

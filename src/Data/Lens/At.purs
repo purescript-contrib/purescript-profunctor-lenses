@@ -10,7 +10,6 @@ import Data.Map as M
 import Data.Maybe (Maybe(..), maybe)
 import Data.Set as S
 import Data.StrMap as SM
-import Data.Tuple
 
 import Data.Lens (LensP(), lens)
 import Data.Lens.Index (Index)

@@ -10,7 +10,6 @@ module Data.Lens.Types
   ) where
 
 import Data.Const (Const())
-import Data.Maybe.First (First())
 import Data.Profunctor (Profunctor)
 import Data.Profunctor.Choice (Choice)
 import Data.Profunctor.Star (Star())

@@ -16,7 +16,7 @@ import Data.Profunctor (dimap, rmap)
 import Data.Profunctor.Choice (right)
 
 import Data.Lens.Types (Prism(), PrismP(), APrism(), APrismP(), Review(), ReviewP()) as ExportTypes
-import Data.Lens.Types (Prism(), PrismP(), APrism(), APrismP(), Market(..), Review(), Tagged(..), unTagged)
+import Data.Lens.Types (Prism(), PrismP(), APrism(), Market(..), Review(), Tagged(..), unTagged)
 
 -- | Create a `Prism` from a constructor/pattern pair.
 prism :: forall s t a b. (b -> t) -> (s -> Either t a) -> Prism s t a b
