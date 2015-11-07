@@ -1,15 +1,19 @@
-module Data.Lens.Prism.Either where
+module Data.Lens.Prism.Either
+  ( _Left
+  , _Right
+  , module Data.Profunctor.Choice
+  ) where
 
 import Prelude
 
-import Data.Either (Either(..), either)
-
+import Data.Either (Either(..))
 import Data.Lens.Prism (Prism(), prism)
+import Data.Profunctor.Choice (left, right)
 
 -- | Prism for the `Left` constructor of `Either`.
 _Left :: forall a b c. Prism (Either a c) (Either b c) a b
-_Left = prism Left $ either Right (Left <<< Right)
+_Left = left
 
 -- | Prism for the `Right` constructor of `Either`.
 _Right :: forall a b c. Prism (Either c a) (Either c b) a b
-_Right = prism Right $ either (Left <<< Left) Right
+_Right = right
