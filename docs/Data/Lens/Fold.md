@@ -1,6 +1,6 @@
 ## Module Data.Lens.Fold
 
-This module defines functions for working with getters.
+This module defines functions for working with folds.
 
 #### `preview`
 

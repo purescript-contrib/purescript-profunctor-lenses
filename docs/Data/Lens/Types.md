@@ -1,6 +1,6 @@
 ## Module Data.Lens.Types
 
-This module defines functions for working with lenses.
+This module defines types for working with lenses.
 
 #### `Optic`
 
@@ -8,7 +8,7 @@ This module defines functions for working with lenses.
 type Optic p s t a b = p a b -> p s t
 ```
 
-A general-purpose optic.
+A general-purpose Data.Lens.
 
 #### `OpticP`
 

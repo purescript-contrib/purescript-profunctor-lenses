@@ -33,7 +33,7 @@ If you do not need the result, see `sequenceOf_` for `Fold`s.
 failover :: forall f s t a b. (Alternative f) => Optic (Star (Tuple (Disj Boolean))) s t a b -> (a -> b) -> s -> f t
 ```
 
-Tries to map over a `Traversal`; returns `empty`, if the traversal did
+Tries to map over a `Traversal`; returns `empty` if the traversal did
 not have any new focus.
 
 
