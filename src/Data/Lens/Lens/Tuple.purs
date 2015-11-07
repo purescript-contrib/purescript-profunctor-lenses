@@ -1,4 +1,8 @@
-module Data.Lens.Lens.Tuple where
+module Data.Lens.Lens.Tuple 
+  ( _1
+  , _2
+  , module Data.Profunctor.Strong
+  ) where
 
 import Data.Tuple (Tuple())
 import Data.Lens.Lens (Lens())

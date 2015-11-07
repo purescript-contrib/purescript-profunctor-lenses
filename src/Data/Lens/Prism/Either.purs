@@ -1,4 +1,8 @@
-module Data.Lens.Prism.Either where
+module Data.Lens.Prism.Either
+  ( _Left
+  , _Right
+  , module Data.Profunctor.Choice
+  ) where
 
 import Prelude
 
