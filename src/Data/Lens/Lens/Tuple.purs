@@ -1,4 +1,4 @@
-module Data.Lens.Lens.Tuple 
+module Data.Lens.Lens.Tuple
   ( _1
   , _2
   , module Data.Profunctor.Strong

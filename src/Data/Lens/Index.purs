@@ -5,9 +5,9 @@ module Data.Lens.Index
 
 import Prelude
 
-import Data.Identity (Identity(..))
+import Data.Identity (Identity())
 import Data.Map as M
-import Data.Maybe (maybe, fromMaybe, Maybe(..))
+import Data.Maybe (Maybe(), maybe, fromMaybe)
 import Data.Set as S
 import Data.StrMap as SM
 import Data.Array as A
