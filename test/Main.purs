@@ -6,6 +6,7 @@ import Data.Maybe
 import Data.Lens
 import Data.Traversable (Traversable)
 
+import Control.Monad.Eff (Eff())
 import Control.Monad.Eff.Console
 
 foo :: forall a b r. Lens { foo :: a | r } { foo :: b | r } a b
