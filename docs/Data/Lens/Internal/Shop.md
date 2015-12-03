@@ -13,8 +13,8 @@ The `Shop` profunctor characterizes a `Lens`.
 
 ##### Instances
 ``` purescript
-instance profunctorShop :: Profunctor (Shop a b)
-instance strongShop :: Strong (Shop a b)
+Profunctor (Shop a b)
+Strong (Shop a b)
 ```
 
 

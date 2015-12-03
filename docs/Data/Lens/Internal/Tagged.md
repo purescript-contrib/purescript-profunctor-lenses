@@ -11,8 +11,8 @@ newtype Tagged a b
 
 ##### Instances
 ``` purescript
-instance taggedProfunctor :: Profunctor Tagged
-instance taggedChoice :: Choice Tagged
+Profunctor Tagged
+Choice Tagged
 ```
 
 #### `unTagged`

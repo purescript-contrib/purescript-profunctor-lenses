@@ -3,11 +3,10 @@ module Test.Main where
 import Prelude
 
 import Data.Maybe
-import Data.Either
 import Data.Lens
-import Data.Tuple
 import Data.Traversable (Traversable)
 
+import Control.Monad.Eff (Eff())
 import Control.Monad.Eff.Console
 
 foo :: forall a b r. Lens { foo :: a | r } { foo :: b | r } a b
@@ -24,4 +23,5 @@ doc = { foo: Just { bar: [ "Hello", " ", "World" ]} }
 bars :: forall a b. Traversal (Foo a) (Foo b) a b
 bars = foo <<< _Just <<< bar <<< traversed
 
+main :: Eff (console :: CONSOLE) Unit
 main = print $ view bars doc

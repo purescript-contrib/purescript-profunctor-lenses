@@ -9,13 +9,13 @@ class Index m a b where
 
 ##### Instances
 ``` purescript
-instance indexArr :: (Eq i) => Index (i -> a) i a
-instance indexMaybe :: Index (Maybe a) Unit a
-instance indexIdentity :: Index (Identity a) Unit a
-instance indexArray :: Index (Array a) Int a
-instance indexSet :: (Ord a) => Index (Set a) a Unit
-instance indexMap :: (Ord k) => Index (Map k v) k v
-instance indexStrMap :: Index (StrMap v) String v
+(Eq i) => Index (i -> a) i a
+Index (Maybe a) Unit a
+Index (Identity a) Unit a
+Index (Array a) Int a
+(Ord a) => Index (Set a) a Unit
+(Ord k) => Index (Map k v) k v
+Index (StrMap v) String v
 ```
 
 

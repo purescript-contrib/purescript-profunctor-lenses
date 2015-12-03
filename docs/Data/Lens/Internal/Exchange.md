@@ -13,8 +13,8 @@ The `Exchange` profunctor characterizes an `Iso`.
 
 ##### Instances
 ``` purescript
-instance functorExchange :: Functor (Exchange a b s)
-instance profunctorExchange :: Profunctor (Exchange a b)
+Functor (Exchange a b s)
+Profunctor (Exchange a b)
 ```
 
 
