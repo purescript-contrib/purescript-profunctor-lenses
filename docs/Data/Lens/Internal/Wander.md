@@ -13,8 +13,8 @@ Class for profunctors that support polymorphic traversals.
 
 ##### Instances
 ``` purescript
-instance wanderFunction :: Wander Function
-instance wanderStar :: (Applicative f) => Wander (Star f)
+Wander Function
+(Applicative f) => Wander (Star f)
 ```
 
 

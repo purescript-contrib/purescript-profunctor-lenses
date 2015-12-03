@@ -9,11 +9,11 @@ class (Index m a b) <= At m a b where
 
 ##### Instances
 ``` purescript
-instance atIdentity :: At (Identity a) Unit a
-instance atMaybe :: At (Maybe a) Unit a
-instance atSet :: (Ord v) => At (Set v) v Unit
-instance atMap :: (Ord k) => At (Map k v) k v
-instance atStrMap :: At (StrMap v) String v
+At (Identity a) Unit a
+At (Maybe a) Unit a
+(Ord v) => At (Set v) v Unit
+(Ord k) => At (Map k v) k v
+At (StrMap v) String v
 ```
 
 
