@@ -6,20 +6,21 @@ module Data.Lens.Getter
   , module Data.Lens.Types
   ) where
 
-import Prelude ((<<<))
+import Prelude (id, (<<<))
 
 import Data.Const (Const(..), getConst)
 import Data.Functor.Contravariant (Contravariant, cmap)
 import Data.Profunctor.Star (Star(..), runStar)
 import Control.Monad.State.Class (MonadState, gets)
 
+import Data.Lens.Internal.Forget (Forget (..), runForget)
 import Data.Lens.Types (Getter(), Optic())
 
 infixl 8 ^.
 
 -- | View the focus of a `Getter`.
 view :: forall s t a b. Getter s t a b -> s -> a
-view l s = getConst (runStar (l (Star Const)) s)
+view l = runForget (l (Forget id))
 
 -- | Synonym for `view`, flipped.
 (^.) :: forall s t a b. s -> Getter s t a b -> a

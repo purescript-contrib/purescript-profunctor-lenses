@@ -12,7 +12,6 @@ import Prelude
 
 import Control.Apply ((*>))
 
-import Data.Const (Const(..), getConst)
 import Data.Either (Either(..), either)
 import Data.Foldable (Foldable, foldr)
 import Data.Functor.Contravariant (Contravariant)
@@ -32,6 +31,7 @@ import Data.Profunctor.Star (Star(..), runStar)
 import Data.Tuple (Tuple(..))
 
 import Data.Lens.Internal.Void (coerce)
+import Data.Lens.Internal.Forget (Forget (..), runForget)
 import Data.Lens.Types (Fold(), FoldP()) as ExportTypes
 import Data.Lens.Types (Optic(), OpticP(), Fold())
 
@@ -48,11 +48,11 @@ preview p = runFirst <<< foldMapOf p (First <<< Just)
 
 -- | Folds all foci of a `Fold` to one. Note that this is the same as `view`.
 foldOf :: forall s t a b. Fold a s t a b -> s -> a
-foldOf p = getConst <<< runStar (p (Star Const))
+foldOf p = runForget (p (Forget id))
 
 -- | Maps and then folds all foci of a `Fold`.
 foldMapOf :: forall s t a b r. Fold r s t a b -> (a -> r) -> s -> r
-foldMapOf p f = getConst <<< runStar (p (Star (Const <<< f)))
+foldMapOf p f = runForget (p (Forget f))
 
 -- | Right fold over a `Fold`.
 foldrOf :: forall s t a b r. Fold (Endo r) s t a b -> (a -> r -> r) -> r -> s -> r
