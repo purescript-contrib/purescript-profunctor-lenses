@@ -6,7 +6,9 @@ module Data.Lens.Types
   , module Data.Lens.Internal.Market
   , module Data.Lens.Internal.Shop
   , module Data.Lens.Internal.Tagged
+  , module Data.Lens.Internal.Forget
   , module Data.Lens.Internal.Wander
+  , module Data.Lens.Internal.Re
   ) where
 
 import Data.Const (Const())
@@ -14,12 +16,15 @@ import Data.Profunctor (Profunctor)
 import Data.Profunctor.Choice (Choice)
 import Data.Profunctor.Star (Star())
 import Data.Profunctor.Strong (Strong)
+import Data.Profunctor.Closed (Closed)
 
 import Data.Lens.Internal.Exchange (Exchange(..))
 import Data.Lens.Internal.Market (Market(..))
 import Data.Lens.Internal.Shop (Shop(..))
 import Data.Lens.Internal.Tagged (Tagged(..), unTagged)
+import Data.Lens.Internal.Forget (Forget(..), runForget)
 import Data.Lens.Internal.Wander (Wander, wander)
+import Data.Lens.Internal.Re (Re(..), runRe)
 
 -- | A general-purpose Data.Lens.
 type Optic p s t a b = p a b -> p s t
@@ -63,5 +68,5 @@ type Review s t a b = Optic Tagged s t a b
 type ReviewP s a = Review s s a a
 
 -- | A fold.
-type Fold r s t a b = Optic (Star (Const r)) s t a b
+type Fold r s t a b = Optic (Forget r) s t a b
 type FoldP r s a = Fold r s s a a

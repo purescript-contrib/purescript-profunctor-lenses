@@ -1,7 +1,7 @@
 -- | This module defines functions for working with isomorphisms.
 
 module Data.Lens.Iso
-  ( iso, withIso, cloneIso, au, auf, under, curried, uncurried, flipped
+  ( iso, withIso, cloneIso, re, au, auf, under, curried, uncurried, flipped
   , module Data.Lens.Types
   ) where
 
@@ -10,7 +10,7 @@ import Prelude ((<<<), flip, id)
 import Data.Profunctor (Profunctor, dimap, rmap)
 import Data.Tuple (Tuple(), curry, uncurry)
 
-import Data.Lens.Types (Iso(), IsoP(), AnIso(), AnIsoP(), Exchange(..))
+import Data.Lens.Types (Iso(), IsoP(), AnIso(), AnIsoP(), Optic(), Exchange(..), Re(..), runRe)
 
 -- | Create an `Iso` from a pair of morphisms.
 iso :: forall s t a b. (s -> a) -> (b -> t) -> Iso s t a b
@@ -24,6 +24,10 @@ withIso l f = case l (Exchange id id) of
 -- | Extracts an `Iso` from `AnIso`.
 cloneIso :: forall s t a b. AnIso s t a b -> Iso s t a b
 cloneIso l = withIso l \x y p -> iso x y p
+
+-- | Reverses an optic.
+re :: forall p s t a b. Optic (Re p a b) s t a b -> Optic p b a t s
+re t = runRe (t (Re id))
 
 au :: forall s t a b e. AnIso s t a b -> ((b -> t) -> e -> s) -> e -> a
 au l = withIso l \sa bt f e -> sa (f bt e)

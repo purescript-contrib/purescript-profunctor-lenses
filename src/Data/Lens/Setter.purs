@@ -2,12 +2,14 @@
 
 module Data.Lens.Setter
   ( (%~), (.~), (+~), (-~), (*~), (//~), (||~), (&&~), (<>~), (++~), (?~)
+  , (.=), (%=), (+=), (*=), (-=), (//=), (||=), (&&=), (<>=), (++=), (?=)
   , over, set
   , module Data.Lens.Types
   ) where
 
 import Prelude
 
+import Control.Monad.State.Class (MonadState, modify)
 import Data.Maybe (Maybe(..))
 
 import Data.Lens.Types (Setter(), SetterP())
@@ -23,6 +25,18 @@ infixr 4 &&~
 infixr 4 <>~
 infixr 4 ++~
 infixr 4 ?~
+
+infix 4 .=
+infix 4 %=
+infix 4 +=
+infix 4 *=
+infix 4 -=
+infix 4 //=
+infix 4 ||=
+infix 4 &&=
+infix 4 <>=
+infix 4 ++=
+infix 4 ?=
 
 -- | Apply a function to the foci of a `Setter`.
 over :: forall s t a b. Setter s t a b -> (a -> b) -> s -> t
@@ -66,3 +80,48 @@ set l b = over l (const b)
 
 (?~) :: forall s t a b. Setter s t a (Maybe b) -> b -> s -> t
 (?~) p = set p <<< Just
+
+-- Stateful
+
+-- | Set the foci of a `Setter` in a monadic state to a constant value.
+assign :: forall s a b m. (MonadState s m) => Setter s s a b -> b -> m Unit
+assign p b = modify (set p b)
+
+-- | Modify the foci of a `Setter` in a monadic state.
+modifying :: forall s a b m. (MonadState s m) => Setter s s a b -> (a -> b) -> m Unit
+modifying p f = modify (over p f)
+
+-- | Synonym for `assign`
+(.=) :: forall s a b m. (MonadState s m) => Setter s s a b -> b -> m Unit
+(.=) = assign
+
+-- | Synonym for `modifying`
+(%=) :: forall s a b m. (MonadState s m) => Setter s s a b -> (a -> b) -> m Unit
+(%=) = modifying
+
+(+=) :: forall s a m. (MonadState s m, Semiring a) => SetterP s a -> a -> m Unit
+(+=) p = modifying p <<< add
+
+(*=) :: forall s a m. (MonadState s m, Semiring a) => SetterP s a -> a -> m Unit
+(*=) p = modifying p <<< flip mul
+
+(-=) :: forall s a m. (MonadState s m, Ring a) => SetterP s a -> a -> m Unit
+(-=) p = modifying p <<< flip sub
+
+(//=) :: forall s a m. (MonadState s m, DivisionRing a) => SetterP s a -> a -> m Unit
+(//=) p = modifying p <<< flip div
+
+(||=) :: forall s a m. (MonadState s m, BooleanAlgebra a) => SetterP s a -> a -> m Unit
+(||=) p = modifying p <<< flip disj
+
+(&&=) :: forall s a m. (MonadState s m, BooleanAlgebra a) => SetterP s a -> a -> m Unit
+(&&=) p = modifying p <<< flip conj
+
+(<>=) :: forall s a m. (MonadState s m, Semigroup a) => SetterP s a -> a -> m Unit
+(<>=) p = modifying p <<< flip append
+
+(++=) :: forall s a m. (MonadState s m, Semigroup a) => SetterP s a -> a -> m Unit
+(++=) p = modifying p <<< flip append
+
+(?=) :: forall s a b m. (MonadState s m) => Setter s s a (Maybe b) -> b -> m Unit
+(?=) p = assign p <<< Just
