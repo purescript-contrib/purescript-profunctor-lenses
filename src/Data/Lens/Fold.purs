@@ -114,7 +114,7 @@ maximumOf p = foldrOf p (\a -> Just <<< maybe a (max a)) Nothing where
 -- | The minimum of all foci of a `Fold`, if there is any.
 minimumOf :: forall s t a b. (Ord a) => Fold (Endo (Maybe a)) s t a b -> s -> Maybe a
 minimumOf p = foldrOf p (\a -> Just <<< maybe a (min a)) Nothing where
-  min a b = if a > b then a else b
+  min a b = if a < b then a else b
 
 -- | Find the first focus of a `Fold` that satisfies a predicate, if there is any.
 findOf :: forall s t a b. Fold (Endo (Maybe a)) s t a b -> (a -> Boolean) -> s -> Maybe a
