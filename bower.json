@@ -23,6 +23,7 @@
     "purescript-profunctor": "~0.3.0",
     "purescript-sets": "~0.5.1",
     "purescript-unsafe-coerce": "~0.1.0",
-    "purescript-transformers": "~0.8.1"
+    "purescript-transformers": "~0.8.1",
+    "purescript-functor-compose": "~0.0.1"
   }
 }

@@ -36,4 +36,12 @@ failover :: forall f s t a b. (Alternative f) => Optic (Star (Tuple (Disj Boolea
 Tries to map over a `Traversal`; returns `empty` if the traversal did
 not have any new focus.
 
+#### `elementsOf`
+
+``` purescript
+elementsOf :: forall p i s t a. (Wander p) => IndexedTraversal i s t a a -> (i -> Boolean) -> IndexedOptic p i s t a a
+```
+
+Traverse elements of an `IndexedTraversal` whose index satisfy a predicate.
+
 

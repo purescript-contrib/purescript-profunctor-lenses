@@ -110,4 +110,96 @@ _right-associative / precedence 4_
 
 _right-associative / precedence 4_
 
+#### `(.=)`
+
+``` purescript
+(.=) :: forall s a b m. (MonadState s m) => Setter s s a b -> b -> m Unit
+```
+
+_non-associative / precedence 4_
+
+Synonym for `assign`
+
+#### `(%=)`
+
+``` purescript
+(%=) :: forall s a b m. (MonadState s m) => Setter s s a b -> (a -> b) -> m Unit
+```
+
+_non-associative / precedence 4_
+
+Synonym for `modifying`
+
+#### `(+=)`
+
+``` purescript
+(+=) :: forall s a m. (MonadState s m, Semiring a) => SetterP s a -> a -> m Unit
+```
+
+_non-associative / precedence 4_
+
+#### `(*=)`
+
+``` purescript
+(*=) :: forall s a m. (MonadState s m, Semiring a) => SetterP s a -> a -> m Unit
+```
+
+_non-associative / precedence 4_
+
+#### `(-=)`
+
+``` purescript
+(-=) :: forall s a m. (MonadState s m, Ring a) => SetterP s a -> a -> m Unit
+```
+
+_non-associative / precedence 4_
+
+#### `(//=)`
+
+``` purescript
+(//=) :: forall s a m. (MonadState s m, DivisionRing a) => SetterP s a -> a -> m Unit
+```
+
+_non-associative / precedence 4_
+
+#### `(||=)`
+
+``` purescript
+(||=) :: forall s a m. (MonadState s m, BooleanAlgebra a) => SetterP s a -> a -> m Unit
+```
+
+_non-associative / precedence 4_
+
+#### `(&&=)`
+
+``` purescript
+(&&=) :: forall s a m. (MonadState s m, BooleanAlgebra a) => SetterP s a -> a -> m Unit
+```
+
+_non-associative / precedence 4_
+
+#### `(<>=)`
+
+``` purescript
+(<>=) :: forall s a m. (MonadState s m, Semigroup a) => SetterP s a -> a -> m Unit
+```
+
+_non-associative / precedence 4_
+
+#### `(++=)`
+
+``` purescript
+(++=) :: forall s a m. (MonadState s m, Semigroup a) => SetterP s a -> a -> m Unit
+```
+
+_non-associative / precedence 4_
+
+#### `(?=)`
+
+``` purescript
+(?=) :: forall s a b m. (MonadState s m) => Setter s s a (Maybe b) -> b -> m Unit
+```
+
+_non-associative / precedence 4_
+
 

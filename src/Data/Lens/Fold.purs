@@ -5,6 +5,7 @@ module Data.Lens.Fold
   , preview, foldOf, foldMapOf, foldrOf, foldlOf, toListOf, firstOf, lastOf
   , maximumOf, minimumOf, allOf, anyOf, andOf, orOf, elemOf, notElemOf, sumOf
   , productOf, lengthOf, findOf, sequenceOf_, has, hasn't, replicated, filtered
+  , ifoldMapOf, ifoldrOf, ifoldlOf, iallOf, ianyOf, itoListOf, itraverseOf_
   , module ExportTypes
   ) where
 
@@ -28,12 +29,13 @@ import Data.Monoid.Multiplicative (Multiplicative(..), runMultiplicative)
 import Data.Profunctor (dimap)
 import Data.Profunctor.Choice (Choice, right)
 import Data.Profunctor.Star (Star(..), runStar)
-import Data.Tuple (Tuple(..))
+import Data.Tuple (Tuple(..), uncurry)
 
 import Data.Lens.Internal.Void (coerce)
 import Data.Lens.Internal.Forget (Forget (..), runForget)
 import Data.Lens.Types (Fold(), FoldP()) as ExportTypes
 import Data.Lens.Types (Optic(), OpticP(), Fold())
+import Data.Lens.Types (IndexedOptic(), IndexedFold(), Indexed(..))
 
 infixl 8 ^?
 infixl 8 ^..
@@ -125,6 +127,10 @@ findOf p f = foldrOf p (\a -> maybe (if f a then Just a else Nothing) Just) Noth
 sequenceOf_ :: forall f s t a b. (Applicative f) => Fold (Endo (f Unit)) s t (f a) b -> s -> f Unit
 sequenceOf_ p = flip runEndo (pure unit) <<< foldMapOf p \f -> Endo (f *>)
 
+-- | Traverse the foci of a `Fold`, discarding the results.
+traverseOf_ :: forall f s t a b r. (Applicative f) => Fold (Endo (f Unit)) s t a b -> (a -> f r) -> s -> f Unit
+traverseOf_ p f = foldrOf p (\a fu -> void (f a) *> fu) (pure unit)
+
 -- | Collects the foci of a `Fold` into a list.
 toListOf :: forall s t a b. Fold (Endo (List a)) s t a b -> s -> List a
 toListOf p = foldrOf p (:) Nil
@@ -165,3 +171,37 @@ unfolded
   => (s -> Maybe (Tuple a s)) -> Optic (Star f) s t a b
 unfolded f p = Star go where
   go = maybe (coerce $ pure unit) (\(Tuple a s) -> runStar p a *> go s) <<< f
+
+-- | Fold map over an `IndexedFold`.
+ifoldMapOf :: forall r i s t a b. IndexedFold r i s t a b -> (i -> a -> r) -> s -> r
+ifoldMapOf p f = runForget $ p $ Indexed $ Forget (uncurry f)
+
+-- | Right fold over an `IndexedFold`.
+ifoldrOf :: forall i s t a b r. IndexedFold (Endo r) i s t a b -> (i -> a -> r -> r) -> r -> s -> r
+ifoldrOf p f r = flip runEndo r <<< ifoldMapOf p (\i -> Endo <<< f i)
+
+-- | Left fold over an `IndexedFold`.
+ifoldlOf :: forall i s t a b r. IndexedFold (Dual (Endo r)) i s t a b -> (i -> r -> a -> r) -> r -> s -> r
+ifoldlOf p f r = flip runEndo r <<< runDual <<< ifoldMapOf p (\i -> Dual <<< Endo <<< flip (f i))
+
+-- | Whether all foci of an `IndexedFold` satisfy a predicate.
+iallOf :: forall i s t a b r. (BooleanAlgebra r) => IndexedFold (Conj r) i s t a b -> (i -> a -> r) -> s -> r
+iallOf p f = runConj <<< ifoldMapOf p (\i -> Conj <<< f i)
+
+-- | Whether any focus of an `IndexedFold` satisfies a predicate.
+ianyOf :: forall i s t a b r. (BooleanAlgebra r) => IndexedFold (Disj r) i s t a b -> (i -> a -> r) -> s -> r
+ianyOf p f = runDisj <<< ifoldMapOf p (\i -> Disj <<< f i)
+
+-- | Find the first focus of an `IndexedFold` that satisfies a predicate, if there is any.
+ifindOf :: forall i s t a b. IndexedFold (Endo (Maybe a)) i s t a b -> (i -> a -> Boolean) -> s -> Maybe a
+ifindOf p f = ifoldrOf p (\i a -> maybe (if f i a then Just a else Nothing) Just) Nothing
+
+-- | Collects the foci of an `IndexedFold` into a list.
+itoListOf :: forall i s t a b. IndexedFold (Endo (List (Tuple i a))) i s t a b -> s -> List (Tuple i a)
+itoListOf p = ifoldrOf p (\i x xs -> Tuple i x : xs) Nil
+
+-- | Traverse the foci of an `IndexedFold`, discarding the results.
+itraverseOf_
+  :: forall i f s t a b r. (Applicative f)
+  => IndexedFold (Endo (f Unit)) i s t a b -> (i -> a -> f r) -> s -> f Unit
+itraverseOf_ p f = ifoldrOf p (\i a fu -> void (f i a) *> fu) (pure unit)

@@ -9,6 +9,7 @@ module Data.Lens.Types
   , module Data.Lens.Internal.Forget
   , module Data.Lens.Internal.Wander
   , module Data.Lens.Internal.Re
+  , module Data.Lens.Internal.Indexed
   ) where
 
 import Data.Const (Const())
@@ -25,6 +26,7 @@ import Data.Lens.Internal.Tagged (Tagged(..), unTagged)
 import Data.Lens.Internal.Forget (Forget(..), runForget)
 import Data.Lens.Internal.Wander (Wander, wander)
 import Data.Lens.Internal.Re (Re(..), runRe)
+import Data.Lens.Internal.Indexed (Indexed (..), fromIndexed)
 
 -- | A general-purpose Data.Lens.
 type Optic p s t a b = p a b -> p s t
@@ -70,3 +72,23 @@ type ReviewP s a = Review s s a a
 -- | A fold.
 type Fold r s t a b = Optic (Forget r) s t a b
 type FoldP r s a = Fold r s s a a
+
+-- | An indexed optic.
+type IndexedOptic p i s t a b = Indexed p i a b -> p s t
+type IndexedOpticP p i s a = IndexedOptic p i s s a a
+
+-- | An indexed traversal.
+type IndexedTraversal i s t a b = forall p. (Wander p) => IndexedOptic p i s t a b
+type IndexedTraversalP i s a = IndexedTraversal i s s a a
+
+-- | An indexed fold.
+type IndexedFold r i s t a b = IndexedOptic (Forget r) i s t a b
+type IndexedFoldP r i s a = IndexedFold r i s s a a
+
+-- | An indexed getter.
+type IndexedGetter i s t a b = IndexedFold a i s t a b
+type IndexedGetterP i s a = IndexedGetter i s s a a
+
+-- | An indexed setter.
+type IndexedSetter i s t a b = IndexedOptic Function i s t a b
+type IndexedSetterP i s a = IndexedSetter i s s a a

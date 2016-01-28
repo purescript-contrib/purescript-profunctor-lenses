@@ -5,10 +5,11 @@ module Data.Lens.Traversal
   , traverseOf
   , sequenceOf
   , failover
+  , elementsOf
   , module ExportTypes
   ) where
 
-import Prelude (Applicative, (<<<), ($), pure, id)
+import Prelude (Applicative, (<<<), ($), pure, id, (==))
 
 import Control.Alternative (Alternative)
 import Control.Plus (empty)
@@ -16,10 +17,12 @@ import Control.Plus (empty)
 import Data.Monoid.Disj (Disj(..))
 import Data.Profunctor.Star (Star(..), runStar)
 import Data.Traversable (Traversable, traverse)
-import Data.Tuple (Tuple(..))
+import Data.Tuple (Tuple(..), uncurry)
 
 import Data.Lens.Types (Traversal(), TraversalP()) as ExportTypes
-import Data.Lens.Types (Traversal(), Optic(), wander)
+import Data.Lens.Types (Traversal(), Optic(), Wander, wander)
+import Data.Lens.Types (IndexedTraversal(), IndexedOptic(), Indexed(..))
+import Data.Lens.Indexed (iwander, positions, unIndex)
 
 -- | Create a `Traversal` which traverses the elements of a `Traversable` functor.
 traversed :: forall t a b. (Traversable t) => Traversal (t a) (t b) a b
@@ -46,3 +49,21 @@ failover
 failover t f s = case runStar (t $ Star $ Tuple (Disj true) <<< f) s of
   Tuple (Disj true) x  -> pure x
   Tuple (Disj false) _ -> empty
+
+-- | Affine traversal the `n`-th focus of a `Traversal`.
+element
+  :: forall p s t a. (Wander p)
+  => Int -> Traversal s t a a -> Optic p s t a a
+element n tr = unIndex $ elementsOf (positions tr) (== n)
+
+-- | Traverse elements of an `IndexedTraversal` whose index satisfy a predicate.
+elementsOf
+  :: forall p i s t a. (Wander p)
+  => IndexedTraversal i s t a a -> (i -> Boolean) -> IndexedOptic p i s t a a
+elementsOf tr pr = iwander \f -> runStar $ tr $ Indexed $ Star $ \(Tuple i a) -> if pr i then f i a else pure a
+
+-- | Turn a pure profunctor `IndexedTraversal` into a `lens`-like `IndexedTraversal`.
+itraverseOf
+  :: forall f i s t a b. (Applicative f)
+  => IndexedOptic (Star f) i s t a b -> (i -> a -> f b) -> s -> f t
+itraverseOf t f = runStar $ t $ Indexed $ Star $ uncurry f

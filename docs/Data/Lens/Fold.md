@@ -223,4 +223,60 @@ replicated :: forall a b t f. (Applicative f, Contravariant f) => Int -> Optic (
 
 Replicates the elements of a fold.
 
+#### `ifoldMapOf`
+
+``` purescript
+ifoldMapOf :: forall r i s t a b. IndexedFold r i s t a b -> (i -> a -> r) -> s -> r
+```
+
+Fold map over an `IndexedFold`.
+
+#### `ifoldrOf`
+
+``` purescript
+ifoldrOf :: forall i s t a b r. IndexedFold (Endo r) i s t a b -> (i -> a -> r -> r) -> r -> s -> r
+```
+
+Right fold over an `IndexedFold`.
+
+#### `ifoldlOf`
+
+``` purescript
+ifoldlOf :: forall i s t a b r. IndexedFold (Dual (Endo r)) i s t a b -> (i -> r -> a -> r) -> r -> s -> r
+```
+
+Left fold over an `IndexedFold`.
+
+#### `iallOf`
+
+``` purescript
+iallOf :: forall i s t a b r. (BooleanAlgebra r) => IndexedFold (Conj r) i s t a b -> (i -> a -> r) -> s -> r
+```
+
+Whether all foci of an `IndexedFold` satisfy a predicate.
+
+#### `ianyOf`
+
+``` purescript
+ianyOf :: forall i s t a b r. (BooleanAlgebra r) => IndexedFold (Disj r) i s t a b -> (i -> a -> r) -> s -> r
+```
+
+Whether any focus of an `IndexedFold` satisfies a predicate.
+
+#### `itoListOf`
+
+``` purescript
+itoListOf :: forall i s t a b. IndexedFold (Endo (List (Tuple i a))) i s t a b -> s -> List (Tuple i a)
+```
+
+Collects the foci of an `IndexedFold` into a list.
+
+#### `itraverseOf_`
+
+``` purescript
+itraverseOf_ :: forall i f s t a b r. (Applicative f) => IndexedFold (Endo (f Unit)) i s t a b -> (i -> a -> f r) -> s -> f Unit
+```
+
+Traverse the foci of an `IndexedFold`, discarding the results.
+
 

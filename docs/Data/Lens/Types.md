@@ -153,7 +153,7 @@ type ReviewP s a = Review s s a a
 #### `Fold`
 
 ``` purescript
-type Fold r s t a b = Optic (Star (Const r)) s t a b
+type Fold r s t a b = Optic (Forget r) s t a b
 ```
 
 A fold.
@@ -162,6 +162,76 @@ A fold.
 
 ``` purescript
 type FoldP r s a = Fold r s s a a
+```
+
+#### `IndexedOptic`
+
+``` purescript
+type IndexedOptic p i s t a b = Indexed p i a b -> p s t
+```
+
+An indexed optic.
+
+#### `IndexedOpticP`
+
+``` purescript
+type IndexedOpticP p i s a = IndexedOptic p i s s a a
+```
+
+#### `IndexedTraversal`
+
+``` purescript
+type IndexedTraversal i s t a b = forall p. (Wander p) => IndexedOptic p i s t a b
+```
+
+An indexed traversal.
+
+#### `IndexedTraversalP`
+
+``` purescript
+type IndexedTraversalP i s a = IndexedTraversal i s s a a
+```
+
+#### `IndexedFold`
+
+``` purescript
+type IndexedFold r i s t a b = IndexedOptic (Forget r) i s t a b
+```
+
+An indexed fold.
+
+#### `IndexedFoldP`
+
+``` purescript
+type IndexedFoldP r i s a = IndexedFold r i s s a a
+```
+
+#### `IndexedGetter`
+
+``` purescript
+type IndexedGetter i s t a b = IndexedFold a i s t a b
+```
+
+An indexed getter.
+
+#### `IndexedGetterP`
+
+``` purescript
+type IndexedGetterP i s a = IndexedGetter i s s a a
+```
+
+#### `IndexedSetter`
+
+``` purescript
+type IndexedSetter i s t a b = IndexedOptic Function i s t a b
+```
+
+An indexed setter.
+
+#### `IndexedSetterP`
+
+``` purescript
+type IndexedSetterP i s a = IndexedSetter i s s a a
 ```
 
 
