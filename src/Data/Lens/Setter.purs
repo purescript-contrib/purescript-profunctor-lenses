@@ -11,8 +11,10 @@ import Prelude
 
 import Control.Monad.State.Class (MonadState, modify)
 import Data.Maybe (Maybe(..))
+import Data.Tuple (uncurry)
 
 import Data.Lens.Types (Setter(), SetterP())
+import Data.Lens.Types (IndexedSetter(), Indexed(..))
 
 infixr 4 %~
 infixr 4 .~
@@ -45,6 +47,10 @@ over l = l
 -- | Synonym for `over`.
 (%~) :: forall s t a b. Setter s t a b -> (a -> b) -> s -> t
 (%~) = over
+
+-- | Apply a function to the foci of a `Setter` that may vary with the index.
+iover :: forall i s t a b. IndexedSetter i s t a b -> (i -> a -> b) -> s -> t
+iover l f = l (Indexed $ uncurry f)
 
 -- | Set the foci of a `Setter` to a constant value.
 set :: forall s t a b. Setter s t a b -> b -> s -> t

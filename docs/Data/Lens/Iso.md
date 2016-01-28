@@ -26,6 +26,14 @@ cloneIso :: forall s t a b. AnIso s t a b -> Iso s t a b
 
 Extracts an `Iso` from `AnIso`.
 
+#### `re`
+
+``` purescript
+re :: forall p s t a b. Optic (Re p a b) s t a b -> Optic p b a t s
+```
+
+Reverses an optic.
+
 #### `au`
 
 ``` purescript

@@ -13,6 +13,7 @@ newtype Tagged a b
 ``` purescript
 instance taggedProfunctor :: Profunctor Tagged
 instance taggedChoice :: Choice Tagged
+instance taggedCostrong :: Costrong Tagged
 ```
 
 #### `unTagged`
