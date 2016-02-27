@@ -5,6 +5,7 @@ module Data.Lens.Fold
   , preview, foldOf, foldMapOf, foldrOf, foldlOf, toListOf, firstOf, lastOf
   , maximumOf, minimumOf, allOf, anyOf, andOf, orOf, elemOf, notElemOf, sumOf
   , productOf, lengthOf, findOf, sequenceOf_, has, hasn't, replicated, filtered
+  , folded, unfolded
   , ifoldMapOf, ifoldrOf, ifoldlOf, iallOf, ianyOf, itoListOf, itraverseOf_
   , module ExportTypes
   ) where
@@ -14,12 +15,12 @@ import Prelude
 import Control.Apply ((*>))
 
 import Data.Either (Either(..), either)
-import Data.Foldable (Foldable, foldr)
-import Data.Functor.Contravariant (Contravariant)
+import Data.Foldable (Foldable, foldMap)
 import Data.List (List(..), (:))
 import Data.Maybe (Maybe(..), maybe)
 import Data.Maybe.First (First(..), runFirst)
 import Data.Maybe.Last (Last(..), runLast)
+import Data.Monoid (Monoid, mempty)
 import Data.Monoid.Additive (Additive(..), runAdditive)
 import Data.Monoid.Conj (Conj(..), runConj)
 import Data.Monoid.Disj (Disj(..), runDisj)
@@ -28,7 +29,6 @@ import Data.Monoid.Endo (Endo(..), runEndo)
 import Data.Monoid.Multiplicative (Multiplicative(..), runMultiplicative)
 import Data.Profunctor (dimap)
 import Data.Profunctor.Choice (Choice, right)
-import Data.Profunctor.Star (Star(..), runStar)
 import Data.Tuple (Tuple(..), uncurry)
 
 import Data.Lens.Internal.Void (coerce)
@@ -152,25 +152,19 @@ filtered :: forall p a. (Choice p) => (a -> Boolean) -> OpticP p a a
 filtered f = dimap (\x -> if f x then Right x else Left x) (either id id) <<< right
 
 -- | Replicates the elements of a fold.
-replicated
-  :: forall a b t f. (Applicative f, Contravariant f)
-  => Int -> Optic (Star f) a b a t
-replicated n p = Star (flip go n <<< runStar p) where
-  go x 0 = coerce (pure unit)
-  go x n = x *> go x (n - 1)
+replicated :: forall a b t r. (Monoid r) => Int -> Fold r a b a t
+replicated n = Forget <<< go n <<< runForget where
+  go 0 x = mempty
+  go n x = x <> go (n - 1) x
 
 -- | Folds over a `Foldable` container.
-folded
-  :: forall f g a b t. (Applicative f, Contravariant f, Foldable g)
-  => Optic (Star f) (g a) b a t
-folded p = Star $ foldr (\a r -> runStar p a *> r) (coerce $ pure unit)
+folded :: forall g a b t r. (Monoid r, Foldable g) => Fold r (g a) b a t
+folded = Forget <<< foldMap <<< runForget
 
 -- | Builds a `Fold` using an unfold.
-unfolded
-  :: forall f s t a b. (Applicative f, Contravariant f)
-  => (s -> Maybe (Tuple a s)) -> Optic (Star f) s t a b
-unfolded f p = Star go where
-  go = maybe (coerce $ pure unit) (\(Tuple a s) -> runStar p a *> go s) <<< f
+unfolded :: forall r s t a b. (Monoid r) => (s -> Maybe (Tuple a s)) -> Fold r s t a b
+unfolded f p = Forget go where
+  go = maybe mempty (\(Tuple a sn) -> runForget p a <> go sn) <<< f
 
 -- | Fold map over an `IndexedFold`.
 ifoldMapOf :: forall r i s t a b. IndexedFold r i s t a b -> (i -> a -> r) -> s -> r

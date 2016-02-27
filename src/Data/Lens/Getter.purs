@@ -10,12 +10,13 @@ import Prelude (id, (<<<), ($))
 
 import Data.Const (Const(..), getConst)
 import Data.Functor.Contravariant (Contravariant, cmap)
+import Data.Profunctor (Profunctor, lmap)
 import Data.Profunctor.Star (Star(..), runStar)
 import Data.Tuple (Tuple (..))
 import Control.Monad.State.Class (MonadState, gets)
 
 import Data.Lens.Internal.Forget (Forget (..), runForget)
-import Data.Lens.Types (Getter(), Optic())
+import Data.Lens.Types (Getter(), Fold(), Optic())
 import Data.Lens.Types (IndexedGetter(), Indexed (..))
 import Data.Lens.Types (IndexedFold())
 
@@ -34,8 +35,8 @@ iview l = runForget (l (Indexed $ Forget id))
 (^.) s l = view l s
 
 -- | Convert a function into a getter.
-to :: forall s a f. (Contravariant f) => (s -> a) -> Optic (Star f) s s a a
-to f p = Star (cmap f <<< runStar p <<< f)
+to :: forall r s t a b. (s -> a) -> Fold r s t a b
+to f p = Forget (runForget p <<< f)
 
 -- | View the focus of a `Getter` in the state of a monad.
 use :: forall s t a b m. (MonadState s m) => Getter s t a b -> m a
