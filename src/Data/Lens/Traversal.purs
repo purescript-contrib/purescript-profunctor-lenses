@@ -9,18 +9,18 @@ module Data.Lens.Traversal
   , module ExportTypes
   ) where
 
-import Prelude (Applicative, (<<<), ($), pure, id, (==))
+import Prelude (class Applicative, (<<<), ($), pure, id, (==))
 
-import Control.Alternative (Alternative)
+import Control.Alternative (class Alternative)
 import Control.Plus (empty)
 
 import Data.Monoid.Disj (Disj(..))
 import Data.Profunctor.Star (Star(..), runStar)
-import Data.Traversable (Traversable, traverse)
+import Data.Traversable (class Traversable, traverse)
 import Data.Tuple (Tuple(..), uncurry)
 
 import Data.Lens.Types (Traversal(), TraversalP()) as ExportTypes
-import Data.Lens.Types (Traversal(), Optic(), Wander, wander)
+import Data.Lens.Types (Traversal(), Optic(), class Wander, wander)
 import Data.Lens.Types (IndexedTraversal(), IndexedOptic(), Indexed(..))
 import Data.Lens.Indexed (iwander, positions, unIndex)
 
@@ -54,7 +54,7 @@ failover t f s = case runStar (t $ Star $ Tuple (Disj true) <<< f) s of
 element
   :: forall p s t a. (Wander p)
   => Int -> Traversal s t a a -> Optic p s t a a
-element n tr = unIndex $ elementsOf (positions tr) (== n)
+element n tr = unIndex $ elementsOf (positions tr) (_ == n)
 
 -- | Traverse elements of an `IndexedTraversal` whose index satisfy a predicate.
 elementsOf

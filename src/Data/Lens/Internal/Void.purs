@@ -2,9 +2,9 @@
 
 module Data.Lens.Internal.Void where
 
-import Prelude (Functor, (<$>))
+import Prelude (class Functor, (<$>))
 
-import Data.Functor.Contravariant (Contravariant, (>$<))
+import Data.Functor.Contravariant (class Contravariant, (>$<))
 
 import Unsafe.Coerce (unsafeCoerce)
 

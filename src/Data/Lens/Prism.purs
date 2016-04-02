@@ -8,7 +8,7 @@ module Data.Lens.Prism
 
 import Prelude
 
-import Control.MonadPlus (MonadPlus, guard)
+import Control.MonadPlus (class MonadPlus, guard)
 
 import Data.Either (Either(..), either)
 import Data.Maybe (Maybe(), maybe)
@@ -33,7 +33,7 @@ nearly :: forall a. a -> (a -> Boolean) -> PrismP a Unit
 nearly x f = prism' (const x) (guard <<< f)
 
 only :: forall a. (Eq a) => a -> Prism a a Unit Unit
-only x = nearly x (== x)
+only x = nearly x (_ == x)
 
 clonePrism :: forall s t a b. APrism s t a b -> Prism s t a b
 clonePrism l = withPrism l \x y p -> prism x y p

@@ -3,11 +3,11 @@ module Data.Lens.Internal.Indexed where
 
 import Prelude
 
-import Data.Profunctor
-import Data.Profunctor.Strong
-import Data.Profunctor.Choice
-import Data.Tuple
-import Data.Either
+import Data.Profunctor (class Profunctor, dimap)
+import Data.Profunctor.Strong (class Strong, first, second)
+import Data.Profunctor.Choice (class Choice, right, left)
+import Data.Tuple (Tuple(Tuple))
+import Data.Either (Either(Right, Left), either)
 
 -- | Profunctor used for `IndexedOptic`s.
 newtype Indexed p i s t = Indexed (p (Tuple i s) t)
