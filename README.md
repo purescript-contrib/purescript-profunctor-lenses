@@ -6,9 +6,15 @@
 
 Pure profunctor lenses.
 
-- [Module Documentation](docs/Data/Lens.md)
-- [Example](test/Main.purs)
+## Installation
 
-## Usage
+```
+bower install purescript-profunctor-lenses
+```
 
-    bower install purescript-profunctor-lenses
+## Documentation
+
+Module documentation is [published on Pursuit](http://pursuit.purescript.org/packages/purescript-profunctor-lenses).
+
+You can find an example usage [here](test/Main.purs).
+

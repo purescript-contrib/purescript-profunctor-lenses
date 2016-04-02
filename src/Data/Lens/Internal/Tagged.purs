@@ -2,9 +2,9 @@
 
 module Data.Lens.Internal.Tagged where
 
-import Data.Profunctor (Profunctor)
-import Data.Profunctor.Choice (Choice)
-import Data.Profunctor.Costrong (Costrong)
+import Data.Profunctor (class Profunctor)
+import Data.Profunctor.Choice (class Choice)
+import Data.Profunctor.Costrong (class Costrong)
 import Data.Either (Either(..))
 import Data.Tuple (Tuple(..))
 

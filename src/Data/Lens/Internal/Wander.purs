@@ -2,10 +2,10 @@
 
 module Data.Lens.Internal.Wander where
 
-import Prelude (Applicative, (<<<), ($))
+import Prelude (class Applicative, (<<<), ($))
 
-import Data.Profunctor.Strong (Strong)
-import Data.Profunctor.Choice (Choice)
+import Data.Profunctor.Strong (class Strong)
+import Data.Profunctor.Choice (class Choice)
 import Data.Profunctor.Star (Star(..), runStar)
 import Data.Identity (Identity(..), runIdentity)
 

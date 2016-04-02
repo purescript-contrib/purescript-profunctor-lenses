@@ -2,9 +2,9 @@
 
 module Data.Lens.Internal.Exchange where
 
-import Prelude (Functor, (<<<))
+import Prelude (class Functor, (<<<))
 
-import Data.Profunctor (Profunctor)
+import Data.Profunctor (class Profunctor)
 
 -- | The `Exchange` profunctor characterizes an `Iso`.
 data Exchange a b s t = Exchange (s -> a) (b -> t)

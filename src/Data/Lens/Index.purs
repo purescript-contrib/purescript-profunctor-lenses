@@ -1,5 +1,5 @@
 module Data.Lens.Index
-  ( Index
+  ( class Index
   , ix
   ) where
 
@@ -13,7 +13,7 @@ import Data.StrMap as SM
 import Data.Array as A
 
 import Data.Traversable (traverse)
-import Data.Lens.Internal.Wander
+import Data.Lens.Internal.Wander (wander)
 import Data.Lens.Types (TraversalP())
 
 class Index m a b where

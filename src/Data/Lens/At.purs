@@ -1,5 +1,5 @@
 module Data.Lens.At
-  ( At
+  ( class At
   , at
   ) where
 
@@ -12,7 +12,7 @@ import Data.Set as S
 import Data.StrMap as SM
 
 import Data.Lens (LensP(), lens)
-import Data.Lens.Index (Index)
+import Data.Lens.Index (class Index)
 
 class (Index m a b) <= At m a b where
   at :: a -> LensP m (Maybe b)
