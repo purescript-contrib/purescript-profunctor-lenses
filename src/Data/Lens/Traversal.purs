@@ -6,6 +6,7 @@ module Data.Lens.Traversal
   , sequenceOf
   , failover
   , elementsOf
+  , itraverseOf
   , module ExportTypes
   ) where
 
