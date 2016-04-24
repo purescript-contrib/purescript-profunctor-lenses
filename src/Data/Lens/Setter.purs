@@ -3,7 +3,7 @@
 module Data.Lens.Setter
   ( (%~), (.~), (+~), (-~), (*~), (//~), (||~), (&&~), (<>~), (++~), (?~)
   , (.=), (%=), (+=), (*=), (-=), (//=), (||=), (&&=), (<>=), (++=), (?=)
-  , over, set
+  , over, iover, set
   , module Data.Lens.Types
   ) where
 
