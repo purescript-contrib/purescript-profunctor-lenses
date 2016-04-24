@@ -1,11 +1,12 @@
 {
   "private": true,
   "scripts": {
-    "postinstall": "pulp dep install",
-    "build": "pulp test && rimraf docs && pulp docs"
+    "postinstall": "bower install",
+    "clean": "rimraf output && rimraf .pulp-cache",
+    "build": "pulp test"
   },
   "devDependencies": {
-    "pulp": "^4.0.1",
-    "rimraf": "^2.4.1"
+    "pulp": "^8.1.1",
+    "rimraf": "^2.5.0"
   }
 }

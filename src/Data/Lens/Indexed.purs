@@ -2,20 +2,15 @@ module Data.Lens.Indexed where
 
 import Prelude
 
-import Control.Monad.State
-import Control.Apply
+import Control.Monad.State (modify, get, evalState)
+import Control.Apply ((<*))
 
-import Data.Profunctor
-import Data.Profunctor.Star
-import Data.Profunctor.Strong
-import Data.Profunctor.Choice
-import Data.Functor.Compose
-import Data.Tuple
-import Data.Either
+import Data.Profunctor (class Profunctor, dimap)
+import Data.Profunctor.Star (Star(Star), runStar)
+import Data.Functor.Compose (Compose(Compose), decompose)
+import Data.Tuple (curry, snd)
 
-import Data.Lens.Types
-import Data.Lens.Internal.Indexed
-import Data.Lens.Internal.Wander
+import Data.Lens.Types (class Wander, wander, IndexedOptic, Traversal, Optic, Indexed(Indexed), fromIndexed)
 
 -- | Converts an `IndexedOptic` to an `Optic` by forgetting indices.
 unIndex
@@ -35,4 +30,4 @@ positions
   :: forall p s t a b. (Wander p)
   => Traversal s t a b -> IndexedOptic p Int s t a b
 positions tr = iwander \f s -> flip evalState 0 $ decompose $ flip runStar s $
-  tr $ Star \a -> Compose $ (f <$> get <*> pure a) <* modify (+1)
+  tr $ Star \a -> Compose $ (f <$> get <*> pure a) <* modify (_ + 1)

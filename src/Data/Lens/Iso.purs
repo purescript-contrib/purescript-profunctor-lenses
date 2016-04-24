@@ -7,7 +7,7 @@ module Data.Lens.Iso
 
 import Prelude ((<<<), flip, id)
 
-import Data.Profunctor (Profunctor, dimap, rmap)
+import Data.Profunctor (class Profunctor, dimap, rmap)
 import Data.Tuple (Tuple(), curry, uncurry)
 
 import Data.Lens.Types (Iso(), IsoP(), AnIso(), AnIsoP(), Optic(), Exchange(..), Re(..), runRe)

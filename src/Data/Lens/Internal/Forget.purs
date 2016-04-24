@@ -2,16 +2,16 @@ module Data.Lens.Internal.Forget where
 
 import Prelude
 
-import Data.Tuple (Tuple (..), fst, snd)
+import Data.Tuple (fst, snd)
 import Data.Either (Either (..), either)
-import Data.Monoid (Monoid, mempty)
+import Data.Monoid (class Monoid, mempty)
 import Data.Const (Const (..), getConst)
-import Data.Profunctor (Profunctor)
-import Data.Profunctor.Strong (Strong)
-import Data.Profunctor.Choice (Choice)
-import Data.Profunctor.Cochoice (Cochoice)
+import Data.Profunctor (class Profunctor)
+import Data.Profunctor.Strong (class Strong)
+import Data.Profunctor.Choice (class Choice)
+import Data.Profunctor.Cochoice (class Cochoice)
 
-import Data.Lens.Internal.Wander (Wander)
+import Data.Lens.Internal.Wander (class Wander)
 
 -- | Profunctor that forgets the `b` value and returns (and accumulates) a
 -- | value of type `r`.

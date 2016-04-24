@@ -13,18 +13,18 @@ module Data.Lens.Types
   ) where
 
 import Data.Const (Const())
-import Data.Profunctor (Profunctor)
-import Data.Profunctor.Choice (Choice)
+import Data.Profunctor (class Profunctor)
+import Data.Profunctor.Choice (class Choice)
 import Data.Profunctor.Star (Star())
-import Data.Profunctor.Strong (Strong)
-import Data.Profunctor.Closed (Closed)
+import Data.Profunctor.Strong (class Strong)
+import Data.Profunctor.Closed (class Closed)
 
 import Data.Lens.Internal.Exchange (Exchange(..))
 import Data.Lens.Internal.Market (Market(..))
 import Data.Lens.Internal.Shop (Shop(..))
 import Data.Lens.Internal.Tagged (Tagged(..), unTagged)
 import Data.Lens.Internal.Forget (Forget(..), runForget)
-import Data.Lens.Internal.Wander (Wander, wander)
+import Data.Lens.Internal.Wander (class Wander, wander)
 import Data.Lens.Internal.Re (Re(..), runRe)
 import Data.Lens.Internal.Indexed (Indexed (..), fromIndexed)
 

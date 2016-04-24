@@ -4,8 +4,8 @@ module Data.Lens.Internal.Shop where
 
 import Prelude ((<<<))
 
-import Data.Profunctor (Profunctor)
-import Data.Profunctor.Strong (Strong)
+import Data.Profunctor (class Profunctor)
+import Data.Profunctor.Strong (class Strong)
 import Data.Tuple (Tuple(..))
 
 -- | The `Shop` profunctor characterizes a `Lens`.

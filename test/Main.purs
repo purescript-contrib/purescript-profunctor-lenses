@@ -1,16 +1,15 @@
 module Test.Main where
 
-import Prelude
+import Prelude (Unit, ($), bind, (<<<), (<*>), (<$>))
 
-import Data.Maybe
-import Data.Either
-import Data.Lens
-import Data.Lens.Zoom
-import Data.Tuple
-import Data.Traversable (Traversable)
+import Data.Maybe (Maybe(Just))
+import Data.Lens (view, traversed, _1, _2, _Just, lens)
+import Data.Lens.Zoom (Traversal, Lens, zoom)
+import Data.Tuple (Tuple(Tuple))
 
-import Control.Monad.Eff.Console
-import Control.Monad.State
+import Control.Monad.Eff (Eff)
+import Control.Monad.Eff.Console (CONSOLE, print)
+import Control.Monad.State (evalState, get)
 
 foo :: forall a b r. Lens { foo :: a | r } { foo :: b | r } a b
 foo = lens _.foo (_ { foo = _ })
@@ -30,6 +29,7 @@ stateTest :: Tuple Int String
 stateTest = evalState go (Tuple 4 ["Foo", "Bar"]) where
   go = Tuple <$> zoom _1 get <*> zoom (_2 <<< traversed) get
 
+main :: forall e. Eff (console :: CONSOLE | e) Unit
 main = do
   print $ view bars doc
   print stateTest

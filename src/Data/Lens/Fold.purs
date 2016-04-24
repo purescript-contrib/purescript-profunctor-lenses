@@ -1,7 +1,8 @@
 -- | This module defines functions for working with folds.
 
 module Data.Lens.Fold
-  ( (^?), (^..)
+  ( (^?), previewOn
+  , (^..), toListOfOn
   , preview, foldOf, foldMapOf, foldrOf, foldlOf, toListOf, firstOf, lastOf
   , maximumOf, minimumOf, allOf, anyOf, andOf, orOf, elemOf, notElemOf, sumOf
   , productOf, lengthOf, findOf, sequenceOf_, has, hasn't, replicated, filtered
@@ -15,12 +16,12 @@ import Prelude
 import Control.Apply ((*>))
 
 import Data.Either (Either(..), either)
-import Data.Foldable (Foldable, foldMap)
+import Data.Foldable (class Foldable, foldMap)
 import Data.List (List(..), (:))
 import Data.Maybe (Maybe(..), maybe)
 import Data.Maybe.First (First(..), runFirst)
 import Data.Maybe.Last (Last(..), runLast)
-import Data.Monoid (Monoid, mempty)
+import Data.Monoid (class Monoid, mempty)
 import Data.Monoid.Additive (Additive(..), runAdditive)
 import Data.Monoid.Conj (Conj(..), runConj)
 import Data.Monoid.Disj (Disj(..), runDisj)
@@ -28,7 +29,7 @@ import Data.Monoid.Dual (Dual(..), runDual)
 import Data.Monoid.Endo (Endo(..), runEndo)
 import Data.Monoid.Multiplicative (Multiplicative(..), runMultiplicative)
 import Data.Profunctor (dimap)
-import Data.Profunctor.Choice (Choice, right)
+import Data.Profunctor.Choice (class Choice, right)
 import Data.Tuple (Tuple(..), uncurry)
 
 import Data.Lens.Internal.Void (coerce)
@@ -37,16 +38,16 @@ import Data.Lens.Types (Fold(), FoldP()) as ExportTypes
 import Data.Lens.Types (Optic(), OpticP(), Fold())
 import Data.Lens.Types (IndexedOptic(), IndexedFold(), Indexed(..))
 
-infixl 8 ^?
-infixl 8 ^..
+infixl 8 previewOn as ^?
+infixl 8 toListOfOn as ^..
 
 -- | Previews the first value of a fold, if there is any.
 preview :: forall s t a b. Fold (First a) s t a b -> s -> Maybe a
 preview p = runFirst <<< foldMapOf p (First <<< Just)
 
 -- | Synonym for `preview`, flipped.
-(^?) :: forall s t a b. s -> Fold (First a) s t a b -> Maybe a
-(^?) s p = preview p s
+previewOn :: forall s t a b. s -> Fold (First a) s t a b -> Maybe a
+previewOn s p = preview p s
 
 -- | Folds all foci of a `Fold` to one. Note that this is the same as `view`.
 foldOf :: forall s t a b. Fold a s t a b -> s -> a
@@ -82,11 +83,11 @@ orOf p = anyOf p id
 
 -- | Whether a `Fold` contains a given element.
 elemOf :: forall s t a b. (Eq a) => Fold (Disj Boolean) s t a b -> a -> s -> Boolean
-elemOf p a = anyOf p (== a)
+elemOf p a = anyOf p (_ == a)
 
 -- | Whether a `Fold` not contains a given element.
 notElemOf :: forall s t a b. (Eq a) => Fold (Conj Boolean) s t a b -> a -> s -> Boolean
-notElemOf p a = allOf p (/= a)
+notElemOf p a = allOf p (_ /= a)
 
 -- | The sum of all foci of a `Fold`.
 sumOf :: forall s t a b. (Semiring a) => Fold (Additive a) s t a b -> s -> a
@@ -125,7 +126,7 @@ findOf p f = foldrOf p (\a -> maybe (if f a then Just a else Nothing) Just) Noth
 -- | Sequence the foci of a `Fold`, pulling out an `Applicative`, and ignore
 -- | the result. If you need the result, see `sequenceOf` for `Traversal`s.
 sequenceOf_ :: forall f s t a b. (Applicative f) => Fold (Endo (f Unit)) s t (f a) b -> s -> f Unit
-sequenceOf_ p = flip runEndo (pure unit) <<< foldMapOf p \f -> Endo (f *>)
+sequenceOf_ p = flip runEndo (pure unit) <<< foldMapOf p \f -> Endo (f *> _)
 
 -- | Traverse the foci of a `Fold`, discarding the results.
 traverseOf_ :: forall f s t a b r. (Applicative f) => Fold (Endo (f Unit)) s t a b -> (a -> f r) -> s -> f Unit
@@ -136,8 +137,8 @@ toListOf :: forall s t a b. Fold (Endo (List a)) s t a b -> s -> List a
 toListOf p = foldrOf p (:) Nil
 
 -- | Synonym for `toListOf`, reversed.
-(^..) :: forall s t a b. s -> Fold (Endo (List a)) s t a b -> List a
-(^..) s p = toListOf p s
+toListOfOn :: forall s t a b. s -> Fold (Endo (List a)) s t a b -> List a
+toListOfOn s p = toListOf p s
 
 -- | Determines whether a `Fold` has at least one focus.
 has :: forall s t a b r. (BooleanAlgebra r) => Fold (Disj r) s t a b -> s -> r

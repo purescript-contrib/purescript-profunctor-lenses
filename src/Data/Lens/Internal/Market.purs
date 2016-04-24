@@ -2,12 +2,12 @@
 
 module Data.Lens.Internal.Market where
 
-import Prelude (Functor, (<<<))
+import Prelude (class Functor, (<<<))
 
 import Data.Bifunctor as BF
 import Data.Either (Either(..), either)
-import Data.Profunctor (Profunctor)
-import Data.Profunctor.Choice (Choice)
+import Data.Profunctor (class Profunctor)
+import Data.Profunctor.Choice (class Choice)
 
 -- | The `Market` profunctor characterizes a `Prism`.
 data Market a b s t = Market (b -> t) (s -> Either t a)
