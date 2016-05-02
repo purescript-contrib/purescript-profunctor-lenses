@@ -1,5 +1,6 @@
 {
   "name": "purescript-profunctor-lenses",
+  "license": "MIT",
   "ignore": [
     "**/.*",
     "node_modules",
