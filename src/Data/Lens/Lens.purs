@@ -1,5 +1,4 @@
 -- | This module defines functions for working with lenses.
-
 module Data.Lens.Lens
   ( lens
   , lens'
@@ -8,14 +7,13 @@ module Data.Lens.Lens
   , module Data.Lens.Types
   ) where
 
-import Prelude (id)
+import Prelude
 
+import Data.Lens.Internal.Shop (Shop(..))
+import Data.Lens.Types (Lens, LensP, ALens, ALensP)
 import Data.Profunctor (dimap)
 import Data.Profunctor.Strong (first)
 import Data.Tuple (Tuple(..))
-
-import Data.Lens.Internal.Shop (Shop(..))
-import Data.Lens.Types (Lens(), LensP(), ALens(), ALensP())
 
 lens' :: forall s t a b. (s -> Tuple a (b -> t)) -> Lens s t a b
 lens' to pab = dimap to (\(Tuple b f) -> f b) (first pab)

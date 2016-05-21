@@ -22,12 +22,12 @@ module Data.Lens
   , module Data.Lens.Common
   ) where
 
-import Data.Lens.Iso
-import Data.Lens.Lens
-import Data.Lens.Prism
-import Data.Lens.Traversal
+import Data.Lens.Iso (AnIso, AnIsoP, Iso, IsoP, Optic, Exchange(..), Re(..), au, auf, cloneIso, curried, flipped, iso, re, runRe, uncurried, under, withIso)
+import Data.Lens.Lens (ALens, ALensP, Lens, LensP, cloneLens, lens, lens', withLens)
+import Data.Lens.Prism (APrism, APrismP, Prism, PrismP, Review, ReviewP, clonePrism, is, isn't, matching, nearly, only, prism, prism', review, withPrism)
+import Data.Lens.Traversal (Traversal, TraversalP, element, elementsOf, failover, itraverseOf, sequenceOf, traverseOf, traversed)
 import Data.Lens.Types
-import Data.Lens.Setter
-import Data.Lens.Getter
-import Data.Lens.Fold
-import Data.Lens.Common
+import Data.Lens.Setter (IndexedSetter, Setter, SetterP, Indexed(..), addModifying, addOver, appendModifying, appendOver, assign, assignJust, conjModifying, conjOver, disjModifying, disjOver, divModifying, divOver, iover, modifying, mulModifying, mulOver, over, set, setJust, subModifying, subOver, (%=), (%~), (&&=), (&&~), (*=), (*~), (++=), (++~), (+=), (+~), (-=), (-~), (.=), (.~), (//=), (//~), (<>=), (<>~), (?=), (?~), (||=), (||~))
+import Data.Lens.Getter (Fold, Getter, IndexedFold, IndexedGetter, Optic, Indexed(..), iuse, iview, to, use, view, viewOn, (^.))
+import Data.Lens.Fold (Fold, FoldP, allOf, andOf, anyOf, elemOf, filtered, findOf, firstOf, foldMapOf, foldOf, folded, foldlOf, foldrOf, has, hasn't, iallOf, ianyOf, ifoldMapOf, ifoldlOf, ifoldrOf, itoListOf, itraverseOf_, lastOf, lengthOf, maximumOf, minimumOf, notElemOf, orOf, preview, previewOn, productOf, replicated, sequenceOf_, sumOf, toListOf, toListOfOn, unfolded, (^..), (^?))
+import Data.Lens.Common (_1, _2, _Just, _Left, _Nothing, _Right, first, left, right, second, united)

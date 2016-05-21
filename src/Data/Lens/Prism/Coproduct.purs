@@ -1,11 +1,11 @@
 module Data.Lens.Prism.Coproduct where
 
-import Prelude ((<<<))
+import Prelude
 
-import Data.Functor.Coproduct (Coproduct())
+import Data.Functor.Coproduct (Coproduct)
 
 import Data.Lens.Iso.Coproduct (_Coproduct)
-import Data.Lens.Prism (Prism())
+import Data.Lens.Prism (Prism)
 import Data.Lens.Prism.Either as E
 
 -- | Prism for the `left` of a `Coproduct`.

@@ -1,5 +1,4 @@
 -- | This module defines functions for working with prisms.
-
 module Data.Lens.Prism
   ( prism, prism', review, nearly, only, clonePrism, withPrism, matching
   , is, isn't
@@ -8,15 +7,15 @@ module Data.Lens.Prism
 
 import Prelude
 
-import Control.MonadPlus (MonadPlus, guard)
+import Control.MonadPlus (guard)
 
 import Data.Either (Either(..), either)
-import Data.Maybe (Maybe(), maybe)
+import Data.HeytingAlgebra (tt, ff)
+import Data.Lens.Types (Prism, PrismP, APrism, APrismP, Review, ReviewP) as ExportTypes
+import Data.Lens.Types (Prism, PrismP, APrism, Market(..), Review, Tagged(..), unTagged)
+import Data.Maybe (Maybe, maybe)
 import Data.Profunctor (dimap, rmap)
 import Data.Profunctor.Choice (right)
-
-import Data.Lens.Types (Prism(), PrismP(), APrism(), APrismP(), Review(), ReviewP()) as ExportTypes
-import Data.Lens.Types (Prism(), PrismP(), APrism(), Market(..), Review(), Tagged(..), unTagged)
 
 -- | Create a `Prism` from a constructor/pattern pair.
 prism :: forall s t a b. (b -> t) -> (s -> Either t a) -> Prism s t a b
@@ -33,7 +32,7 @@ nearly :: forall a. a -> (a -> Boolean) -> PrismP a Unit
 nearly x f = prism' (const x) (guard <<< f)
 
 only :: forall a. (Eq a) => a -> Prism a a Unit Unit
-only x = nearly x (== x)
+only x = nearly x (_ == x)
 
 clonePrism :: forall s t a b. APrism s t a b -> Prism s t a b
 clonePrism l = withPrism l \x y p -> prism x y p
@@ -45,8 +44,8 @@ withPrism l f = case l (Market id Right) of
 matching :: forall s t a b. APrism s t a b -> s -> Either t a
 matching l = withPrism l \_ f -> f
 
-is :: forall s t a b r. (BooleanAlgebra r) => APrism s t a b -> s -> r
-is l = either (const bottom) (const top) <<< matching l
+is :: forall s t a b r. HeytingAlgebra r => APrism s t a b -> s -> r
+is l = either (const ff) (const tt) <<< matching l
 
-isn't :: forall s t a b r. (BooleanAlgebra r) => APrism s t a b -> s -> r
+isn't :: forall s t a b r. HeytingAlgebra r => APrism s t a b -> s -> r
 isn't l = not <<< is l

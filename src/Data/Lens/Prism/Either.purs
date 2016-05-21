@@ -4,10 +4,8 @@ module Data.Lens.Prism.Either
   , module Data.Profunctor.Choice
   ) where
 
-import Prelude
-
-import Data.Either (Either())
-import Data.Lens.Prism (Prism())
+import Data.Either (Either)
+import Data.Lens.Prism (Prism)
 import Data.Profunctor.Choice (left, right)
 
 -- | Prism for the `Left` constructor of `Either`.
