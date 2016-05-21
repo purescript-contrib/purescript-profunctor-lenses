@@ -1,16 +1,14 @@
 -- | This module defines functions for working with isomorphisms.
-
 module Data.Lens.Iso
   ( iso, withIso, cloneIso, re, au, auf, under, curried, uncurried, flipped
   , module Data.Lens.Types
   ) where
 
-import Prelude ((<<<), flip, id)
+import Prelude
 
+import Data.Lens.Types (Iso, IsoP, AnIso, AnIsoP, Optic, Exchange(..), Re(..), runRe)
 import Data.Profunctor (class Profunctor, dimap, rmap)
-import Data.Tuple (Tuple(), curry, uncurry)
-
-import Data.Lens.Types (Iso(), IsoP(), AnIso(), AnIsoP(), Optic(), Exchange(..), Re(..), runRe)
+import Data.Tuple (Tuple, curry, uncurry)
 
 -- | Create an `Iso` from a pair of morphisms.
 iso :: forall s t a b. (s -> a) -> (b -> t) -> Iso s t a b

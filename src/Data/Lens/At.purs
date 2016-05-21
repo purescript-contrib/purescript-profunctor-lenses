@@ -11,7 +11,7 @@ import Data.Maybe (Maybe(..), maybe)
 import Data.Set as S
 import Data.StrMap as SM
 
-import Data.Lens (LensP(), lens)
+import Data.Lens (LensP, lens)
 import Data.Lens.Index (class Index)
 
 class (Index m a b) <= At m a b where

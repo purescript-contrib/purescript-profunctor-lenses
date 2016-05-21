@@ -2,9 +2,8 @@ module Data.Lens.Lens.Void where
 
 import Prelude (const)
 
-import Data.Lens.Internal.Void (Void(), absurd)
-
-import Data.Lens.Lens (LensP(), lens)
+import Data.Lens.Lens (LensP, lens)
+import Data.Void (Void, absurd)
 
 -- | There is everything in `Void`.
 devoid :: forall a. LensP Void a

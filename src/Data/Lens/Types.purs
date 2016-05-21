@@ -1,5 +1,4 @@
 -- | This module defines types for working with lenses.
-
 module Data.Lens.Types
   ( module Data.Lens.Types
   , module Data.Lens.Internal.Exchange
@@ -12,21 +11,17 @@ module Data.Lens.Types
   , module Data.Lens.Internal.Indexed
   ) where
 
-import Data.Const (Const())
-import Data.Profunctor (class Profunctor)
-import Data.Profunctor.Choice (class Choice)
-import Data.Profunctor.Star (Star())
-import Data.Profunctor.Strong (class Strong)
-import Data.Profunctor.Closed (class Closed)
-
 import Data.Lens.Internal.Exchange (Exchange(..))
+import Data.Lens.Internal.Forget (Forget(..), runForget)
+import Data.Lens.Internal.Indexed (Indexed (..), fromIndexed)
 import Data.Lens.Internal.Market (Market(..))
+import Data.Lens.Internal.Re (Re(..), runRe)
 import Data.Lens.Internal.Shop (Shop(..))
 import Data.Lens.Internal.Tagged (Tagged(..), unTagged)
-import Data.Lens.Internal.Forget (Forget(..), runForget)
 import Data.Lens.Internal.Wander (class Wander, wander)
-import Data.Lens.Internal.Re (Re(..), runRe)
-import Data.Lens.Internal.Indexed (Indexed (..), fromIndexed)
+import Data.Profunctor (class Profunctor)
+import Data.Profunctor.Choice (class Choice)
+import Data.Profunctor.Strong (class Strong)
 
 -- | A general-purpose Data.Lens.
 type Optic p s t a b = p a b -> p s t

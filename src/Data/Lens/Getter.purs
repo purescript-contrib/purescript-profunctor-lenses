@@ -1,24 +1,17 @@
 -- | This module defines functions for working with getters.
-
 module Data.Lens.Getter
   ( (^.), viewOn
   , view, to, use, iview, iuse
   , module Data.Lens.Types
   ) where
 
-import Prelude (id, (<<<), ($))
+import Prelude
 
-import Data.Const (Const(..), getConst)
-import Data.Functor.Contravariant (class Contravariant, cmap)
-import Data.Profunctor (class Profunctor, lmap)
-import Data.Profunctor.Star (Star(..), runStar)
-import Data.Tuple (Tuple (..))
 import Control.Monad.State.Class (class MonadState, gets)
 
-import Data.Lens.Internal.Forget (Forget (..), runForget)
-import Data.Lens.Types (Getter(), Fold(), Optic())
-import Data.Lens.Types (IndexedGetter(), Indexed (..))
-import Data.Lens.Types (IndexedFold())
+import Data.Lens.Internal.Forget (Forget(..), runForget)
+import Data.Lens.Types (Getter, Fold, Optic, IndexedGetter, Indexed(..), IndexedFold)
+import Data.Tuple (Tuple)
 
 infixl 8 viewOn as ^.
 

@@ -1,8 +1,7 @@
 -- | This module defines the `Exchange` profunctor
-
 module Data.Lens.Internal.Exchange where
 
-import Prelude (class Functor, (<<<))
+import Prelude
 
 import Data.Profunctor (class Profunctor)
 

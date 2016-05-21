@@ -4,9 +4,9 @@ module Data.Lens.Lens.Tuple
   , module Data.Profunctor.Strong
   ) where
 
-import Data.Tuple (Tuple())
-import Data.Lens.Lens (Lens())
+import Data.Lens.Lens (Lens)
 import Data.Profunctor.Strong (first, second)
+import Data.Tuple (Tuple)
 
 -- | Lens for the first component of a `Tuple`.
 _1 :: forall a b c. Lens (Tuple a c) (Tuple b c) a b

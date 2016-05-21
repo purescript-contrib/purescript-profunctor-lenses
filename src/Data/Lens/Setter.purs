@@ -1,5 +1,4 @@
 -- | This module defines functions for working with setters.
-
 module Data.Lens.Setter
   ( (%~),  over, iover
   , (.~),  set
@@ -29,12 +28,10 @@ module Data.Lens.Setter
 import Prelude
 
 import Control.Monad.State.Class (class MonadState, modify)
+
+import Data.Lens.Types (IndexedSetter, Indexed(..), Setter, SetterP)
 import Data.Maybe (Maybe(..))
 import Data.Tuple (uncurry)
-
-import Data.Lens.Types (Setter(), SetterP())
-import Data.Lens.Types (IndexedSetter(), Indexed(..))
-
 
 infixr 4 over as %~
 infixr 4 set as .~
@@ -81,7 +78,7 @@ mulOver p = over p <<< flip mul
 subOver :: forall s t a. (Ring a) => Setter s t a a -> a -> s -> t
 subOver p = over p <<< flip sub
 
-divOver :: forall s t a. (DivisionRing a) => Setter s t a a -> a -> s -> t
+divOver :: forall s t a. (EuclideanRing a) => Setter s t a a -> a -> s -> t
 divOver p = over p <<< flip div
 
 disjOver :: forall s t a. (BooleanAlgebra a) => Setter s t a a -> a -> s -> t
@@ -115,7 +112,7 @@ mulModifying p = modifying p <<< flip mul
 subModifying :: forall s a m. (MonadState s m, Ring a) => SetterP s a -> a -> m Unit
 subModifying p = modifying p <<< flip sub
 
-divModifying :: forall s a m. (MonadState s m, DivisionRing a) => SetterP s a -> a -> m Unit
+divModifying :: forall s a m. (MonadState s m, EuclideanRing a) => SetterP s a -> a -> m Unit
 divModifying p = modifying p <<< flip div
 
 disjModifying :: forall s a m. (MonadState s m, BooleanAlgebra a) => SetterP s a -> a -> m Unit

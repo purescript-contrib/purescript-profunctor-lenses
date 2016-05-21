@@ -1,11 +1,11 @@
 module Data.Lens.Lens.Product where
 
-import Prelude ((<<<))
+import Prelude
 
-import Data.Functor.Product (Product())
+import Data.Functor.Product (Product)
 
 import Data.Lens.Iso.Product (_Product)
-import Data.Lens.Lens (Lens())
+import Data.Lens.Lens (Lens)
 import Data.Lens.Lens.Tuple as T
 
 -- | Lens for the first component of a `Product`.

@@ -1,8 +1,7 @@
 -- | This module defines the `Market` profunctor
-
 module Data.Lens.Internal.Market where
 
-import Prelude (class Functor, (<<<))
+import Prelude
 
 import Data.Bifunctor as BF
 import Data.Either (Either(..), either)
@@ -19,5 +18,7 @@ instance profunctorMarket :: Profunctor (Market a b) where
   dimap f g (Market a b) = Market (g <<< a) (BF.lmap g <<< b <<< f)
 
 instance choiceMarket :: Choice (Market a b) where
-  left (Market x y) = Market (Left <<< x) (either (BF.lmap Left <<< y) (Left <<< Right))
-  right (Market x y) = Market (Right <<< x) (either (Left <<< Left) (BF.lmap Right <<< y))
+  left (Market x y) =
+    Market (Left <<< x) (either (BF.lmap Left <<< y) (Left <<< Right))
+  right (Market x y) =
+    Market (Right <<< x) (either (Left <<< Left) (BF.lmap Right <<< y))

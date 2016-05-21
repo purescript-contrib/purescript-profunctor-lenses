@@ -5,16 +5,15 @@ module Data.Lens.Index
 
 import Prelude
 
-import Data.Identity (Identity())
+import Data.Array as A
+import Data.Identity (Identity)
+import Data.Lens.Internal.Wander (wander)
+import Data.Lens.Types (TraversalP)
 import Data.Map as M
-import Data.Maybe (Maybe(), maybe, fromMaybe)
+import Data.Maybe (Maybe, maybe, fromMaybe)
 import Data.Set as S
 import Data.StrMap as SM
-import Data.Array as A
-
 import Data.Traversable (traverse)
-import Data.Lens.Internal.Wander (wander)
-import Data.Lens.Types (TraversalP())
 
 class Index m a b where
   ix :: a -> TraversalP m b
