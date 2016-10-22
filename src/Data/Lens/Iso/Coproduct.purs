@@ -1,8 +1,8 @@
 module Data.Lens.Iso.Coproduct where
 
 import Data.Either (Either)
-import Data.Functor.Coproduct (Coproduct(..), unCoproduct)
-
+import Data.Functor.Coproduct (Coproduct(..))
+import Data.Newtype (unwrap)
 import Data.Lens.Iso (Iso, iso)
 
 _Coproduct
@@ -12,4 +12,4 @@ _Coproduct
       (Coproduct h i b)
       (Either (f a) (g a))
       (Either (h b) (i b))
-_Coproduct = iso unCoproduct Coproduct
+_Coproduct = iso unwrap Coproduct

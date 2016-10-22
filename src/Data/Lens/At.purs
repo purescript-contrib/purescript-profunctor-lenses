@@ -5,7 +5,7 @@ module Data.Lens.At
 
 import Prelude
 
-import Data.Identity (runIdentity, Identity(..))
+import Data.Identity (Identity(..))
 import Data.Map as M
 import Data.Maybe (Maybe(..), maybe)
 import Data.Set as S
@@ -13,12 +13,13 @@ import Data.StrMap as SM
 
 import Data.Lens (LensP, lens)
 import Data.Lens.Index (class Index)
+import Data.Newtype (unwrap)
 
 class (Index m a b) <= At m a b where
   at :: a -> LensP m (Maybe b)
 
 instance atIdentity :: At (Identity a) Unit a where
-  at _ = lens (Just <<< runIdentity) (flip maybe Identity)
+  at _ = lens (Just <<< unwrap) (flip maybe Identity)
 
 instance atMaybe :: At (Maybe a) Unit a where
   at _ = lens id \_ -> id

@@ -19,9 +19,10 @@ import Data.Lens.Indexed (iwander, positions, unIndex)
 import Data.Lens.Types (IndexedTraversal, IndexedOptic, Indexed(..), Traversal, Optic, class Wander, wander)
 import Data.Lens.Types (Traversal, TraversalP) as ExportTypes
 import Data.Monoid.Disj (Disj(..))
-import Data.Profunctor.Star (Star(..), unStar)
+import Data.Profunctor.Star (Star(..))
 import Data.Traversable (class Traversable, traverse)
 import Data.Tuple (Tuple(..), uncurry)
+import Data.Newtype (unwrap)
 
 -- | Create a `Traversal` which traverses the elements of a `Traversable` functor.
 traversed :: forall t a b. (Traversable t) => Traversal (t a) (t b) a b
@@ -31,7 +32,7 @@ traversed = wander traverse
 traverseOf
   :: forall f s t a b. (Applicative f)
   => Optic (Star f) s t a b -> (a -> f b) -> s -> f t
-traverseOf t = unStar <<< t <<< Star
+traverseOf t = unwrap <<< t <<< Star
 
 -- | Sequence the foci of a `Traversal`, pulling out an `Applicative` effect.
 -- | If you do not need the result, see `sequenceOf_` for `Fold`s.
@@ -45,7 +46,7 @@ sequenceOf t = traverseOf t id
 failover
   :: forall f s t a b. (Alternative f)
   => Optic (Star (Tuple (Disj Boolean))) s t a b -> (a -> b) -> s -> f t
-failover t f s = case unStar (t $ Star $ Tuple (Disj true) <<< f) s of
+failover t f s = case unwrap (t $ Star $ Tuple (Disj true) <<< f) s of
   Tuple (Disj true) x  -> pure x
   Tuple (Disj false) _ -> empty
 
@@ -59,10 +60,10 @@ element n tr = unIndex $ elementsOf (positions tr) (_ == n)
 elementsOf
   :: forall p i s t a. (Wander p)
   => IndexedTraversal i s t a a -> (i -> Boolean) -> IndexedOptic p i s t a a
-elementsOf tr pr = iwander \f -> unStar $ tr $ Indexed $ Star $ \(Tuple i a) -> if pr i then f i a else pure a
+elementsOf tr pr = iwander \f -> unwrap $ tr $ Indexed $ Star $ \(Tuple i a) -> if pr i then f i a else pure a
 
 -- | Turn a pure profunctor `IndexedTraversal` into a `lens`-like `IndexedTraversal`.
 itraverseOf
   :: forall f i s t a b. (Applicative f)
   => IndexedOptic (Star f) i s t a b -> (i -> a -> f b) -> s -> f t
-itraverseOf t f = unStar $ t $ Indexed $ Star $ uncurry f
+itraverseOf t f = unwrap $ t $ Indexed $ Star $ uncurry f

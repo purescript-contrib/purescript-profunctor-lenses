@@ -4,10 +4,11 @@ module Data.Lens.Internal.Wander where
 
 import Prelude
 
-import Data.Identity (Identity(..), runIdentity)
+import Data.Identity (Identity(..))
 import Data.Profunctor.Choice (class Choice)
-import Data.Profunctor.Star (Star(..), unStar)
+import Data.Profunctor.Star (Star(..))
 import Data.Profunctor.Strong (class Strong)
+import Data.Newtype (unwrap)
 
 -- | Class for profunctors that support polymorphic traversals.
 class (Strong p, Choice p) <= Wander p where
@@ -18,7 +19,7 @@ class (Strong p, Choice p) <= Wander p where
     -> p s t
 
 instance wanderFunction :: Wander Function where
-  wander t f = runIdentity <<< t (Identity <<< f)
+  wander t f = unwrap <<< t (Identity <<< f)
 
 instance wanderStar :: (Applicative f) => Wander (Star f) where
-  wander t = Star <<< t <<< unStar
+  wander t = Star <<< t <<< unwrap
