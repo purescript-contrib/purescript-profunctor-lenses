@@ -1,21 +1,18 @@
 -- | This module defines the `Focusing` functor
-module Data.Lens.Internal.Focusing
-  ( Focusing(..)
-  , runFocusing
-  ) where
+module Data.Lens.Internal.Focusing where
 
 import Prelude
 
 import Data.Monoid (class Monoid)
 import Data.Tuple (Tuple)
+import Data.Newtype (class Newtype)
 
 -- | The functor used to zoom into `StateT`.
 newtype Focusing m s a = Focusing (m (Tuple s a))
 
-runFocusing :: forall m s a. Focusing m s a -> m (Tuple s a)
-runFocusing (Focusing r) = r
+derive instance newtypeFocusing :: Newtype (Focusing m s a) _
 
-instance focusingFunctor :: (Functor m) => Functor (Focusing m s) where
+instance focusingFunctor :: Functor m => Functor (Focusing m s) where
   map f (Focusing r) = Focusing (map (map f) r)
 
 instance focusingApply :: (Apply m, Semigroup s) => Apply (Focusing m s) where

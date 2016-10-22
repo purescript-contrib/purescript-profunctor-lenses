@@ -2,6 +2,7 @@
 module Data.Lens.Internal.Tagged where
 
 import Data.Either (Either(..))
+import Data.Newtype (class Newtype)
 import Data.Profunctor (class Profunctor)
 import Data.Profunctor.Choice (class Choice)
 import Data.Profunctor.Costrong (class Costrong)
@@ -9,8 +10,7 @@ import Data.Tuple (Tuple(..))
 
 newtype Tagged a b = Tagged b
 
-unTagged :: forall a b. Tagged a b -> b
-unTagged (Tagged x) = x
+derive instance newtypeTagged :: Newtype (Tagged a b) _
 
 instance taggedProfunctor :: Profunctor Tagged where
   dimap _ g (Tagged x) = Tagged (g x)

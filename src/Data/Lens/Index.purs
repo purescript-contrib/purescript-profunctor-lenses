@@ -8,7 +8,7 @@ import Prelude
 import Data.Array as A
 import Data.Identity (Identity)
 import Data.Lens.Internal.Wander (wander)
-import Data.Lens.Types (TraversalP)
+import Data.Lens.Types (Traversal')
 import Data.Map as M
 import Data.Maybe (Maybe, maybe, fromMaybe)
 import Data.Set as S
@@ -16,9 +16,9 @@ import Data.StrMap as SM
 import Data.Traversable (traverse)
 
 class Index m a b | m -> a, m -> b where
-  ix :: a -> TraversalP m b
+  ix :: a -> Traversal' m b
 
-instance indexArr :: (Eq i) => Index (i -> a) i a where
+instance indexArr :: Eq i => Index (i -> a) i a where
   ix i =
     wander \coalg f ->
       coalg (f i) <#> \a j ->
@@ -38,12 +38,12 @@ instance indexArray :: Index (Array a) Int a where
           (pure xs)
           (coalg >>> map \x -> fromMaybe xs (A.updateAt n x xs))
 
-instance indexSet :: (Ord a) => Index (S.Set a) a Unit where
+instance indexSet :: Ord a => Index (S.Set a) a Unit where
   ix x =
     wander \coalg ->
       pure <<< S.insert x
 
-instance indexMap :: (Ord k) => Index (M.Map k v) k v where
+instance indexMap :: Ord k => Index (M.Map k v) k v where
   ix k =
     wander \coalg m ->
       M.lookup k m #

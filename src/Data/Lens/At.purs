@@ -5,25 +5,26 @@ module Data.Lens.At
 
 import Prelude
 
-import Data.Identity (runIdentity, Identity(..))
+import Data.Identity (Identity(..))
 import Data.Map as M
 import Data.Maybe (Maybe(..), maybe)
 import Data.Set as S
 import Data.StrMap as SM
+import Data.Newtype (unwrap)
 
-import Data.Lens (LensP, lens)
+import Data.Lens (Lens', lens)
 import Data.Lens.Index (class Index)
 
 class (Index m a b) <= At m a b where
-  at :: a -> LensP m (Maybe b)
+  at :: a -> Lens' m (Maybe b)
 
 instance atIdentity :: At (Identity a) Unit a where
-  at _ = lens (Just <<< runIdentity) (flip maybe Identity)
+  at _ = lens (Just <<< unwrap) (flip maybe Identity)
 
 instance atMaybe :: At (Maybe a) Unit a where
   at _ = lens id \_ -> id
 
-instance atSet :: (Ord v) => At (S.Set v) v Unit where
+instance atSet :: Ord v => At (S.Set v) v Unit where
   at x = lens get (flip update)
     where
       get xs =
@@ -33,7 +34,7 @@ instance atSet :: (Ord v) => At (S.Set v) v Unit where
       update Nothing = S.delete x
       update (Just _) = S.insert x
 
-instance atMap :: (Ord k) => At (M.Map k v) k v where
+instance atMap :: Ord k => At (M.Map k v) k v where
   at k =
     lens (M.lookup k) \m ->
       maybe (M.delete k m) \v -> M.insert k v m

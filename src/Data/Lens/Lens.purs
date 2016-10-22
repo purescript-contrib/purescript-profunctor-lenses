@@ -10,7 +10,7 @@ module Data.Lens.Lens
 import Prelude
 
 import Data.Lens.Internal.Shop (Shop(..))
-import Data.Lens.Types (Lens, LensP, ALens, ALensP)
+import Data.Lens.Types (Lens, Lens', ALens, ALens')
 import Data.Profunctor (dimap)
 import Data.Profunctor.Strong (first)
 import Data.Tuple (Tuple(..))

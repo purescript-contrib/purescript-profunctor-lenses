@@ -5,7 +5,7 @@ import Prelude
 import Data.Lens (view, traversed, _1, _2, _Just, _Left, lens)
 import Data.Lens.Index (ix)
 import Data.Lens.Fold ((^?))
-import Data.Lens.Zoom (Traversal, TraversalP, Lens, LensP, zoom)
+import Data.Lens.Zoom (Traversal, Traversal', Lens, Lens', zoom)
 import Data.Tuple  (Tuple(..))
 import Data.Maybe  (Maybe(..))
 import Data.Either (Either(..))
@@ -35,16 +35,16 @@ bars = foo <<< _Just <<< bar <<< traversed
 type BarRec = { foo :: Array (Either { bar :: Array Int } String) }
 data Bar = Bar BarRec
 
-_Bar :: LensP Bar BarRec
+_Bar :: Lens' Bar BarRec
 _Bar = lens (\(Bar rec) -> rec) (\_ -> Bar)
 
 doc2 :: Bar
 doc2 = Bar { foo: [Left { bar: [ 1, 2, 3 ] }] }
 
-_0Justbar :: TraversalP Bar (Either { bar :: Array Int } String)
+_0Justbar :: Traversal' Bar (Either { bar :: Array Int } String)
 _0Justbar = _Bar <<< foo <<< ix 0
 
-_1bars :: TraversalP Bar Int
+_1bars :: Traversal' Bar Int
 _1bars = _0Justbar <<< _Left <<< bar <<< ix 1
 
 
