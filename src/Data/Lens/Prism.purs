@@ -11,27 +11,28 @@ import Control.MonadPlus (guard)
 
 import Data.Either (Either(..), either)
 import Data.HeytingAlgebra (tt, ff)
-import Data.Lens.Types (Prism, PrismP, APrism, APrismP, Review, ReviewP) as ExportTypes
-import Data.Lens.Types (Prism, PrismP, APrism, Market(..), Review, Tagged(..), unTagged)
+import Data.Lens.Types (Prism, Prism', APrism, APrism', Review, Review') as ExportTypes
+import Data.Lens.Types (Prism, Prism', APrism, Market(..), Review, Tagged(..))
 import Data.Maybe (Maybe, maybe)
 import Data.Profunctor (dimap, rmap)
 import Data.Profunctor.Choice (right)
+import Data.Newtype (under)
 
 -- | Create a `Prism` from a constructor/pattern pair.
 prism :: forall s t a b. (b -> t) -> (s -> Either t a) -> Prism s t a b
 prism to fro pab = dimap fro (either id id) (right (rmap to pab))
 
-prism' :: forall s a. (a -> s) -> (s -> Maybe a) -> PrismP s a
+prism' :: forall s a. (a -> s) -> (s -> Maybe a) -> Prism' s a
 prism' to fro = prism to (\s -> maybe (Left s) Right (fro s))
 
 -- | Review a value through a `Prism`.
 review :: forall s t a b. Review s t a b -> b -> t
-review p = unTagged <<< p <<< Tagged
+review = under Tagged
 
-nearly :: forall a. a -> (a -> Boolean) -> PrismP a Unit
+nearly :: forall a. a -> (a -> Boolean) -> Prism' a Unit
 nearly x f = prism' (const x) (guard <<< f)
 
-only :: forall a. (Eq a) => a -> Prism a a Unit Unit
+only :: forall a. Eq a => a -> Prism a a Unit Unit
 only x = nearly x (_ == x)
 
 clonePrism :: forall s t a b. APrism s t a b -> Prism s t a b

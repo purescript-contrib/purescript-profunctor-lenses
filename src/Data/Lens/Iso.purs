@@ -6,9 +6,10 @@ module Data.Lens.Iso
 
 import Prelude
 
-import Data.Lens.Types (Iso, IsoP, AnIso, AnIsoP, Optic, Exchange(..), Re(..), runRe)
+import Data.Lens.Types (Iso, Iso', AnIso, AnIso', Optic, Exchange(..), Re(..))
 import Data.Profunctor (class Profunctor, dimap, rmap)
 import Data.Tuple (Tuple, curry, uncurry)
+import Data.Newtype (unwrap)
 
 -- | Create an `Iso` from a pair of morphisms.
 iso :: forall s t a b. (s -> a) -> (b -> t) -> Iso s t a b
@@ -25,12 +26,12 @@ cloneIso l = withIso l \x y p -> iso x y p
 
 -- | Reverses an optic.
 re :: forall p s t a b. Optic (Re p a b) s t a b -> Optic p b a t s
-re t = runRe (t (Re id))
+re t = unwrap (t (Re id))
 
 au :: forall s t a b e. AnIso s t a b -> ((b -> t) -> e -> s) -> e -> a
 au l = withIso l \sa bt f e -> sa (f bt e)
 
-auf :: forall s t a b e r p. (Profunctor p) => AnIso s t a b -> (p r a -> e -> b) -> p r s -> e -> t
+auf :: forall s t a b e r p. Profunctor p => AnIso s t a b -> (p r a -> e -> b) -> p r s -> e -> t
 auf l = withIso l \sa bt f g e -> bt (f (rmap sa g) e)
 
 under :: forall s t a b. AnIso s t a b -> (t -> s) -> b -> a

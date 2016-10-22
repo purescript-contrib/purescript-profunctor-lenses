@@ -2,10 +2,11 @@ module Data.Lens.Internal.Forget where
 
 import Prelude
 
-import Data.Const (Const(..), getConst)
+import Data.Const (Const(..))
 import Data.Either (Either(..), either)
 import Data.Lens.Internal.Wander (class Wander)
 import Data.Monoid (class Monoid, mempty)
+import Data.Newtype (class Newtype, alaF)
 import Data.Profunctor (class Profunctor)
 import Data.Profunctor.Choice (class Choice)
 import Data.Profunctor.Cochoice (class Cochoice)
@@ -19,9 +20,7 @@ import Data.Tuple (fst, snd)
 -- | instance.
 newtype Forget r a b = Forget (a -> r)
 
--- | Unwrap a value of type `Forget`.
-runForget :: forall r a b. Forget r a b -> a -> r
-runForget (Forget z) = z
+derive instance newtypeForget :: Newtype (Forget r a b) _
 
 instance profunctorForget :: Profunctor (Forget r) where
   dimap f _ (Forget z) = Forget (z <<< f)
@@ -38,5 +37,5 @@ instance cochoiceForget :: Cochoice (Forget r) where
   unleft  (Forget z) = Forget (z <<< Left)
   unright (Forget z) = Forget (z <<< Right)
 
-instance wanderForget :: (Monoid r) => Wander (Forget r) where
-  wander f (Forget r) = Forget (getConst <<< f (Const <<< r))
+instance wanderForget :: Monoid r => Wander (Forget r) where
+  wander f (Forget r) = Forget (alaF Const f r)
