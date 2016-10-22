@@ -7,8 +7,9 @@ import Control.Monad.State (modify, get, evalState)
 import Data.Lens.Internal.Compose (Compose(..), decompose)
 import Data.Lens.Types (class Wander, wander, IndexedOptic, Traversal, Optic, Indexed(Indexed), fromIndexed)
 import Data.Profunctor (class Profunctor, dimap)
-import Data.Profunctor.Star (Star(..), unStar)
+import Data.Profunctor.Star (Star(..))
 import Data.Tuple (curry, snd)
+import Data.Newtype (unwrap)
 
 -- | Converts an `IndexedOptic` to an `Optic` by forgetting indices.
 unIndex
@@ -29,5 +30,5 @@ positions
    . Wander p
   => Traversal s t a b
   -> IndexedOptic p Int s t a b
-positions tr = iwander \f s -> flip evalState 0 $ decompose $ flip unStar s $
+positions tr = iwander \f s -> flip evalState 0 $ decompose $ flip unwrap s $
   tr $ Star \a -> Compose $ (f <$> get <*> pure a) <* modify (_ + 1)

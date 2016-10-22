@@ -10,7 +10,8 @@ import Control.Monad.State.Trans (StateT (..), runStateT)
 
 import Data.Lens.Internal.Focusing (Focusing (..), runFocusing)
 import Data.Lens.Types
-import Data.Profunctor.Star (Star (..), unStar)
+import Data.Profunctor.Star (Star (..))
+import Data.Newtype (unwrap)
 
 -- | Zooms into a substate in a `StateT` transformer.
 zoom
@@ -19,4 +20,4 @@ zoom
   -> StateT a m r
   -> StateT s m r
 zoom p ma =
-  StateT $ runFocusing <<< unStar (p $ Star $ Focusing <<< runStateT ma)
+  StateT $ runFocusing <<< unwrap (p $ Star $ Focusing <<< runStateT ma)

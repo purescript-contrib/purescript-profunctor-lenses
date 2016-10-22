@@ -1,7 +1,8 @@
 module Data.Lens.Iso.Product where
 
-import Data.Functor.Product (Product(..), unProduct)
+import Data.Functor.Product (Product(..))
 import Data.Tuple (Tuple)
+import Data.Newtype (unwrap)
 
 import Data.Lens.Iso (Iso, iso)
 
@@ -12,4 +13,4 @@ _Product
       (Product h i b)
       (Tuple (f a) (g a))
       (Tuple (h b) (i b))
-_Product = iso unProduct Product
+_Product = iso unwrap Product
