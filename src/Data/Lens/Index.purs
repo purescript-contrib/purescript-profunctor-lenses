@@ -15,7 +15,7 @@ import Data.Set as S
 import Data.StrMap as SM
 import Data.Traversable (traverse)
 
-class Index m a b where
+class Index m a b | m -> a, m -> b where
   ix :: a -> TraversalP m b
 
 instance indexArr :: (Eq i) => Index (i -> a) i a where
