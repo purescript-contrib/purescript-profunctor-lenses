@@ -15,7 +15,7 @@ import Data.Newtype (unwrap)
 import Data.Lens (Lens', lens)
 import Data.Lens.Index (class Index)
 
-class (Index m a b) <= At m a b where
+class Index m a b <= At m a b | m -> a, m -> b where
   at :: a -> Lens' m (Maybe b)
 
 instance atIdentity :: At (Identity a) Unit a where
