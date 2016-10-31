@@ -9,7 +9,7 @@ import Data.Lens.Types (class Wander, wander, IndexedOptic, Traversal, Optic, In
 import Data.Newtype (unwrap)
 import Data.Profunctor (class Profunctor, dimap)
 import Data.Profunctor.Star (Star(..))
-import Data.Tuple (curry, snd)
+import Data.Tuple (curry, fst, snd)
 
 -- | Converts an `IndexedOptic` to an `Optic` by forgetting indices.
 unIndex
@@ -18,6 +18,13 @@ unIndex
   => IndexedOptic p i s t a b
   -> Optic p s t a b
 unIndex l = l <<< Indexed <<< dimap snd id
+
+asIndex
+  :: forall p i s t a b
+   . Profunctor p
+  => IndexedOptic p i s t a b
+  -> Optic p s t i b
+asIndex l = l <<< Indexed <<< dimap fst id
 
 -- | Converts a `lens`-like indexed traversal to an `IndexedTraversal`.
 iwander
