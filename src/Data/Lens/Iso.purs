@@ -1,6 +1,6 @@
 -- | This module defines functions for working with isomorphisms.
 module Data.Lens.Iso
-  ( iso, withIso, cloneIso, re, au, auf, under, curried, uncurried, flipped
+  ( iso, withIso, cloneIso, re, au, auf, under, curried, uncurried, flipped, mapping, dimapping
   , module Data.Lens.Types
   ) where
 
@@ -45,3 +45,10 @@ uncurried = iso uncurry curry
 
 flipped :: forall a b c d e f. Iso (a -> b -> c) (d -> e -> f) (b -> a -> c) (e -> d -> f)
 flipped = iso flip flip
+
+mapping :: forall s t a b f g. (Functor f, Functor g) => AnIso s t a b -> Iso (f s) (g t) (f a) (g b)
+mapping l = withIso l \sa bt -> iso (map sa) (map bt)
+
+dimapping :: forall s ss t tt a aa b bb p q
+          . (Profunctor p, Profunctor q) => AnIso s t a b -> AnIso ss tt aa bb -> Iso (p a ss) (q b tt) (p s aa) (q t bb)
+dimapping f g = withIso f \sa bt -> withIso g \ssaa bbtt -> iso (dimap sa ssaa) (dimap bt bbtt)
