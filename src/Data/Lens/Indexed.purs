@@ -5,7 +5,7 @@ import Prelude
 import Control.Monad.State (modify, get, evalState)
 
 import Data.Functor.Compose (Compose(..))
-import Data.Lens.Types (class Wander, wander, IndexedOptic, Traversal, Optic, Indexed(..))
+import Data.Lens.Types (class Wander, wander, Optic, IndexedOptic, Indexed(..), Traversal, IndexedTraversal)
 import Data.Newtype (unwrap)
 import Data.Profunctor (class Profunctor, dimap)
 import Data.Profunctor.Star (Star(..))
