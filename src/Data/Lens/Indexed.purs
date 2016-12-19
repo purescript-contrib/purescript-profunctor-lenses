@@ -29,19 +29,16 @@ asIndex l = l <<< Indexed <<< dimap fst id
 -- | Converts a `lens`-like indexed traversal to an `IndexedTraversal`.
 iwander
   :: forall p i s t a b
-   . Wander p
   => (forall f. Applicative f => (i -> a -> f b) -> s -> f t)
-  -> Indexed p i a b
-  -> p s t
+  -> IndexedTraversal p i s t a b
 iwander itr = wander (\f s -> itr (curry f) s) <<< unwrap
 
 -- | Converts a `Traversal` to an `IndexedTraversal` by using the integer
 -- | positions as indices.
 positions
   :: forall p s t a b
-   . Wander p
   => Traversal s t a b
-  -> IndexedOptic p Int s t a b
+  -> IndexedTraversal p Int s t a b
 positions tr =
   iwander \f s ->
     flip evalState 0 $ unwrap $ flip unwrap s $ tr $ Star \a ->
