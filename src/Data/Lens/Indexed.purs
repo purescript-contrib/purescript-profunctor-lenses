@@ -5,7 +5,7 @@ import Prelude
 import Control.Monad.State (modify, get, evalState)
 
 import Data.Functor.Compose (Compose(..))
-import Data.Lens.Types (class Wander, wander, IndexedOptic, Traversal, Optic, Indexed(..))
+import Data.Lens.Types (wander, Optic, IndexedOptic, Indexed(..), Traversal, IndexedTraversal)
 import Data.Newtype (unwrap)
 import Data.Profunctor (class Profunctor, dimap)
 import Data.Profunctor.Star (Star(..))
@@ -28,20 +28,17 @@ asIndex l = l <<< Indexed <<< dimap fst id
 
 -- | Converts a `lens`-like indexed traversal to an `IndexedTraversal`.
 iwander
-  :: forall p i s t a b
-   . Wander p
-  => (forall f. Applicative f => (i -> a -> f b) -> s -> f t)
-  -> Indexed p i a b
-  -> p s t
+  :: forall i s t a b
+   . (forall f. Applicative f => (i -> a -> f b) -> s -> f t)
+  -> IndexedTraversal i s t a b
 iwander itr = wander (\f s -> itr (curry f) s) <<< unwrap
 
 -- | Converts a `Traversal` to an `IndexedTraversal` by using the integer
 -- | positions as indices.
 positions
-  :: forall p s t a b
-   . Wander p
-  => Traversal s t a b
-  -> IndexedOptic p Int s t a b
+  :: forall s t a b
+   . Traversal s t a b
+  -> IndexedTraversal Int s t a b
 positions tr =
   iwander \f s ->
     flip evalState 0 $ unwrap $ flip unwrap s $ tr $ Star \a ->
