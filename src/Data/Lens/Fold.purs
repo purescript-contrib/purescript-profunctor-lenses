@@ -4,8 +4,8 @@ module Data.Lens.Fold
   , (^..), toListOfOn
   , preview, foldOf, foldMapOf, foldrOf, foldlOf, toListOf, firstOf, lastOf
   , maximumOf, minimumOf, allOf, anyOf, andOf, orOf, elemOf, notElemOf, sumOf
-  , productOf, lengthOf, findOf, sequenceOf_, has, hasn't, replicated, filtered
-  , folded, unfolded
+  , productOf, lengthOf, findOf, sequenceOf_, traverseOf_, has, hasn't
+  , replicated, filtered, folded, unfolded
   , ifoldMapOf, ifoldrOf, ifoldlOf, iallOf, ianyOf, itoListOf, itraverseOf_
   , module ExportTypes
   )
