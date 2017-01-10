@@ -1,5 +1,5 @@
--- | This module defines the `Shop` profunctor
-module Data.Lens.Internal.Shop where
+-- | This module defines the `IndexedShop` profunctor
+module Data.Lens.Internal.IndexedShop where
 
 import Prelude
 

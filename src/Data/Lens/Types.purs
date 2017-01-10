@@ -4,6 +4,7 @@ module Data.Lens.Types
   , module Data.Lens.Internal.Exchange
   , module Data.Lens.Internal.Market
   , module Data.Lens.Internal.Shop
+  , module Data.Lens.Internal.IndexedShop
   , module Data.Lens.Internal.Tagged
   , module Data.Lens.Internal.Forget
   , module Data.Lens.Internal.Wander
@@ -17,6 +18,7 @@ import Data.Lens.Internal.Indexed (Indexed(..))
 import Data.Lens.Internal.Market (Market(..))
 import Data.Lens.Internal.Re (Re(..))
 import Data.Lens.Internal.Shop (Shop(..))
+import Data.Lens.Internal.IndexedShop (IndexedShop(..))
 import Data.Lens.Internal.Tagged (Tagged(..))
 import Data.Lens.Internal.Wander (class Wander, wander)
 import Data.Profunctor (class Profunctor)
