@@ -46,7 +46,7 @@ ilens' to pab = dimap to (\(Tuple b f) -> f b) (first ((un Indexed) pab))
 -- create an `IndexedLens` from a getter/setter pair.
 ilens :: forall i s t a b.
   (s -> Tuple i a) -> (s -> b -> t) -> IndexedLens i s t a b
-ilens sia sbt = ilens' \s -> Tuple (sia s) \b -> sbt s b
+ilens get set = ilens' \s -> Tuple (get s) \b -> set s b
 
 withIndexedLens :: forall i s t a b r.
   (AnIndexedLens i s t a b) -> ((s -> (Tuple i a)) -> (s -> b -> t) -> r) -> r
