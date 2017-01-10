@@ -41,6 +41,13 @@ type Lens' s a = Lens s s a a
 type ALens s t a b = Optic (Shop a b) s t a b
 type ALens' s a = ALens s s a a
 
+-- | An indexed lens.
+type IndexedLens i s t a b = forall p. Strong p => IndexedOptic p i s t a b
+type IndexedLens' i s a = IndexedLens i s s a a
+
+type AnIndexedLens i s t a b = IndexedOptic (IndexedShop i a b) i s t a b
+type AnIndexedLens' i s a = AnIndexedLens i s s a a
+
 -- | A prism.
 type Prism s t a b = forall p. Choice p => Optic p s t a b
 type Prism' s a = Prism s s a a
