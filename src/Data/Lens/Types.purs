@@ -4,6 +4,7 @@ module Data.Lens.Types
   , module Data.Lens.Internal.Exchange
   , module Data.Lens.Internal.Market
   , module Data.Lens.Internal.Shop
+  , module Data.Lens.Internal.IndexedShop
   , module Data.Lens.Internal.Tagged
   , module Data.Lens.Internal.Forget
   , module Data.Lens.Internal.Wander
@@ -17,6 +18,7 @@ import Data.Lens.Internal.Indexed (Indexed(..))
 import Data.Lens.Internal.Market (Market(..))
 import Data.Lens.Internal.Re (Re(..))
 import Data.Lens.Internal.Shop (Shop(..))
+import Data.Lens.Internal.IndexedShop (IndexedShop(..))
 import Data.Lens.Internal.Tagged (Tagged(..))
 import Data.Lens.Internal.Wander (class Wander, wander)
 import Data.Profunctor (class Profunctor)
@@ -40,6 +42,13 @@ type Lens' s a = Lens s s a a
 
 type ALens s t a b = Optic (Shop a b) s t a b
 type ALens' s a = ALens s s a a
+
+-- | An indexed lens.
+type IndexedLens i s t a b = forall p. Strong p => IndexedOptic p i s t a b
+type IndexedLens' i s a = IndexedLens i s s a a
+
+type AnIndexedLens i s t a b = IndexedOptic (IndexedShop i a b) i s t a b
+type AnIndexedLens' i s a = AnIndexedLens i s s a a
 
 -- | A prism.
 type Prism s t a b = forall p. Choice p => Optic p s t a b
