@@ -14,7 +14,6 @@ module Data.Lens.Lens
 import Prelude
 
 import Data.Lens.Internal.Shop (Shop(..))
-import Data.Lens.Internal.IndexedShop (IndexedShop(..))
 import Data.Lens.Internal.Indexed (Indexed(..))
 import Data.Lens.Types
   ( Lens,  Lens', ALens, ALens'
