@@ -14,7 +14,6 @@ module Data.Lens.Lens
 import Prelude
 
 import Data.Lens.Internal.Shop (Shop(..))
-import Data.Lens.Internal.IndexedShop (IndexedShop(..))
 import Data.Lens.Internal.Indexed (Indexed(..))
 import Data.Lens.Types
   ( Lens,  Lens', ALens, ALens'
@@ -50,7 +49,7 @@ ilens get set = ilens' \s -> Tuple (get s) \b -> set s b
 
 withIndexedLens :: forall i s t a b r.
   (AnIndexedLens i s t a b) -> ((s -> (Tuple i a)) -> (s -> b -> t) -> r) -> r
-withIndexedLens l f = case l (Indexed (IndexedShop id \_ b -> b)) of IndexedShop x y -> f x y
+withIndexedLens l f = case l (Indexed (Shop id \_ b -> b)) of Shop x y -> f x y
 
 cloneIndexedLens :: forall i s t a b. AnIndexedLens i s t a b -> IndexedLens i s t a b
 cloneIndexedLens l = withIndexedLens l \x y p -> ilens x y p
