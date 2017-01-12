@@ -57,7 +57,7 @@ stateTest = evalState go (Tuple 4 ["Foo", "Bar"]) where
 
 --test cloning of indexed lenses
 cloneTest :: Tuple Int Int
-cloneTest = iover i_2 (+) (Tuple 1 2)
+cloneTest = iover (cloneIndexedLens i_2) (+) (Tuple 1 2)
 
 i_2 :: forall i a b. IndexedLens i (Tuple i a) (Tuple i b) a b
 i_2 = ilens id \(Tuple i _) b -> Tuple i b
