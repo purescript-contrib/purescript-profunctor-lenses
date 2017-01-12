@@ -4,6 +4,8 @@ import Prelude
 
 import Data.Lens (view, traversed, _1, _2, _Just, _Left, lens)
 import Data.Lens.Index (ix)
+import Data.Lens.Setter (iover)
+import Data.Lens.Lens (ilens, IndexedLens, cloneIndexedLens)
 import Data.Lens.Fold ((^?))
 import Data.Lens.Zoom (Traversal, Traversal', Lens, Lens', zoom)
 import Data.Tuple  (Tuple(..))
@@ -53,8 +55,16 @@ stateTest :: Tuple Int String
 stateTest = evalState go (Tuple 4 ["Foo", "Bar"]) where
   go = Tuple <$> zoom _1 get <*> zoom (_2 <<< traversed) get
 
+--test cloning of indexed lenses
+cloneTest :: Tuple Int Int
+cloneTest = iover i_2 (+) (Tuple 1 2)
+
+i_2 :: forall i a b. IndexedLens i (Tuple i a) (Tuple i b) a b
+i_2 = ilens id \(Tuple i _) b -> Tuple i b
+
 main :: forall e. Eff (console :: CONSOLE | e) Unit
 main = do
   logShow $ view bars doc
   logShow $ doc2 ^? _1bars
   logShow stateTest
+  logShow cloneTest
