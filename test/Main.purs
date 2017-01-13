@@ -56,11 +56,11 @@ stateTest = evalState go (Tuple 4 ["Foo", "Bar"]) where
   go = Tuple <$> zoom _1 get <*> zoom (_2 <<< traversed) get
 
 --test cloning of indexed lenses
-cloneTest :: Tuple Int Int
-cloneTest = iover (cloneIndexedLens i_2) (+) (Tuple 1 2)
+cloneTest :: Tuple Int (Tuple Int Int)
+cloneTest = iover (cloneIndexedLens i_2) Tuple (Tuple 1 2)
 
-i_2 :: forall i a b. IndexedLens i (Tuple i a) (Tuple i b) a b
-i_2 = ilens id \(Tuple i _) b -> Tuple i b
+i_2 :: forall a b c. IndexedLens Int (Tuple a b) (Tuple a c) b c
+i_2 = ilens (\(Tuple _ b) -> Tuple 0 b) (\(Tuple a _) b -> Tuple a b)
 
 main :: forall e. Eff (console :: CONSOLE | e) Unit
 main = do
