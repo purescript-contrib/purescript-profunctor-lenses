@@ -2,7 +2,8 @@
   "private": true,
   "scripts": {
     "clean": "rimraf output && rimraf .pulp-cache",
-    "build": "pulp build --censor-lib --strict"
+    "build": "pulp build --censor-lib --strict",
+    "test": "pulp test"
   },
   "devDependencies": {
     "pulp": "^9.0.1",
