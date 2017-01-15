@@ -48,6 +48,7 @@ _1bars :: Traversal' Bar Int
 _1bars = _0Justbar <<< _Left <<< bar <<< ix 1
 
 
+
 -- Tests state using zoom
 stateTest :: Tuple Int String
 stateTest = evalState go (Tuple 4 ["Foo", "Bar"]) where
@@ -57,4 +58,5 @@ main :: forall e. Eff (console :: CONSOLE | e) Unit
 main = do
   logShow $ view bars doc
   logShow $ doc2 ^? _1bars
+  logShow $ doc2 ^?! _lbars
   logShow stateTest
