@@ -9,7 +9,8 @@ import Prelude
 import Data.Lens.Fold (Fold, ifoldMapOf, previewOn)
 import Data.Lens.Types (IndexedFold)
 import Data.Maybe (fromMaybe', Maybe(..))
-import Data.Maybe.First (First(..), runFirst)
+import Data.Maybe.First (First(..))
+import Data.Newtype (unwrap)
 import Partial.Unsafe (unsafeCrashWith)
 
 unsafeViewPrism :: forall s t a b. Partial => s -> Fold (First a) s t a b -> a
@@ -26,7 +27,7 @@ unsafeIndexedFold
   -> IndexedFold ((First (KV i a))) i s t a b
   -> (KV i a)
 unsafeIndexedFold s l =fromMaybe' (crash "(^@?!): empty Fold")
-                         $ runFirst
+                         $ unwrap
                            $ ifoldMapOf l (\i a -> First $ Just { index : i, value : a}) s
 
 infixl 8 unsafeIndexedFold as ^@?!
