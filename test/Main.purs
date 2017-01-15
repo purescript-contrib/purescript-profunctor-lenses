@@ -5,6 +5,7 @@ import Prelude
 import Data.Lens (view, traversed, _1, _2, _Just, _Left, lens)
 import Data.Lens.Index (ix)
 import Data.Lens.Fold ((^?))
+import Data.Lens.Prism.Partial ((^?!))
 import Data.Lens.Zoom (Traversal, Traversal', Lens, Lens', zoom)
 import Data.Tuple  (Tuple(..))
 import Data.Maybe  (Maybe(..))
