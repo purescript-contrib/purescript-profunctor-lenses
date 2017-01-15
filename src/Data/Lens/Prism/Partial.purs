@@ -1,17 +1,20 @@
 module Data.Lens.Prism.Partial
   ( unsafeViewPrism, (^?!)
-  , unsafeIndexedFold, (^@?!))
+  , unsafeIndexedFold, (^@?!)
+  )
   where
 
 import Prelude
 
-import Data.Lens.Fold (Fold, foldrOf, ifoldrOf)
+import Data.Lens.Fold (Fold, ifoldMapOf, previewOn)
 import Data.Lens.Types (IndexedFold)
-import Data.Monoid.Endo (Endo)
+import Data.Maybe (fromMaybe', Maybe(..))
+import Data.Maybe.First (First(..), runFirst)
 import Partial.Unsafe (unsafeCrashWith)
 
-unsafeViewPrism :: forall s t a b. Partial => s -> Fold (Endo a) s t a b -> a
-unsafeViewPrism s l = foldrOf l const (unsafeCrashWith "^?! empty fold") s
+unsafeViewPrism :: forall s t a b. Partial => s -> Fold (First a) s t a b -> a
+unsafeViewPrism s l = fromMaybe' (crash "(^?!): Empty fold") $ previewOn s l
+
 
 infixl 8 unsafeViewPrism as ^?!
 
@@ -20,9 +23,13 @@ type KV k v = { index :: k, value :: v}
 unsafeIndexedFold
   :: forall i s t a b. Partial
   => s
-  -> IndexedFold ((Endo (KV i a))) i s t a b
+  -> IndexedFold ((First (KV i a))) i s t a b
   -> (KV i a)
-unsafeIndexedFold s l = ifoldrOf l (\i x _ -> { index : i, value : x})
-                                   (unsafeCrashWith "(^@?!): empty Fold")
-                                   s
+unsafeIndexedFold s l =fromMaybe' (crash "(^@?!): empty Fold")
+                         $ runFirst
+                           $ ifoldMapOf l (\i a -> First $ Just { index : i, value : a}) s
+
 infixl 8 unsafeIndexedFold as ^@?!
+
+crash :: forall a. String -> Unit -> a
+crash msg _ = unsafeCrashWith msg
