@@ -7,10 +7,12 @@ import Data.Lens.Index (ix)
 import Data.Lens.Setter (iover)
 import Data.Lens.Lens (ilens, IndexedLens, cloneIndexedLens)
 import Data.Lens.Fold ((^?))
+import Data.Lens.Prism.Partial ((^?!))
 import Data.Lens.Zoom (Traversal, Traversal', Lens, Lens', zoom)
 import Data.Tuple  (Tuple(..))
 import Data.Maybe  (Maybe(..))
 import Data.Either (Either(..))
+import Partial.Unsafe (unsafePartial)
 
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, logShow)
@@ -50,6 +52,7 @@ _1bars :: Traversal' Bar Int
 _1bars = _0Justbar <<< _Left <<< bar <<< ix 1
 
 
+
 -- Tests state using zoom
 stateTest :: Tuple Int String
 stateTest = evalState go (Tuple 4 ["Foo", "Bar"]) where
@@ -66,5 +69,6 @@ main :: forall e. Eff (console :: CONSOLE | e) Unit
 main = do
   logShow $ view bars doc
   logShow $ doc2 ^? _1bars
+  logShow $ unsafePartial $ doc2 ^?! _1bars
   logShow stateTest
   logShow cloneTest
