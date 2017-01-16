@@ -1,5 +1,5 @@
-module Data.Lens.Prism.Partial
-  ( unsafeViewPrism, (^?!)
+module Data.Lens.Fold.Partial
+  ( unsafeView, (^?!)
   , unsafeIndexedFold, (^@?!)
   )
   where
@@ -14,23 +14,18 @@ import Data.Tuple(Tuple(..))
 import Data.Newtype (unwrap)
 import Partial.Unsafe (unsafeCrashWith)
 
-unsafeViewPrism :: forall s t a b. Partial => s -> Fold (First a) s t a b -> a
-unsafeViewPrism s l = fromMaybe' (crash "unsafeViewPrism: Empty fold") $ previewOn s l
+unsafeView :: forall s t a b. Partial => s -> Fold (First a) s t a b -> a
+unsafeView s l = fromMaybe' (\_ -> unsafeCrashWith "unsafeView: Empty fold") $ previewOn s l
 
-infixl 8 unsafeViewPrism as ^?!
-
+infixl 8 unsafeView as ^?!
 
 unsafeIndexedFold
   :: forall i s t a b. Partial
   => s
-  -> IndexedFold ((First (Tuple i a))) i s t a b
-  -> (Tuple i a)
-unsafeIndexedFold s l = fromMaybe' (crash "unsafeIndexedFold: empty Fold")
+  -> IndexedFold (First (Tuple i a)) i s t a b
+  -> Tuple i a
+unsafeIndexedFold s l = fromMaybe' (\_ -> unsafeCrashWith "unsafeIndexedFold: empty Fold")
                           $ unwrap
                            $ ifoldMapOf l (\i a -> First $ Just (Tuple i a)) s
 
 infixl 8 unsafeIndexedFold as ^@?!
-
-
-crash :: forall a. String -> Unit -> a
-crash msg _ = unsafeCrashWith msg

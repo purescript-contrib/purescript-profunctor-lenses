@@ -7,17 +7,15 @@ import Data.Lens.Index (ix)
 import Data.Lens.Setter (iover)
 import Data.Lens.Lens (ilens, IndexedLens, cloneIndexedLens)
 import Data.Lens.Fold ((^?))
-import Data.Lens.Prism.Partial ((^?!))
+import Data.Lens.Fold.Partial ((^?!), (^@?!))
 import Data.Lens.Zoom (Traversal, Traversal', Lens, Lens', zoom)
 import Data.Tuple  (Tuple(..))
 import Data.Maybe  (Maybe(..))
 import Data.Either (Either(..))
-import Partial.Unsafe (unsafePartial)
-
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, logShow)
 import Control.Monad.State (evalState, get)
-
+import Partial.Unsafe (unsafePartial)
 
 -- Traversing an array nested within a record
 foo :: forall a b r. Lens { foo :: a | r } { foo :: b | r } a b
@@ -34,7 +32,6 @@ doc = { foo: Just { bar: [ "Hello", " ", "World" ]} }
 bars :: forall a b. Traversal (Foo a) (Foo b) a b
 bars = foo <<< _Just <<< bar <<< traversed
 
-
 -- Get the index of a deeply nested record
 type BarRec = { foo :: Array (Either { bar :: Array Int } String) }
 data Bar = Bar BarRec
@@ -50,8 +47,6 @@ _0Justbar = _Bar <<< foo <<< ix 0
 
 _1bars :: Traversal' Bar Int
 _1bars = _0Justbar <<< _Left <<< bar <<< ix 1
-
-
 
 -- Tests state using zoom
 stateTest :: Tuple Int String
@@ -70,5 +65,6 @@ main = do
   logShow $ view bars doc
   logShow $ doc2 ^? _1bars
   logShow $ unsafePartial $ doc2 ^?! _1bars
+  logShow $ unsafePartial $ Tuple 0 1 ^@?! i_2
   logShow stateTest
   logShow cloneTest
