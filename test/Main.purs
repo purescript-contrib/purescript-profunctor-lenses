@@ -59,5 +59,5 @@ main :: forall e. Eff (console :: CONSOLE | e) Unit
 main = do
   logShow $ view bars doc
   logShow $ doc2 ^? _1bars
-  logShow $ doc2 ^?! _lbars
+  logShow $ doc2 ^?! _1bars
   logShow stateTest
