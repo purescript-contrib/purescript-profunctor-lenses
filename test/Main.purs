@@ -10,6 +10,7 @@ import Data.Lens.Zoom (Traversal, Traversal', Lens, Lens', zoom)
 import Data.Tuple  (Tuple(..))
 import Data.Maybe  (Maybe(..))
 import Data.Either (Either(..))
+import Partial.Unsafe (unsafePartial)
 
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, logShow)
@@ -59,5 +60,5 @@ main :: forall e. Eff (console :: CONSOLE | e) Unit
 main = do
   logShow $ view bars doc
   logShow $ doc2 ^? _1bars
-  logShow $ doc2 ^?! _1bars
+  logShow $ unsafePartial $ doc2 ^?! _1bars
   logShow stateTest
