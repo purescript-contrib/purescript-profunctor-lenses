@@ -24,7 +24,7 @@ unsafeIndexedFold
   :: forall i s t a b. Partial
   => s
   -> IndexedFold ((First (Tuple i a))) i s t a b
-  -> (KV i a)
+  -> (Tuple i a)
 unsafeIndexedFold s l = fromMaybe' (crash "unsafeIndexedFold: empty Fold")
                           $ unwrap
                            $ ifoldMapOf l (\i a -> First $ Just (Tuple i a)) s
