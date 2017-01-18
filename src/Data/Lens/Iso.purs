@@ -1,12 +1,12 @@
 -- | This module defines functions for working with isomorphisms.
 module Data.Lens.Iso
-  ( iso, withIso, cloneIso, re, au, auf, under, curried, uncurried, flipped, mapping, dimapping
+  ( iso, withIso, cloneIso, re, au, auf, under, non, curried, uncurried, flipped, mapping, dimapping
   , module Data.Lens.Types
   ) where
 
 import Prelude
-
 import Data.Lens.Types (Iso, Iso', AnIso, AnIso', Optic, Exchange(..), Re(..))
+import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Profunctor (class Profunctor, dimap, rmap)
 import Data.Tuple (Tuple, curry, uncurry)
 import Data.Newtype (unwrap)
@@ -36,6 +36,11 @@ auf l = withIso l \sa bt f g e -> bt (f (rmap sa g) e)
 
 under :: forall s t a b. AnIso s t a b -> (t -> s) -> b -> a
 under l = withIso l \sa bt ts -> sa <<< ts <<< bt
+
+non :: forall a. Eq a => a -> Iso' (Maybe a) a
+non def = iso (fromMaybe def) g
+  where g a | a == def  = Nothing
+            | otherwise = Just a
 
 curried :: forall a b c d e f. Iso (Tuple a b -> c) (Tuple d e -> f) (a -> b -> c) (d -> e -> f)
 curried = iso curry uncurry
