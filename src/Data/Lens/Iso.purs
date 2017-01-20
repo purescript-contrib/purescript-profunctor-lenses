@@ -37,6 +37,8 @@ auf l = withIso l \sa bt f g e -> bt (f (rmap sa g) e)
 under :: forall s t a b. AnIso s t a b -> (t -> s) -> b -> a
 under l = withIso l \sa bt ts -> sa <<< ts <<< bt
 
+-- | If `a1` is obtained from `a` by removing a single value, then 
+-- | `Maybe a1` is isomorphic to `a`.
 non :: forall a. Eq a => a -> Iso' (Maybe a) a
 non def = iso (fromMaybe def) g
   where g a | a == def  = Nothing
