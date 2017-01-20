@@ -22,7 +22,7 @@ module Data.Lens
   , module Data.Lens.Common
   ) where
 
-import Data.Lens.Iso (AnIso, AnIso', Iso, Iso', Optic, Exchange(..), Re(..), au, auf, cloneIso, curried, flipped, iso, re, uncurried, under, withIso)
+import Data.Lens.Iso (AnIso, AnIso', Iso, Iso', Optic, Exchange(..), Re(..), au, auf, cloneIso, non, curried, flipped, iso, re, uncurried, under, withIso)
 import Data.Lens.Lens (ALens, ALens', Lens, Lens', cloneLens, lens, lens', withLens)
 import Data.Lens.Prism (APrism, APrism', Prism, Prism', Review, Review', clonePrism, is, isn't, matching, nearly, only, prism, prism', review, withPrism)
 import Data.Lens.Traversal (Traversal, Traversal', element, elementsOf, failover, itraverseOf, sequenceOf, traverseOf, traversed)
