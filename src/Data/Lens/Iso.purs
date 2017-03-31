@@ -37,7 +37,7 @@ auf l = withIso l \sa bt f g e -> bt (f (rmap sa g) e)
 under :: forall s t a b. AnIso s t a b -> (t -> s) -> b -> a
 under l = withIso l \sa bt ts -> sa <<< ts <<< bt
 
--- | If `a1` is obtained from `a` by removing a single value, then 
+-- | If `a1` is obtained from `a` by removing a single value, then
 -- | `Maybe a1` is isomorphic to `a`.
 non :: forall a. Eq a => a -> Iso' (Maybe a) a
 non def = iso (fromMaybe def) g
@@ -53,9 +53,19 @@ uncurried = iso uncurry curry
 flipped :: forall a b c d e f. Iso (a -> b -> c) (d -> e -> f) (b -> a -> c) (e -> d -> f)
 flipped = iso flip flip
 
-mapping :: forall s t a b f g. (Functor f, Functor g) => AnIso s t a b -> Iso (f s) (g t) (f a) (g b)
+mapping
+  :: forall s t a b f g
+   . Functor f
+  => Functor g
+  => AnIso s t a b
+  -> Iso (f s) (g t) (f a) (g b)
 mapping l = withIso l \sa bt -> iso (map sa) (map bt)
 
-dimapping :: forall s ss t tt a aa b bb p q
-          . (Profunctor p, Profunctor q) => AnIso s t a b -> AnIso ss tt aa bb -> Iso (p a ss) (q b tt) (p s aa) (q t bb)
+dimapping
+  :: forall s ss t tt a aa b bb p q
+   . Profunctor p
+  => Profunctor q
+  => AnIso s t a b
+  -> AnIso ss tt aa bb
+  -> Iso (p a ss) (q b tt) (p s aa) (q t bb)
 dimapping f g = withIso f \sa bt -> withIso g \ssaa bbtt -> iso (dimap sa ssaa) (dimap bt bbtt)

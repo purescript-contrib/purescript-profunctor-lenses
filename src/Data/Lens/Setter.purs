@@ -103,25 +103,25 @@ assign p b = modify (set p b)
 modifying :: forall s a b m. MonadState s m => Setter s s a b -> (a -> b) -> m Unit
 modifying p f = modify (over p f)
 
-addModifying :: forall s a m. (MonadState s m, Semiring a) => Setter' s a -> a -> m Unit
+addModifying :: forall s a m. MonadState s m => Semiring a => Setter' s a -> a -> m Unit
 addModifying p = modifying p <<< add
 
-mulModifying :: forall s a m. (MonadState s m, Semiring a) => Setter' s a -> a -> m Unit
+mulModifying :: forall s a m. MonadState s m => Semiring a => Setter' s a -> a -> m Unit
 mulModifying p = modifying p <<< flip mul
 
-subModifying :: forall s a m. (MonadState s m, Ring a) => Setter' s a -> a -> m Unit
+subModifying :: forall s a m. MonadState s m => Ring a => Setter' s a -> a -> m Unit
 subModifying p = modifying p <<< flip sub
 
-divModifying :: forall s a m. (MonadState s m, EuclideanRing a) => Setter' s a -> a -> m Unit
+divModifying :: forall s a m. MonadState s m => EuclideanRing a => Setter' s a -> a -> m Unit
 divModifying p = modifying p <<< flip div
 
-disjModifying :: forall s a m. (MonadState s m, HeytingAlgebra a) => Setter' s a -> a -> m Unit
+disjModifying :: forall s a m. MonadState s m => HeytingAlgebra a => Setter' s a -> a -> m Unit
 disjModifying p = modifying p <<< flip disj
 
-conjModifying :: forall s a m. (MonadState s m, HeytingAlgebra a) => Setter' s a -> a -> m Unit
+conjModifying :: forall s a m. MonadState s m => HeytingAlgebra a => Setter' s a -> a -> m Unit
 conjModifying p = modifying p <<< flip conj
 
-appendModifying :: forall s a m. (MonadState s m, Semigroup a) => Setter' s a -> a -> m Unit
+appendModifying :: forall s a m. MonadState s m => Semigroup a => Setter' s a -> a -> m Unit
 appendModifying p = modifying p <<< flip append
 
 assignJust :: forall s a b m. MonadState s m => Setter s s a (Maybe b) -> b -> m Unit

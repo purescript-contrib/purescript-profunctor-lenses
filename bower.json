@@ -12,15 +12,15 @@
     "url": "git://github.com/purescript-contrib/purescript-profunctor-lenses.git"
   },
   "dependencies": {
-    "purescript-const": "^2.0.0",
-    "purescript-functors": "^1.0.0",
-    "purescript-identity": "^2.0.0",
-    "purescript-profunctor": "^2.0.0",
-    "purescript-sets": "^2.0.0",
-    "purescript-unsafe-coerce": "^2.0.0",
-    "purescript-transformers": "^2.0.1"
+    "purescript-const": "^3.0.0",
+    "purescript-functors": "^2.0.0",
+    "purescript-identity": "^3.0.0",
+    "purescript-profunctor": "^3.0.0",
+    "purescript-sets": "^3.0.0",
+    "purescript-unsafe-coerce": "^3.0.0",
+    "purescript-transformers": "^3.0.0"
   },
   "devDependencies": {
-    "purescript-console": "^2.0.0"
+    "purescript-console": "^3.0.0"
   }
 }
