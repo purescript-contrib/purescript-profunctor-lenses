@@ -173,7 +173,7 @@ replicated i (Forget a) = Forget (go i a)
   go n x = x <> go (n - 1) x
 
 -- | Folds over a `Foldable` container.
-folded :: forall g a b t r. (Monoid r, Foldable g) => Fold r (g a) b a t
+folded :: forall g a b t r. Monoid r => Foldable g => Fold r (g a) b a t
 folded (Forget a) = Forget (foldMap a)
 
 -- | Builds a `Fold` using an unfold.
