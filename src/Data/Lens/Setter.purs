@@ -9,7 +9,6 @@ module Data.Lens.Setter
   , (||~), disjOver
   , (&&~), conjOver
   , (<>~), appendOver
-  , (++~)
   , (?~),  setJust
   , (.=),  assign
   , (%=),  modifying
@@ -20,7 +19,6 @@ module Data.Lens.Setter
   , (||=), disjModifying
   , (&&=), conjModifying
   , (<>=), appendModifying
-  , (++=)
   , (?=),  assignJust
   , module Data.Lens.Types
   ) where
@@ -42,7 +40,6 @@ infixr 4 divOver as //~
 infixr 4 disjOver as ||~
 infixr 4 conjOver as &&~
 infixr 4 appendOver as <>~
-infixr 4 appendOver as ++~
 infixr 4 setJust as ?~
 
 infix 4 assign as .=
@@ -54,7 +51,6 @@ infix 4 divModifying as //=
 infix 4 disjModifying as ||=
 infix 4 conjModifying as &&=
 infix 4 appendModifying as <>=
-infix 4 appendModifying as ++=
 infix 4 assignJust as ?=
 
 -- | Apply a function to the foci of a `Setter`.
