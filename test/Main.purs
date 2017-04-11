@@ -1,28 +1,29 @@
 module Test.Main where
 
 import Prelude
-
-import Data.Lens (view, traversed, _1, _2, _Just, _Left, lens)
-import Data.Lens.Index (ix)
-import Data.Lens.Setter (iover)
-import Data.Lens.Lens (ilens, IndexedLens, cloneIndexedLens)
-import Data.Lens.Fold ((^?))
-import Data.Lens.Fold.Partial ((^?!), (^@?!))
-import Data.Lens.Zoom (Traversal, Traversal', Lens, Lens', zoom)
-import Data.Tuple  (Tuple(..))
-import Data.Maybe  (Maybe(..))
-import Data.Either (Either(..))
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, logShow)
 import Control.Monad.State (evalState, get)
+import Data.Either (Either(..))
+import Data.Lens (view, traversed, _1, _2, _Just, _Left, lens)
+import Data.Lens.Fold ((^?))
+import Data.Lens.Fold.Partial ((^?!), (^@?!))
+import Data.Lens.Index (ix)
+import Data.Lens.Lens (ilens, IndexedLens, cloneIndexedLens)
+import Data.Lens.Record (prop)
+import Data.Lens.Setter (iover)
+import Data.Lens.Zoom (Traversal, Traversal', Lens, Lens', zoom)
+import Data.Maybe (Maybe(..))
+import Data.Symbol (SProxy(..))
+import Data.Tuple (Tuple(..))
 import Partial.Unsafe (unsafePartial)
 
 -- Traversing an array nested within a record
 foo :: forall a b r. Lens { foo :: a | r } { foo :: b | r } a b
-foo = lens _.foo (_ { foo = _ })
+foo = prop (SProxy :: SProxy "foo")
 
 bar :: forall a b r. Lens { bar :: a | r } { bar :: b | r } a b
-bar = lens _.bar (_ { bar = _ })
+bar = prop (SProxy :: SProxy "bar")
 
 type Foo a = { foo :: Maybe { bar :: Array a } }
 
