@@ -1,9 +1,8 @@
 module Data.Lens.Record (prop) where
 
 import Prelude
-import Data.Profunctor.Strong (class Strong)
 import Data.StrMap as S
-import Data.Lens (lens)
+import Data.Lens (Lens, lens)
 import Data.Maybe (fromJust)
 import Data.Symbol (class IsSymbol, SProxy, reflectSymbol)
 import Partial.Unsafe (unsafePartial)
@@ -56,12 +55,9 @@ set l = unsafeSet (reflectSymbol l)
 -- |   :: forall a b r. Lens { foo :: a | r } { foo :: b | r } a b
 -- | ```
 prop
-  :: forall l p r1 r2 r a b
+  :: forall l r1 r2 r a b
    . IsSymbol l
   => RowCons l a r r1
   => RowCons l b r r2
-  => Strong p
-  => SProxy l
-  -> p a b
-  -> p (Record r1) (Record r2)
+  => Lens (Record r1) (Record r2) a b
 prop l = lens (get l) (flip (set l))
