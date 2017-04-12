@@ -1,20 +1,22 @@
 module Test.Main where
 
 import Prelude
-
-import Data.Lens (view, traversed, _1, _2, _Just, _Left, lens)
-import Data.Lens.Index (ix)
-import Data.Lens.Setter (iover)
-import Data.Lens.Lens (ilens, IndexedLens, cloneIndexedLens)
-import Data.Lens.Fold ((^?))
-import Data.Lens.Fold.Partial ((^?!), (^@?!))
-import Data.Lens.Zoom (Traversal, Traversal', Lens, Lens', zoom)
-import Data.Tuple  (Tuple(..))
-import Data.Maybe  (Maybe(..))
-import Data.Either (Either(..))
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, logShow)
 import Control.Monad.State (evalState, get)
+import Data.Distributive (class Distributive)
+import Data.Either (Either(..))
+import Data.Lens (_1, _2, _Just, _Left, collectOf, lens, traversed, view)
+import Data.Lens.Fold ((^?))
+import Data.Lens.Fold.Partial ((^?!), (^@?!))
+import Data.Lens.Grate (cloneGrate, grate, zipWithOf)
+import Data.Lens.Index (ix)
+import Data.Lens.Lens (ilens, IndexedLens, cloneIndexedLens)
+import Data.Lens.Setter (iover)
+import Data.Lens.Types (Grate)
+import Data.Lens.Zoom (Traversal, Traversal', Lens, Lens', zoom)
+import Data.Maybe (Maybe(..))
+import Data.Tuple (Tuple(..), fst, snd)
 import Partial.Unsafe (unsafePartial)
 
 -- Traversing an array nested within a record
@@ -60,6 +62,16 @@ cloneTest = iover (cloneIndexedLens i_2) Tuple (Tuple 1 2)
 i_2 :: forall a b c. IndexedLens Int (Tuple a b) (Tuple a c) b c
 i_2 = ilens (\(Tuple _ b) -> Tuple 0 b) (\(Tuple a _) b -> Tuple a b)
 
+-- Grates
+aGrateExample :: forall a b. Grate (Tuple a a) (Tuple b b) a b
+aGrateExample = grate \f -> Tuple (f fst) (f snd)
+
+collectOfTest :: forall f a b. Distributive f => (a -> f b) -> Tuple a a -> f (Tuple b b)
+collectOfTest = collectOf aGrateExample
+
+summing :: Tuple Int Int -> Tuple Int Int -> Tuple Int Int
+summing = zipWithOf (cloneGrate aGrateExample) (+)
+
 main :: forall e. Eff (console :: CONSOLE | e) Unit
 main = do
   logShow $ view bars doc
@@ -68,3 +80,4 @@ main = do
   logShow $ unsafePartial $ Tuple 0 1 ^@?! i_2
   logShow stateTest
   logShow cloneTest
+  logShow (summing (Tuple 1 2) (Tuple 3 4))
