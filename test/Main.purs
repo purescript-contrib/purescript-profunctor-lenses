@@ -17,7 +17,7 @@ import Data.Lens.Setter (iover)
 import Data.Lens.Zoom (Traversal, Traversal', Lens, Lens', zoom)
 import Data.Maybe (Maybe(..))
 import Data.Symbol (SProxy(..))
-import Data.Tuple (Tuple(..))
+import Data.Tuple (Tuple(..), fst, snd)
 import Partial.Unsafe (unsafePartial)
 
 -- Traversing an array nested within a record
