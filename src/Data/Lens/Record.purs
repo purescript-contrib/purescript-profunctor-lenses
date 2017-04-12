@@ -59,5 +59,6 @@ prop
    . IsSymbol l
   => RowCons l a r r1
   => RowCons l b r r2
-  => Lens (Record r1) (Record r2) a b
+  => SProxy l
+  -> Lens (Record r1) (Record r2) a b
 prop l = lens (get l) (flip (set l))
