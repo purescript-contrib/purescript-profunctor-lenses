@@ -6,13 +6,16 @@ module Data.Lens.Types
   , module Data.Lens.Internal.Shop
   , module Data.Lens.Internal.Tagged
   , module Data.Lens.Internal.Forget
+  , module Data.Lens.Internal.Grating
   , module Data.Lens.Internal.Wander
   , module Data.Lens.Internal.Re
   , module Data.Lens.Internal.Indexed
   ) where
 
+import Data.Tuple
 import Data.Lens.Internal.Exchange (Exchange(..))
 import Data.Lens.Internal.Forget (Forget(..))
+import Data.Lens.Internal.Grating (Grating)
 import Data.Lens.Internal.Indexed (Indexed(..))
 import Data.Lens.Internal.Market (Market(..))
 import Data.Lens.Internal.Re (Re(..))
@@ -21,8 +24,8 @@ import Data.Lens.Internal.Tagged (Tagged(..))
 import Data.Lens.Internal.Wander (class Wander, wander)
 import Data.Profunctor (class Profunctor)
 import Data.Profunctor.Choice (class Choice)
+import Data.Profunctor.Closed (class Closed)
 import Data.Profunctor.Strong (class Strong)
-import Data.Tuple
 
 -- | A general-purpose Data.Lens.
 type Optic p s t a b = p a b -> p s t
@@ -59,6 +62,13 @@ type APrism' s a = APrism s s a a
 -- | A traversal.
 type Traversal s t a b = forall p. Wander p => Optic p s t a b
 type Traversal' s a = Traversal s s a a
+
+-- | A grate (http://r6research.livejournal.com/28050.html)
+type Grate s t a b = forall p. Closed p => Optic p s t a b
+type Grate' s a = Grate s s a a
+
+type AGrate s t a b = Optic (Grating a b) s t a b
+type AGrate' s a = AGrate s s a a
 
 -- | A getter.
 type Getter s t a b = Fold a s t a b
