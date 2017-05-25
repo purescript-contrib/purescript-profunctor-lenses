@@ -9,7 +9,7 @@ import Data.Either (Either(..))
 import Data.Lens (view, traversed, _1, _2, _Just, _Left, lens, collectOf)
 import Data.Lens.Fold ((^?))
 import Data.Lens.Fold.Partial ((^?!), (^@?!))
-import Data.Lens.Grate (Grate, cloneGrate, grate, zipWithOf)
+import Data.Lens.Grate (Grate, cloneGrate, grate, zipWithOf, cotraversed)
 import Data.Lens.Index (ix)
 import Data.Lens.Lens (ilens, IndexedLens, cloneIndexedLens)
 import Data.Lens.Record (prop)
@@ -67,8 +67,8 @@ i_2 = ilens (\(Tuple _ b) -> Tuple 0 b) (\(Tuple a _) b -> Tuple a b)
 aGrateExample :: forall a b. Grate (Tuple a a) (Tuple b b) a b
 aGrateExample = grate \f -> Tuple (f fst) (f snd)
 
-collectOfTest :: forall f a b. Distributive f => (a -> f b) -> Tuple a a -> f (Tuple b b)
-collectOfTest = collectOf aGrateExample
+collectOfTest :: forall f g a b. Functor f => Distributive g => (a -> g b) -> f a -> g (f b)
+collectOfTest = collectOf cotraversed
 
 summing :: Tuple Int Int -> Tuple Int Int -> Tuple Int Int
 summing = zipWithOf (cloneGrate aGrateExample) (+)
