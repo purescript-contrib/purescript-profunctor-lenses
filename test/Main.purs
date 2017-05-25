@@ -4,12 +4,11 @@ import Prelude
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, logShow)
 import Control.Monad.State (evalState, get)
-import Data.Distributive (class Distributive)
 import Data.Either (Either(..))
 import Data.Lens (view, traversed, _1, _2, _Just, _Left, lens, collectOf)
 import Data.Lens.Fold ((^?))
 import Data.Lens.Fold.Partial ((^?!), (^@?!))
-import Data.Lens.Grate (Grate, cloneGrate, grate, zipWithOf, cotraversed)
+import Data.Lens.Grate (Grate, cloneGrate, grate, zipWithOf)
 import Data.Lens.Index (ix)
 import Data.Lens.Lens (ilens, IndexedLens, cloneIndexedLens)
 import Data.Lens.Record (prop)
@@ -67,8 +66,8 @@ i_2 = ilens (\(Tuple _ b) -> Tuple 0 b) (\(Tuple a _) b -> Tuple a b)
 aGrateExample :: forall a b. Grate (Tuple a a) (Tuple b b) a b
 aGrateExample = grate \f -> Tuple (f fst) (f snd)
 
-collectOfTest :: forall f g a b. Functor f => Distributive g => (a -> g b) -> f a -> g (f b)
-collectOfTest = collectOf cotraversed
+collectOfTest :: forall f a b. Functor f => (a -> Tuple b b) -> f a -> Tuple (f b) (f b)
+collectOfTest = collectOf aGrateExample
 
 summing :: Tuple Int Int -> Tuple Int Int -> Tuple Int Int
 summing = zipWithOf (cloneGrate aGrateExample) (+)
@@ -82,3 +81,4 @@ main = do
   logShow stateTest
   logShow cloneTest
   logShow (summing (Tuple 1 2) (Tuple 3 4))
+  logShow (collectOfTest (\a -> Tuple (a + a) (a * a)) [4, 5])
