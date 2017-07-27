@@ -84,3 +84,13 @@ itraverseOf
   -> s
   -> f t
 itraverseOf t = under Star (t <<< Indexed) <<< uncurry
+
+-- | Flipped version of `itraverseOf`.
+iforOf
+  :: forall f i s t a b
+  . Applicative f
+  => IndexedOptic (Star f) i s t a b
+  -> s
+  -> (i -> a -> f b)
+  -> f t
+iforOf = flip <<< itraverseOf
