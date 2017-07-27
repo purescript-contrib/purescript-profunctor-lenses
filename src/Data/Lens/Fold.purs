@@ -268,3 +268,12 @@ itraverseOf_
   -> s
   -> f Unit
 itraverseOf_ p f = ifoldrOf p (\i a fu -> void (f i a) *> fu) (pure unit)
+
+-- | Flipped version of `itraverseOf_`.
+iforOf_
+  :: forall i f s t a b r. (Applicative f)
+  => IndexedFold (Endo (f Unit)) i s t a b
+  -> s
+  -> (i -> a -> f r)
+  -> f Unit
+iforOf_ = flip <<< itraverseOf_

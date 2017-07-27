@@ -11,10 +11,11 @@ import Data.Lens.Fold ((^?))
 import Data.Lens.Fold.Partial ((^?!), (^@?!))
 import Data.Lens.Grate (Grate, cloneGrate, grate, zipWithOf)
 import Data.Lens.Index (ix)
+import Data.Lens.Indexed (itraversed, reindexed)
 import Data.Lens.Lens (ilens, IndexedLens, cloneIndexedLens)
 import Data.Lens.Record (prop)
 import Data.Lens.Setter (iover)
-import Data.Lens.Zoom (Traversal, Traversal', Lens, Lens', zoom)
+import Data.Lens.Zoom (IndexedTraversal', Traversal, Traversal', Lens, Lens', zoom)
 import Data.Maybe (Maybe(..))
 import Data.Symbol (SProxy(..))
 import Data.Tuple (Tuple(..), fst, snd)
@@ -39,6 +40,8 @@ bars = foo <<< _Just <<< bar <<< traversed
 type BarRec = { foo :: Array (Either { bar :: Array Int } String) }
 data Bar = Bar BarRec
 
+newtype BarIndex = BarIndex Int
+
 _Bar :: Lens' Bar BarRec
 _Bar = lens (\(Bar rec) -> rec) (\_ -> Bar)
 
@@ -50,6 +53,10 @@ _0Justbar = _Bar <<< foo <<< ix 0
 
 _1bars :: Traversal' Bar Int
 _1bars = _0Justbar <<< _Left <<< bar <<< ix 1
+
+_2Justbared :: IndexedTraversal' BarIndex Bar
+                                 (Either { bar :: Array Int } String)
+_2Justbared = _Bar <<< foo <<< reindexed BarIndex itraversed
 
 -- Tests state using zoom
 stateTest :: Tuple Int String
