@@ -2,9 +2,11 @@
 module Data.Lens.Internal.Tagged where
 
 import Data.Either (Either(..))
+import Data.Function (const)
 import Data.Newtype (class Newtype)
 import Data.Profunctor (class Profunctor)
 import Data.Profunctor.Choice (class Choice)
+import Data.Profunctor.Closed (class Closed)
 import Data.Profunctor.Costrong (class Costrong)
 import Data.Tuple (Tuple(..))
 
@@ -22,3 +24,6 @@ instance taggedChoice :: Choice Tagged where
 instance taggedCostrong :: Costrong Tagged where
   unfirst (Tagged (Tuple b _)) = Tagged b
   unsecond (Tagged (Tuple _ c)) = Tagged c
+
+instance taggedClosed :: Closed Tagged where
+  closed (Tagged b) = Tagged (const b)
