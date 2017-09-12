@@ -7,7 +7,7 @@ import Control.Monad.Eff.Console (CONSOLE, logShow)
 import Control.Monad.State (evalState, get)
 import Data.Distributive (class Distributive)
 import Data.Either (Either(..))
-import Data.Lens (_1, _2, _Just, _Left, both, collectOf, lens, traversed, view)
+import Data.Lens (Getter', _1, _2, _Just, _Left, collectOf, lens, takeBoth, traversed, view)
 import Data.Lens.Fold ((^?))
 import Data.Lens.Fold.Partial ((^?!), (^@?!))
 import Data.Lens.Grate (Grate, cloneGrate, grate, zipWithOf)
@@ -29,8 +29,8 @@ foo = prop (SProxy :: SProxy "foo")
 bar :: forall a b r. Lens { bar :: a | r } { bar :: b | r } a b
 bar = prop (SProxy :: SProxy "bar")
 
-barAndFoo :: forall a b r. Lens' { bar :: a, foo :: b | r } (Tuple a b)
-barAndFoo = both bar foo
+barAndFoo :: forall a b r. Getter' { bar :: a, foo :: b | r } (Tuple a b)
+barAndFoo = takeBoth bar foo
 
 type Foo a = { foo :: Maybe { bar :: Array a } }
 
