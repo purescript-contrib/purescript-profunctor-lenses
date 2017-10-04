@@ -1,0 +1,155 @@
+# `Lens` vs `ALens`: a Note on Impredicativity
+
+Sometimes, you may encounter some strange errors to do with types that
+_should_ unify but don't. For example:
+
+```purescript
+newtype Wrapped = Wrapped String
+derive instance newtypeWrapped :: Newtype Wrapped _
+
+-- `_Newtype` is an `Iso'`, so we can specialise to `Lens'`.
+good :: Lens' Wrapped String
+good = _Newtype
+
+-- So, we should be able to do the same when lifted into a record.
+type Example = { lens :: Iso' Wrapped String }
+
+
+bad :: Example -> Lens' Wrapped String
+bad = _.lens
+
+-- Could not match constrained type
+--    Profunctor t2 => t2 String String -> t2 Wrapped Wrapped
+--  with type
+--    p0 String String -> p0 Wrapped Wrapped
+```
+
+Below, we'll discuss how these problems arise, and what we can do to overcome
+them.
+
+## The Long Answer
+
+The subtle issue here relates to a subject called *impredicativity*. We can make
+a smaller reproducible example:
+
+```purescript
+{ foo: id } :: { foo :: forall a. a -> a }
+```
+
+We can, as we would expect, take `foo` out and cast it to whatever we like:
+
+```purescript
+({ foo: id } :: { foo :: forall a. a -> a }).foo
+  :: String -> String
+```
+
+So, while the original type said that we could pick _any_ `a`, we restricted that
+to `String` afterwards. In some situations, such as the above, the type-checker
+will cope happily. However, the troubles usually arrive when you extract a value
+with **a constraint**. Let's generalise the `id` function a little further:
+
+```purescript
+({ foo: id } :: { foo :: forall k a. Category k => k a a }).foo
+ :: String -> String
+```
+
+Now, we've generalised our `foo` to work with any `Category`, and not just
+`(->)`. However, we've also got ourselves a type error! _What did we do?_
+
+Let's break this line down into two parts:
+
+1. We extract `forall k a. foo :: Category k => k a a` out our record.
+2. We specialise `forall k a. Category k => k a a` to `String -> String`.
+
+Now, step `1` and `2`, independently, seem fine and dandy; they certainly work
+if we try it with a function _not_ wrapped in a record. The issue is with how
+these lines *interact*. We started with our record type, then extracted a value.
+At this point, the compiler has to hold onto its value, the `id` function, and
+its type, `forall k a. foo :: Category k => k a a`. At this point, we can
+observe something a bit weird: in this signature, `a` could correspond to our
+original record!
+
+In fact, with this step, we've made a *more general* type signature, which is
+not something that the compiler wants to do. After all, if we keep getting more
+general, how will we ever solve the type equations? This situation, (where a
+type signature is general enough to contain the structure containing it), is
+called *impredicativity*.
+
+The next question is: why did `foo` work when we specialised it to `a -> a`? The
+answer to this is that the compiler actually can work certain situations out,
+but ends up struggling when we introduce *type constraints*. Why? Well, in the
+generated output code from the compiler, constraints are desugared to function
+arguments. Thus, to create our record, we need to pass in the `k` dictionary for
+`Category`. What if that dictionary was, in part, constructed from the
+dictionary of the surrounding type? We'd be stuck!
+
+For this reason, introducing constraints is where the compiler draws a line. We
+can't explicitly show that our type is getting more general, and we can't say
+for sure that we'll even solve our dictionary problem, so the compiler will
+complain.
+
+OK, but... why does this matter to _lenses_? 
+
+## Conclusion (The Short Answer)
+
+Well, let's take a look at a simple example:
+
+```purescript
+newtype X = X Int
+derive instance newtypeX :: Newtype X _
+
+lensRecord = { foo: _Newtype } :: { foo :: Iso' X Int }
+lensExtracted = lensRecord.foo :: Lens' X Int
+```
+
+The optic types in this library are defined using various forms of the
+`Profunctor` constraint. That means that our example here will fail to
+pass type-checking, despite looking reasonable:
+
+```
+  Could not match constrained type
+                                         
+    Profunctor t2 => t2 Int Int -> t2 X X
+                                         
+  with type
+                        
+    p0 Int Int -> p0 X X
+```
+
+To get around this, we just need to use a different form of the optic that
+doesn't have a visible constraint:
+
+```purescript
+lensRecord = { foo: _Newtype } :: { foo :: AnIso' X Int }
+lensExtracted = cloneIso lensRecord.foo :: Lens' X Int
+```
+
+Here, instead of using `Iso'`, we use `AnIso'`. There's a difference in the type
+signatures:
+
+```purescript
+type Iso'   s a = Iso s s a a
+type AnIso' s a = Optic (Exchange a a) s s a a
+```
+
+What's the difference? Well, if you explore `Optic` and `Exchange`, you won't
+find any constraints! All we're doing here is side-stepping the type-checking
+issue. Afterwards, we can use `cloneIso` to turn our `AnIso` back into the `Iso`
+that we've always wanted.
+
+In short, we used the optics prefixed with `A` or `An` to avoid impredicativity
+issues, and then `clone` those optics to recover the original lens. `Exchange`
+is a data type that characterises `Iso`, but there are similar types for all the
+favourites:
+
+| Profunctor Optic | Profunctor | `data` Optic | Inner Type | Recovery Function |
+| -- | -- | -- | -- | -- |
+| `Iso` | `Profunctor` | `AnIso` | `Exchange` | `cloneIso` |
+| `Lens` | `Strong` | `ALens` | `Shop` | `cloneLens` |
+| `IndexedLens` | `Strong` | `AnIndexedLens` | `Shop` | `cloneIndexedLens` |
+| `Prism` | `Choice` | `APrism` | `Market` | `clonePrism` |
+| `Grate` | `Closed` | `AGrate` | `Grating` | `cloneGrate` |
+
+So, when you run into a strange type error that doesn't look like a problem,
+consider impredicativity, and see whether one of the analogous optics and its
+recovery function solve the issue!
