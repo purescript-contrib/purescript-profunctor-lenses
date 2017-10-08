@@ -14,7 +14,6 @@ good = _Newtype
 -- So, we should be able to do the same when lifted into a record.
 type Example = { lens :: Iso' Wrapped String }
 
-
 bad :: Example -> Lens' Wrapped String
 bad = _.lens
 
@@ -77,51 +76,39 @@ called *impredicativity*.
 
 The next question is: why did `foo` work when we specialised it to `a -> a`? The
 answer to this is that the compiler actually can work certain situations out,
-but ends up struggling when we introduce *type constraints*. Why? Well, in the
-generated output code from the compiler, constraints are desugared to function
-arguments. Thus, to create our record, we need to pass in the `k` dictionary for
-`Category`. What if that dictionary was, in part, constructed from the
-dictionary of the surrounding type? We'd be stuck!
+but ends up struggling when we introduce *type constraints*. Why? Simply because
+the capability isn't in the compiler at the moment. While we _can_ talk about type
+variables, the fact is that this particular transformation would require us to be
+able to store constraints on the type variables, too. Not having an allowance for
+impredicative types will make very little difference to us in practice, but does
+mean that we might sometimes need to work around the issue.
 
-For this reason, introducing constraints is where the compiler draws a line. We
-can't explicitly show that our type is getting more general, and we can't say
-for sure that we'll even solve our dictionary problem, so the compiler will
-complain.
-
-OK, but... why does this matter to _lenses_? 
+So... why does this matter to _lenses_? 
 
 ## Conclusion (The Short Answer)
 
-Well, let's take a look at a simple example:
+Well, let's take another look at that first failing example:
 
 ```purescript
-newtype X = X Int
-derive instance newtypeX :: Newtype X _
+newtype Wrapped = Wrapped String
+derive instance newtypeWrapped :: Newtype Wrapped _
 
-lensRecord = { foo: _Newtype } :: { foo :: Iso' X Int }
-lensExtracted = lensRecord.foo :: Lens' X Int
+type Example = { lens :: Iso' Wrapped String }
+
+bad :: Example -> Lens' Wrapped String
+bad = _.lens
 ```
 
 The optic types in this library are defined using various forms of the
-`Profunctor` constraint. That means that our example here will fail to
-pass type-checking, despite looking reasonable:
-
-```
-  Could not match constrained type
-                                         
-    Profunctor t2 => t2 Int Int -> t2 X X
-                                         
-  with type
-                        
-    p0 Int Int -> p0 X X
-```
-
-To get around this, we just need to use a different form of the optic that
-doesn't have a visible constraint:
+`Profunctor` constraint. That means that our example here will fail to pass
+type-checking, despite looking reasonable. To get around this, we just need to
+use a different form of the optic that doesn't have a visible constraint:
 
 ```purescript
-lensRecord = { foo: _Newtype } :: { foo :: AnIso' X Int }
-lensExtracted = cloneIso lensRecord.foo :: Lens' X Int
+type Example = { lens :: AnIso' Wrapped String }
+
+bad :: Example -> Lens' Wrapped String
+bad = cloneLens <<< _.lens
 ```
 
 Here, instead of using `Iso'`, we use `AnIso'`. There's a difference in the type
