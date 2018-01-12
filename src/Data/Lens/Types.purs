@@ -59,6 +59,10 @@ type Prism' s a = Prism s s a a
 type APrism s t a b = Optic (Market a b) s t a b
 type APrism' s a = APrism s s a a
 
+-- | An affine traversal (has at most one focus, but is not a prism).
+type AffineTraversal s t a b = forall p. Strong p => Choice p => Optic p s t a b
+type AffineTraversal' s a = AffineTraversal s s a a
+
 -- | A traversal.
 type Traversal s t a b = forall p. Wander p => Optic p s t a b
 type Traversal' s a = Traversal s s a a
