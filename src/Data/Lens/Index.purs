@@ -15,6 +15,23 @@ import Data.Set as S
 import Data.StrMap as SM
 import Data.Traversable (traverse)
 
+-- | `Index` is useful when a focus element might not be present.
+-- | It allows you to `set` an existing focus element, but you cannot add a
+-- | new one or delete an old one.
+-- | 
+-- | ```purescript 
+-- |> optic = ix 1
+-- |> preview optic [0, 1, 2]
+-- |(Just 1)
+-- |
+-- |> set optic 8888 [0, 1, 2]
+-- |[0,8888,2]
+-- |
+-- |-- Note that `Index` lenses work with many types:
+-- |> over optic negate $ Map.singleton 1 8888
+-- |(fromFoldable [(Tuple 1 -8888)])
+-- | ```
+
 class Index m a b | m -> a, m -> b where
   ix :: a -> Traversal' m b
 

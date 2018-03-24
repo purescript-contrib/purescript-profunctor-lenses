@@ -27,20 +27,44 @@ import Data.Profunctor.Choice (class Choice)
 import Data.Profunctor.Closed (class Closed)
 import Data.Profunctor.Strong (class Strong)
 
--- | A general-purpose Data.Lens.
-type Optic p s t a b = p a b -> p s t
-type Optic' p s a = Optic p s s a a
+-- | Given a type whose "focus element" can always be retrieved,
+-- | a lens provides a convenient way to view, get, and transform
+-- | that element. 
+-- | 
+-- | `_2` is a Tuple-specific `Lens` available from `Data.Lens`, so:
+-- | ```purescript
+-- | > import Data.Lens
+-- | > over _2 String.length $ Tuple "ignore" "four"
+-- | (Tuple "ignore" 4)
+-- | ```
+type Lens s t a b = forall p. Strong p => Optic p s t a b
+
+-- | `Lens` allows `set` to change the type of the focus. Often, a
+-- | particular lens won't do that. This type alias declares that `set`
+-- | only changes values, not types.
+type Lens' s a = Lens s s a a
+
+-- | A prism.
+type Prism s t a b = forall p. Choice p => Optic p s t a b
+type Prism' s a = Prism s s a a
 
 -- | A generalized isomorphism.
 type Iso s t a b = forall p. Profunctor p => Optic p s t a b
 type Iso' s a = Iso s s a a
 
+-- | A traversal.
+type Traversal s t a b = forall p. Wander p => Optic p s t a b
+type Traversal' s a = Traversal s s a a
+
+
+
+
+-- | A general-purpose Data.Lens.
+type Optic p s t a b = p a b -> p s t
+type Optic' p s a = Optic p s s a a
+
 type AnIso s t a b = Optic (Exchange a b) s t a b
 type AnIso' s a = AnIso s s a a
-
--- | A lens.
-type Lens s t a b = forall p. Strong p => Optic p s t a b
-type Lens' s a = Lens s s a a
 
 type ALens s t a b = Optic (Shop a b) s t a b
 type ALens' s a = ALens s s a a
@@ -52,16 +76,8 @@ type IndexedLens' i s a = IndexedLens i s s a a
 type AnIndexedLens i s t a b = IndexedOptic (Shop (Tuple i a) b) i s t a b
 type AnIndexedLens' i s a = AnIndexedLens i s s a a
 
--- | A prism.
-type Prism s t a b = forall p. Choice p => Optic p s t a b
-type Prism' s a = Prism s s a a
-
 type APrism s t a b = Optic (Market a b) s t a b
 type APrism' s a = APrism s s a a
-
--- | A traversal.
-type Traversal s t a b = forall p. Wander p => Optic p s t a b
-type Traversal' s a = Traversal s s a a
 
 -- | A grate (http://r6research.livejournal.com/28050.html)
 type Grate s t a b = forall p. Closed p => Optic p s t a b

@@ -24,12 +24,23 @@ import Data.Profunctor.Strong (first)
 import Data.Tuple (Tuple(..))
 import Data.Newtype(un)
 
-lens' :: forall s t a b. (s -> Tuple a (b -> t)) -> Lens s t a b
-lens' to pab = dimap to (\(Tuple b f) -> f b) (first pab)
-
 -- | Create a `Lens` from a getter/setter pair.
+-- |
+-- | ```purescript
+-- | > species = lens _.species $ _ {species = _}
+-- | > view species {species : "bovine"}
+-- | "bovine"
+-- |
+-- | > _2 = lens Tuple.snd $ \(Tuple keep _) new -> Tuple keep new
+-- | ```
+-- |
+-- | Note: `_2` is predefined in `Data.Lens.Tuple`.
+
 lens :: forall s t a b. (s -> a) -> (s -> b -> t) -> Lens s t a b
 lens get set = lens' \s -> Tuple (get s) \b -> set s b
+
+lens' :: forall s t a b. (s -> Tuple a (b -> t)) -> Lens s t a b
+lens' to pab = dimap to (\(Tuple b f) -> f b) (first pab)
 
 withLens :: forall s t a b r. ALens s t a b -> ((s -> a) -> (s -> b -> t) -> r) -> r
 withLens l f = case l (Shop id \_ b -> b) of Shop x y -> f x y
