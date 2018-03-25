@@ -15,22 +15,32 @@ import Data.Set as S
 import Data.StrMap as SM
 import Data.Traversable (traverse)
 
--- | `Index` is useful when a focus element might not be present.
--- | It allows you to `set` an existing focus element, but you cannot add a
--- | new one or delete an old one.
--- | 
+-- | Use an `Index` optic on types where: 
+-- | 1. The focus element might not be present.
+-- | 2. You either cannot or do not want to add new elements or delete existing ones. 
+-- |
+-- | `Array` is a typical example:
+-- |
 -- | ```purescript 
--- |> optic = ix 1
--- |> preview optic [0, 1, 2]
--- |(Just 1)
+-- | preview (ix 1) [0, 1, 2] == Just 1
 -- |
--- |> set optic 8888 [0, 1, 2]
--- |[0,8888,2]
--- |
--- |-- Note that `Index` lenses work with many types:
--- |> over optic negate $ Map.singleton 1 8888
--- |(fromFoldable [(Tuple 1 -8888)])
+-- | set (ix 1) 8888 [0, 1, 2] == [0,8888,2]
 -- | ```
+-- |
+-- | Note the use of `preview` rather `view`.
+-- | 
+-- | Another common use is a `Map` that you don't want to either grow or shrink:
+-- |
+-- | ```purescript 
+-- | (set (ix 1) 8888 $ Map.singleton 1 2) == Map.singleton 1 8888
+-- | 
+-- | (set (ix 1) 8888 $ Map.empty) == Map.empty
+-- | ```
+-- |
+-- | Note the second line: an attempt to `set` a missing focus element
+-- | leaves the original whole unchanged.
+-- |
+-- | If you *do* want to add or delete elements, see `Data.Lens.At`. 
 
 class Index m a b | m -> a, m -> b where
   ix :: a -> Traversal' m b

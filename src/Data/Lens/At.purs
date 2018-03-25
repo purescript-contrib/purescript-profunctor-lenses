@@ -16,24 +16,22 @@ import Data.Newtype (unwrap)
 import Data.Lens (Lens', lens)
 import Data.Lens.Index (class Index)
 
-
--- | `At` is useful for types like `Data.Map`:
--- | 
--- | * The result of getting an element is a `Maybe a`. 
--- | * New elements can be added.
--- | * Existing elements can be deleted.
+-- | Use an `At` lens if you want to add
+-- | new elements or delete old ones:
 -- | 
 -- | ```purescript 
--- | > optic = at "key"
--- | > view optic $ Map.singleton "key" "value"
--- | (Just "value")
+-- | whole = Map.singleton "key" "value"
+-- | optic = at "key"
+-- |
+-- | view optic whole == Just "value"
 -- | 
--- | > set optic (Just "NEW") $ Map.singleton "key" "value"
--- | (fromFoldable [(Tuple "key" "NEW")])
+-- | set optic (Just "NEW") whole == Map.singleton "key" "NEW"
 -- | 
--- | > set optic Nothing $ Map.singleton "key" "value"
--- | (fromFoldable [])
+-- | set optic Nothing whole == Map.empty
 -- | ```
+-- |
+-- | If you want neither of those things, but only to view or change
+-- | an existing element, see `Data.Lens.Index`. 
 
 class Index m a b <= At m a b | m -> a, m -> b where
   at :: a -> Lens' m (Maybe b)
