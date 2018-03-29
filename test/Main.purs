@@ -32,6 +32,16 @@ bar = prop (SProxy :: SProxy "bar")
 barAndFoo :: forall a b r. Getter' { bar :: a, foo :: b | r } (Tuple a b)
 barAndFoo = takeBoth bar foo
 
+fooGetter :: forall x. Getter' { foo :: x } x
+fooGetter = foo
+
+barGetter :: forall x. Getter' { bar :: x } x
+barGetter = bar
+
+-- check we can compose getters
+fooBarGetter :: forall x. Getter' { foo :: { bar :: x } } x
+fooBarGetter = foo <<< bar
+
 type Foo a = { foo :: Maybe { bar :: Array a } }
 
 doc :: Foo String

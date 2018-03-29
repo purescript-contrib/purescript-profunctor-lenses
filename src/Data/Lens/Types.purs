@@ -119,8 +119,11 @@ type AGrate s t a b = Optic (Grating a b) s t a b
 type AGrate' s a = AGrate s s a a
 
 -- | A getter.
-type Getter s t a b = Fold a s t a b
+type Getter s t a b = forall r. Fold r s t a b
 type Getter' s a = Getter s s a a
+
+type AGetter s t a b = Fold a s t a b
+type AGetter' s a = AGetter s s a a
 
 -- | A setter.
 type Setter s t a b = Optic Function s t a b
