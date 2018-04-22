@@ -15,7 +15,7 @@ import Data.Set as S
 import Data.StrMap as SM
 import Data.Traversable (traverse)
 
--- | Use an `Index` optic on types where: 
+-- | `Index` is a type class whose instances are optics used when:
 -- | 1. The focus element might not be present.
 -- | 2. You either cannot or do not want to add new elements or delete existing ones. 
 -- |
@@ -27,14 +27,16 @@ import Data.Traversable (traverse)
 -- | set (ix 1) 8888 [0, 1, 2] == [0,8888,2]
 -- | ```
 -- |
--- | Note the use of `preview` rather `view`.
+-- | Note the use of `preview` rather `view`. That's because the optic is 
+-- | a `Data.Lens.Traversal` tailored to the case where there's a single element
+-- | of interest.
 -- | 
 -- | Another common use is a `Map` that you don't want to either grow or shrink:
 -- |
 -- | ```purescript 
--- | (set (ix 1) 8888 $ Map.singleton 1 2) == Map.singleton 1 8888
+-- | (set (ix "k") "new" $ Map.singleton "k" "old") == Map.singleton "k" "new"
 -- | 
--- | (set (ix 1) 8888 $ Map.empty) == Map.empty
+-- | (set (ix "k") "new" $ Map.empty) == Map.empty
 -- | ```
 -- |
 -- | Note the second line: an attempt to `set` a missing focus element
