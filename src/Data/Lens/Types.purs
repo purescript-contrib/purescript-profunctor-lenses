@@ -27,20 +27,76 @@ import Data.Profunctor.Choice (class Choice)
 import Data.Profunctor.Closed (class Closed)
 import Data.Profunctor.Strong (class Strong)
 
--- | A general-purpose Data.Lens.
-type Optic p s t a b = p a b -> p s t
-type Optic' p s a = Optic p s s a a
+-- | Given a type whose "focus element" always exists,
+-- | a lens provides a convenient way to view, set, and transform
+-- | that element. 
+-- | 
+-- | For example, `_2` is a tuple-specific `Lens` available from `Data.Lens`, so:
+-- | ```purescript
+-- | over _2 String.length $ Tuple "ignore" "four" == Tuple "ignore" 4
+-- | ```
+-- | Note the result has a different type than the original tuple.
+-- | That is, the four `Lens` type variables have been narrowed to:
+-- |
+-- | * `s` is `Tuple String String`
+-- | * `t` is `Tuple String Int`
+-- | * `a` is `String`
+-- | * `b` is `Int`
+-- | 
+-- | See `Data.Lens.Getter` and `Data.Lens.Setter` for functions and operators
+-- | frequently used with lenses.
+
+
+type Lens s t a b = forall p. Strong p => Optic p s t a b
+
+-- | `Lens'` is a specialization of `Lens`. An optic of type `Lens'`
+-- | can change only the value of its focus,
+-- | not its type. As an example, consider the `Lens` `_2`, which has this type:
+-- |
+-- | ```purescript
+-- | _2 :: forall s t a b. Lens (Tuple s a) (Tuple t b) a b 
+-- | ```
+-- |
+-- | `_2` can produce a `Tuple Int String` from a `Tuple Int Int`:
+-- |
+-- | ```purescript
+-- | set _2 "NEW" (Tuple 1 2) == (Tuple 1 "NEW")
+-- | ```
+-- |
+-- | If we specialize `_2`'s type with `Lens'`, the following will not
+-- | type check:
+-- |
+-- | ```purescript
+-- | set (_2 :: Lens' (Tuple Int Int) Int) "NEW" (Tuple 1 2)
+-- |            ^^^^^^^^^^^^^^^^^^^^^^^^^
+-- | ```
+-- |
+-- | See `Data.Lens.Getter` and `Data.Lens.Setter` for functions and operators
+-- | frequently used with lenses.
+
+type Lens' s a = Lens s s a a
+
+-- | A prism.
+type Prism s t a b = forall p. Choice p => Optic p s t a b
+type Prism' s a = Prism s s a a
 
 -- | A generalized isomorphism.
 type Iso s t a b = forall p. Profunctor p => Optic p s t a b
 type Iso' s a = Iso s s a a
 
+-- | A traversal.
+type Traversal s t a b = forall p. Wander p => Optic p s t a b
+type Traversal' s a = Traversal s s a a
+
+
+
+
+-- | A general-purpose Data.Lens.
+type Optic p s t a b = p a b -> p s t
+type Optic' p s a = Optic p s s a a
+
 type AnIso s t a b = Optic (Exchange a b) s t a b
 type AnIso' s a = AnIso s s a a
-
--- | A lens.
-type Lens s t a b = forall p. Strong p => Optic p s t a b
-type Lens' s a = Lens s s a a
 
 type ALens s t a b = Optic (Shop a b) s t a b
 type ALens' s a = ALens s s a a
@@ -52,16 +108,8 @@ type IndexedLens' i s a = IndexedLens i s s a a
 type AnIndexedLens i s t a b = IndexedOptic (Shop (Tuple i a) b) i s t a b
 type AnIndexedLens' i s a = AnIndexedLens i s s a a
 
--- | A prism.
-type Prism s t a b = forall p. Choice p => Optic p s t a b
-type Prism' s a = Prism s s a a
-
 type APrism s t a b = Optic (Market a b) s t a b
 type APrism' s a = APrism s s a a
-
--- | A traversal.
-type Traversal s t a b = forall p. Wander p => Optic p s t a b
-type Traversal' s a = Traversal s s a a
 
 -- | A grate (http://r6research.livejournal.com/28050.html)
 type Grate s t a b = forall p. Closed p => Optic p s t a b

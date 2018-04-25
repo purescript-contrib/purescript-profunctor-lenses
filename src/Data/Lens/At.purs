@@ -3,6 +3,7 @@ module Data.Lens.At
   , at
   ) where
 
+
 import Prelude
 
 import Data.Identity (Identity(..))
@@ -14,6 +15,23 @@ import Data.Newtype (unwrap)
 
 import Data.Lens (Lens', lens)
 import Data.Lens.Index (class Index)
+
+-- | `At` is a type class whose instances let you add
+-- | new elements or delete old ones from "container-like" types:
+-- | 
+-- | ```purescript 
+-- | whole = Map.singleton "key" "value"
+-- | optic = at "key"
+-- |
+-- | view optic whole == Just "value"
+-- | 
+-- | set optic (Just "NEW") whole == Map.singleton "key" "NEW"
+-- | 
+-- | set optic Nothing whole == Map.empty
+-- | ```
+-- |
+-- | If you don't want to add or delete, but only to view or change
+-- | an existing element, see `Data.Lens.Index`. 
 
 class Index m a b <= At m a b | m -> a, m -> b where
   at :: a -> Lens' m (Maybe b)
