@@ -31,8 +31,8 @@ import Data.Either (Either(..))
 
 newtype Percent = Percent Number
 data Point = Point Number Number
-  
-data Fill
+
+data Fill -- think of a paint program filling a shape
   = Solid Color
   | LinearGradient Color Color Percent
   | RadialGradient Color Color Point
@@ -50,7 +50,7 @@ fillRadial :: Fill
 fillRadial = RadialGradient Color.white Color.black $ Point 1.0 3.4
 
 
-                {------ Eq and Show come in handy ------}    
+                {------ Eq and Show come in handy ------}
 
 derive instance genericPercent :: Generic Percent _
 instance eqPercent :: Eq Percent where
@@ -72,11 +72,10 @@ instance showFill :: Show Fill where
 
 
                 {------ Making prisms with Maybe and `prism'` ------}
-                {------ Basic usage: `preview`, `review`, `is`, and `isn't` ------}
 
--- Two function arguments: a data constructor for the type in
--- question, plus one that converts your desired case to a
--- `Just <wrapped values>` or `Nothing`.
+-- `prism'` (note the apostrophe) takes two functions. One is a data
+-- constructor for the type in question. The other converts your
+-- desired case to a `Just <wrapped values>` or `Nothing`.
 
 solidFocus :: Prism' Fill Color
 solidFocus = prism' constructor focus
@@ -89,19 +88,24 @@ solidFocus = prism' constructor focus
 -- In real life, you might abbreviate the above to this:
 
 solidFocus' :: Prism' Fill Color
-solidFocus' = prism' Solid case _ of 
+solidFocus' = prism' Solid case _ of
   Solid color -> Just color
   _ -> Nothing
 
 -- ... but being painfully explicit is better for examples.
 
+
+                {------ Basic usage: `preview`, `review`, `is`, and `isn't` ------}
+
 -- After building a prism, you focus in on a color with `preview`:
 
 s1 :: Maybe Color
-s1 = preview solidFocus (Solid Color.white) -- (Just rgba 255 255 255 1.0)
+s1 = preview solidFocus (Solid Color.white)
+-- (Just rgba 255 255 255 1.0)
 
 s2 :: Maybe Color
-s2 = preview solidFocus fillRadial -- Nothing
+s2 = preview solidFocus fillRadial
+-- Nothing
 
 -- ... or you can create a Fill from a color with `review`:
 
@@ -112,18 +116,19 @@ s3 = review solidFocus Color.white
 -- ... or you can ask whether a given value matches the prism:
 
 s4 :: Boolean
-s4 = is solidFocus (Solid Color.white) :: Boolean -- true
+s4 = is solidFocus (Solid Color.white) :: Boolean
+-- true
 
 s5 :: Boolean
-s5 = isn't solidFocus (Solid Color.white) :: Boolean -- false
-
+s5 = isn't solidFocus (Solid Color.white) :: Boolean
+-- false
 
 
                 {------ Making prisms with Either and `prism` ------}
 
--- Since `LinearGradient` wraps multiple values, they need to be
--- rewrapped for `preview`. I'll use a record.
-
+-- Since `LinearGradient` wraps two colors and a percent, they need to
+-- be bundled together into a single value for `preview` to
+-- return. I'll use a record:
 
 type LinearInterchange =
   { color1 :: Color
@@ -131,9 +136,12 @@ type LinearInterchange =
   , percent :: Percent
   }
 
--- When making a prism with `prism`, the "focus" function returns
--- either the selected value (as `Right`) or the entire argument (as
--- `Left`).
+-- (In real life, you probably wouldn't have to give such a record a
+-- type alias.)
+
+-- When making a prism with `prism` (no apostrophe), the "focus"
+-- function returns either the selected value (as a `Right`) or the
+-- entire argument (as a `Left`).
 
 linearFocus :: Prism' Fill LinearInterchange
 linearFocus = prism constructor focus
@@ -142,11 +150,11 @@ linearFocus = prism constructor focus
       LinearGradient color1 color2 percent
     focus = case _ of
       LinearGradient color1 color2 percent ->
-        Right  {color1, color2, percent}
-      fill ->
-        Left fill
-      
--- Even though made differently, this prism is used the same way:
+        Right {color1, color2, percent}
+      otherFill ->
+        Left otherFill
+
+-- Even though made differently, this `linearFocus` is used the same way:
 
 l1 :: String
 l1 = preview linearFocus fillBlackToWhite # maybe "!" showRecord
@@ -158,6 +166,7 @@ l2 = review linearFocus { color1 : Color.black
                         , percent : Percent 33.3
                         }
 
+
                 {------ Constructing more specific prisms ------}
 
 -- `only` is used to check for a specific value:
@@ -166,54 +175,61 @@ whiteToBlackFocus :: Prism' Fill Unit
 whiteToBlackFocus = only fillWhiteToBlack
 
 o1 :: Boolean
-o1 = is whiteToBlackFocus fillWhiteToBlack :: Boolean -- true
+o1 = is whiteToBlackFocus fillWhiteToBlack :: Boolean
+-- true
 
 o2 :: Boolean
-o2 = is whiteToBlackFocus fillBlackToWhite :: Boolean -- false
+o2 = is whiteToBlackFocus fillBlackToWhite :: Boolean
+-- false
 
 o3 :: Boolean
-o3 = is whiteToBlackFocus fillRadial :: Boolean -- false
-
+o3 = is whiteToBlackFocus fillRadial :: Boolean
+-- false
 
 -- `nearly` is typically used to look for a specific case (like other
--- prisms), but accepting only values that are close to some target
--- value. It takes two values: a reference value (which, with sum types, 
--- serves to declare the focus case, and a predicate that determines
--- whether the wrapped value(s) is close enough to what's desired.
+-- prisms), but also accepts only values that are close to some target
+-- value. It takes two values: a reference value, and a predicate that
+-- determines whether the wrapped value(s) are close enough to the
+-- reference. Note that the predicate takes the "whole" type (here,
+-- `Fill`), not the unwrapped values inside the case you care about.
 
 -- In this example, we want to focus on solid colors that are "bright
--- enough". 
+-- enough."
 
 brightSolidFocus :: Prism' Fill Unit
 brightSolidFocus = nearly (Solid referenceColor) predicate
   where
     referenceColor = Color.graytone 0.8
     predicate = case _ of
-      Solid color -> 
+      Solid color ->
         Color.brightness color >= Color.brightness referenceColor
       _ ->
         false
 
--- Because a `nearly` prism focuses on `Unit`, you get only two values
--- from `preview`:
-
+-- Because a `nearly` prism focuses into `Unit`, you can get only two
+-- values from `preview`:
 
 n1 :: Maybe Unit
-n1 = preview brightSolidFocus (Solid Color.white) -- (Just unit)
+n1 = preview brightSolidFocus (Solid Color.white)
+-- (Just unit)
 
 n2 :: Maybe Unit
-n2 = preview brightSolidFocus (Solid Color.black) --  Nothing
+n2 = preview brightSolidFocus (Solid Color.black)
+-- Nothing
 
 n3 :: Maybe Unit
-n3 = preview brightSolidFocus NoFill --  Nothing
+n3 = preview brightSolidFocus NoFill
+--  Nothing
 
-      
--- So you probably want to use `is` or `isn't`:
+
+-- ... so you probably want to use `is` or `isn't`:
 
 n4 :: Boolean
-n4 = is brightSolidFocus (Solid Color.white) :: Boolean -- true
+n4 = is brightSolidFocus (Solid Color.white) :: Boolean
+-- true
 
 -- You can recover the reference value with `review`:
 
 n5 :: Fill
-n5 = review brightSolidFocus unit -- (Solid rgba 204 204 204 1.0)
+n5 = review brightSolidFocus unit
+-- (Solid rgba 204 204 204 1.0)
