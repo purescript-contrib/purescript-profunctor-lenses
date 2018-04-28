@@ -9,13 +9,12 @@ module PrismsForSumTypes where
       preview prismForSolidFill $ Solid Color.white
       -- (Just rgba 255 255 255 1.0)
 
-      preview prismForSolidCase NoFill
+      preview prismForSolidFill NoFill
       -- Nothing
 
       review prismForSolidFill Color.white
       -- (Solid rgba 255 255 255 1.0)
 -}
-
 
 {-   If you want to try out examples, paste the following into the repl.
 
@@ -27,9 +26,7 @@ import Data.Maybe
 import Data.Record.ShowRecord (showRecord)
 
 See `README.md` if you're wondering why code is formatted the way it is.
-
 -}
-
 
 import Prelude
 import Data.Lens (Prism', is, isn't, nearly, only, preview, prism, prism', review)
@@ -67,26 +64,6 @@ fillWhiteToBlack = LinearGradient Color.white Color.black $ Percent 3.3
 fillRadial :: Fill
 fillRadial = RadialGradient Color.white Color.black $ Point 1.0 3.4
 
-
-                {------ Eq and Show come in handy ------}
-
-derive instance genericPercent :: Generic Percent _
-instance eqPercent :: Eq Percent where
-  eq = GEq.genericEq
-instance showPercent :: Show Percent where
-  show (Percent f) = "(" <> show f <> "%)"
-
-derive instance genericPoint :: Generic Point _
-instance eqPoint :: Eq Point where
-  eq = GEq.genericEq
-instance showPoint :: Show Point where
-  show (Point x y) = "(" <> show x <> ", " <> show y <> ")"
-
-derive instance genericFill :: Generic Fill _
-instance eqFill :: Eq Fill where
-  eq = GEq.genericEq
-instance showFill :: Show Fill where
-  show x = GShow.genericShow x
 
 
                 {------ Making prisms with Maybe and `prism'` ------}
@@ -204,6 +181,10 @@ o3 :: Boolean
 o3 = is whiteToBlackFocus fillRadial :: Boolean
 -- false
 
+-- Note that `only` requires `Fill` to implement `Eq`.
+-- It's the only prism constructor that does.
+
+
 -- `nearly` is typically used to look for a specific case (like other
 -- prisms), but also accepts only values that are close to some target
 -- value. It takes two values: a reference value, and a predicate that
@@ -251,3 +232,27 @@ n4 = is brightSolidFocus (Solid Color.white) :: Boolean
 n5 :: Fill
 n5 = review brightSolidFocus unit
 -- (Solid rgba 204 204 204 1.0)
+
+
+
+                {------ Eq and Show are always nice ------}
+
+-- ... although Eq is only required for `only`.
+
+derive instance genericPercent :: Generic Percent _
+instance eqPercent :: Eq Percent where
+  eq = GEq.genericEq
+instance showPercent :: Show Percent where
+  show (Percent f) = "(" <> show f <> "%)"
+
+derive instance genericPoint :: Generic Point _
+instance eqPoint :: Eq Point where
+  eq = GEq.genericEq
+instance showPoint :: Show Point where
+  show (Point x y) = "(" <> show x <> ", " <> show y <> ")"
+
+derive instance genericFill :: Generic Fill _
+instance eqFill :: Eq Fill where
+  eq = GEq.genericEq
+instance showFill :: Show Fill where
+  show x = GShow.genericShow x
