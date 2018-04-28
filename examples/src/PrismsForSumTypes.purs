@@ -1,5 +1,22 @@
 module PrismsForSumTypes where
 
+{- Prisms are optics that "focus" on one case of a sum type. They can
+   also be used for other kinds of case analysis, but sum types are most
+   common. This introduction only discusses sum types.
+
+   Use a Prism if you want to write code like this:
+
+      preview prismForSolidFill $ Solid Color.white
+      -- (Just rgba 255 255 255 1.0)
+
+      preview prismForSolidCase NoFill
+      -- Nothing
+
+      review prismForSolidFill Color.white
+      -- (Solid rgba 255 255 255 1.0)
+-}
+
+
 {-   If you want to try out examples, paste the following into the repl.
 
 import PrismsForSumTypes
@@ -12,6 +29,7 @@ import Data.Record.ShowRecord (showRecord)
 See `README.md` if you're wondering why code is formatted the way it is.
 
 -}
+
 
 import Prelude
 import Data.Lens (Prism', is, isn't, nearly, only, preview, prism, prism', review)
