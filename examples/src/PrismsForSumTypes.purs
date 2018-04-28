@@ -1,16 +1,22 @@
 module PrismsForSumTypes where
 
-{-
+{-   If you want to try out examples, paste the following into the repl.
 
-   If you want to try out examples, paste the following into the repl.
-
-import Data.Maybe
-
+import PrismsForSumTypes
 import Data.Lens
 import Data.Lens.Prism
 import Color as Color
+import Data.Maybe
 import Data.Record.ShowRecord (showRecord)
-import PrismsForSumTypes
+
+Examples are written in this format:
+
+s1 :: Maybe Color
+s1 = preview solidFocus (Solid Color.white) -- (Just rgba 255 255 255 1.0)
+
+That's so that a typical syntax highlighter will make the executable code
+easy to spot among the commentary. (The name-value binding is unfortunate,
+but needed to prevent noise from compiler warnings.)
 
 -}
 
@@ -39,7 +45,7 @@ data Fill
   | RadialGradient Color Color Point
   | NoFill
 
-                {- Some samples to work with -}
+                {------ Some samples to work with ------}
 
 fillWhite :: Fill
 fillWhite = Solid Color.white
@@ -54,7 +60,7 @@ fillRadial :: Fill
 fillRadial = RadialGradient Color.white Color.black $ Point 1.0 3.4
 
 
-                {- Eq and Show come in handy -}    
+                {------ Eq and Show come in handy ------}    
 
 derive instance genericPercent :: Generic Percent _
 instance eqPercent :: Eq Percent where
@@ -75,8 +81,8 @@ instance showFill :: Show Fill where
   show x = GShow.genericShow x
 
 
-                {- Making prisms with Maybe and `prism'`-}
-                {- Basic usage -}
+                {------ Making prisms with Maybe and `prism'` ------}
+                {------ Basic usage ------}
 
 -- Two function arguments: a data constructor for the type in
 -- question, plus one that "substitutes" your desired case with `Just`
@@ -123,7 +129,7 @@ s5 = isn't solidFocus fillWhite :: Boolean -- false
 
 
 
-                {- Making prisms with Either and `prism` -}
+                {------ Making prisms with Either and `prism` ------}
 
 -- Since `LinearGradient` wraps multiple values, they need to be
 -- rewrapped for `preview`. I'll use a record.
@@ -162,7 +168,7 @@ l2 = review linearFocus { color1 : Color.black
                         , percent : Percent 33.3
                         }
 
-                {- Constructing more specific prisms -}
+                {------ Constructing more specific prisms ------}
 
 -- `only` is used to check for a specific value:
 
