@@ -9,15 +9,7 @@ import Color as Color
 import Data.Maybe
 import Data.Record.ShowRecord (showRecord)
 
-Examples are written in this format:
-
-s1 :: Maybe Color
-s1 = preview solidFocus (Solid Color.white) -- (Just rgba 255 255 255 1.0)
-
-That's so that a typical syntax highlighter will make the executable
-code easy to spot among the commentary. (The name-value bindings and
-type annotations are unfortunate clutter, but needed to prevent noise
-from compiler warnings.)
+See `README.md` if you're wondering why code is formatted the way it is.
 
 -}
 
@@ -80,11 +72,11 @@ instance showFill :: Show Fill where
 
 
                 {------ Making prisms with Maybe and `prism'` ------}
-                {------ Basic usage ------}
+                {------ Basic usage: `preview`, `review`, `is`, and `isn't` ------}
 
 -- Two function arguments: a data constructor for the type in
--- question, plus one that "substitutes" your desired case with `Just`
--- and converts all other values to `Nothing`.
+-- question, plus one that converts your desired case to a
+-- `Just <wrapped values>` or `Nothing`.
 
 solidFocus :: Prism' Fill Color
 solidFocus = prism' constructor focus
