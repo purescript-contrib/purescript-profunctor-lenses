@@ -14,9 +14,10 @@ Examples are written in this format:
 s1 :: Maybe Color
 s1 = preview solidFocus (Solid Color.white) -- (Just rgba 255 255 255 1.0)
 
-That's so that a typical syntax highlighter will make the executable code
-easy to spot among the commentary. (The name-value binding is unfortunate,
-but needed to prevent noise from compiler warnings.)
+That's so that a typical syntax highlighter will make the executable
+code easy to spot among the commentary. (The name-value bindings and
+type annotations are unfortunate clutter, but needed to prevent noise
+from compiler warnings.)
 
 -}
 
@@ -46,9 +47,6 @@ data Fill
   | NoFill
 
                 {------ Some samples to work with ------}
-
-fillWhite :: Fill
-fillWhite = Solid Color.white
 
 fillBlackToWhite :: Fill
 fillBlackToWhite = LinearGradient Color.black Color.white $ Percent 3.3
@@ -122,10 +120,10 @@ s3 = review solidFocus Color.white
 -- ... or you can ask whether a given value matches the prism:
 
 s4 :: Boolean
-s4 = is solidFocus fillWhite :: Boolean -- true
+s4 = is solidFocus (Solid Color.white) :: Boolean -- true
 
 s5 :: Boolean
-s5 = isn't solidFocus fillWhite :: Boolean -- false
+s5 = isn't solidFocus (Solid Color.white) :: Boolean -- false
 
 
 
@@ -172,17 +170,17 @@ l2 = review linearFocus { color1 : Color.black
 
 -- `only` is used to check for a specific value:
 
-whiteSolid :: Prism' Fill Unit
-whiteSolid = only (Solid Color.white)
+whiteToBlackFocus :: Prism' Fill Unit
+whiteToBlackFocus = only fillWhiteToBlack
 
 o1 :: Boolean
-o1 = is whiteSolid (Solid Color.white) :: Boolean -- true
+o1 = is whiteToBlackFocus fillWhiteToBlack :: Boolean -- true
 
 o2 :: Boolean
-o2 = is whiteSolid (Solid Color.black) :: Boolean -- false
+o2 = is whiteToBlackFocus fillBlackToWhite :: Boolean -- false
 
 o3 :: Boolean
-o3 = is whiteSolid fillRadial :: Boolean -- false
+o3 = is whiteToBlackFocus fillRadial :: Boolean -- false
 
 
 -- `nearly` is typically used to look for a specific case (like other
@@ -194,8 +192,8 @@ o3 = is whiteSolid fillRadial :: Boolean -- false
 -- In this example, we want to focus on solid colors that are "bright
 -- enough". 
 
-brightSolid :: Prism' Fill Unit
-brightSolid = nearly (Solid referenceColor) predicate
+brightSolidFocus :: Prism' Fill Unit
+brightSolidFocus = nearly (Solid referenceColor) predicate
   where
     referenceColor = Color.graytone 0.8
     predicate = case _ of
@@ -209,21 +207,21 @@ brightSolid = nearly (Solid referenceColor) predicate
 
 
 n1 :: Maybe Unit
-n1 = preview brightSolid (Solid Color.white) -- (Just unit)
+n1 = preview brightSolidFocus (Solid Color.white) -- (Just unit)
 
 n2 :: Maybe Unit
-n2 = preview brightSolid (Solid Color.black) --  Nothing
+n2 = preview brightSolidFocus (Solid Color.black) --  Nothing
 
 n3 :: Maybe Unit
-n3 = preview brightSolid NoFill --  Nothing
+n3 = preview brightSolidFocus NoFill --  Nothing
 
       
 -- So you probably want to use `is` or `isn't`:
 
 n4 :: Boolean
-n4 = is brightSolid (Solid Color.white) :: Boolean -- true
+n4 = is brightSolidFocus (Solid Color.white) :: Boolean -- true
 
 -- You can recover the reference value with `review`:
 
 n5 :: Fill
-n5 = review brightSolid unit -- (Solid rgba 204 204 204 1.0)
+n5 = review brightSolidFocus unit -- (Solid rgba 204 204 204 1.0)
