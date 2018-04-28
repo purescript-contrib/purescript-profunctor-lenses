@@ -47,7 +47,7 @@ Why?
    to prevent compiler warnings in, for example, `pulp build`.
 
 4. The expected value is on a new line, rather than appended to the
-   end of the second line because it's visually easier to scan down a line
+   end of the second line, because it's visually easier to scan down a line
    than scan right for a `--` pattern.
 
    "Comfort is the key." -- Prof. Dawn Marick, DVM, MS, DACVIM (LAIM)
