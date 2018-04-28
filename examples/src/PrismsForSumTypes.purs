@@ -65,7 +65,6 @@ fillRadial :: Fill
 fillRadial = RadialGradient Color.white Color.black $ Point 1.0 3.4
 
 
-
                 {------ Making prisms with Maybe and `prism'` ------}
 
 -- `prism'` (note the apostrophe) takes two functions. One is a data
@@ -78,7 +77,7 @@ solidFocus = prism' constructor focus
     constructor = Solid
     focus fill = case fill of
       Solid color -> Just color
-      _ -> Nothing
+      otherCases -> Nothing
 
 -- In real life, you might abbreviate the above to this:
 
@@ -131,9 +130,6 @@ type LinearInterchange =
   , percent :: Percent
   }
 
--- (In real life, you probably wouldn't have to give such a record a
--- type alias.)
-
 -- When making a prism with `prism` (no apostrophe), the "focus"
 -- function returns either the selected value (as a `Right`) or the
 -- entire argument (as a `Left`).
@@ -146,10 +142,11 @@ linearFocus = prism constructor focus
     focus = case _ of
       LinearGradient color1 color2 percent ->
         Right {color1, color2, percent}
-      otherFill ->
-        Left otherFill
+      otherCases ->
+        Left otherCases
 
--- Even though made differently, this `linearFocus` is used the same way:
+-- Even though made differently than `solidFocus`, `linearFocus` is
+-- used the same way:
 
 l1 :: String
 l1 = preview linearFocus fillBlackToWhite # maybe "!" showRecord
