@@ -7,13 +7,13 @@ module PrismsForSumTypes where
    Use a Prism if you want to write code like this:
 
       preview prismForSolidFill $ Solid Color.white
-      -- (Just rgba 255 255 255 1.0)
+      -- Just Color.white
 
       preview prismForSolidFill NoFill
       -- Nothing
 
       review prismForSolidFill Color.white
-      -- (Solid rgba 255 255 255 1.0)
+      -- Solid Color.white
 -}
 
 {-   If you want to try out examples, paste the following into the repl.
@@ -159,9 +159,7 @@ l2 = review linearFocus { color1 : Color.black
                         }
 
 
-                {------ Constructing more specific prisms ------}
-
--- `only` is used to check for a specific value:
+                {------ Use `only` to focus on specific values ------}
 
 whiteToBlackFocus :: Prism' Fill Unit
 whiteToBlackFocus = only fillWhiteToBlack
@@ -180,6 +178,8 @@ o3 = is whiteToBlackFocus fillRadial :: Boolean
 
 -- Note that `only` requires `Fill` to implement `Eq`.
 -- It's the only prism constructor that does.
+
+                {------ Use `nearly` to focus on a sub-case ------}
 
 
 -- `nearly` is typically used to look for a specific case (like other
