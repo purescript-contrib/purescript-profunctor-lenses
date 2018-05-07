@@ -16,5 +16,5 @@ bower install purescript-profunctor-lenses
 
 Module documentation is [published on Pursuit](http://pursuit.purescript.org/packages/purescript-profunctor-lenses).
 
-You can find an example usage [here](test/Main.purs).
+You can find examples in the [tests](test/Main.purs) and the [examples](examples/README.md) directory.
 
