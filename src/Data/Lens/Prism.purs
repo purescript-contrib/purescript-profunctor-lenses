@@ -3,11 +3,12 @@
 -- |
 -- | ```purescript
 -- | data Fill -- think of a paint program filling a shape
--- |   = Solid Color
--- |   ...
+-- |   = NoFill
+-- |   | Solid Color
+-- |   | ...
 -- | ```
 -- |
--- | A prism that focuses on `Solid` fills would be written like this:
+-- | A prism that focuses on `Solid` fills could be written like this:
 -- |
 -- | ```purescript
 -- | solidFocus :: Prism' Fill Color
@@ -31,15 +32,15 @@
 -- | review solidFocus Color.white == Solid Color.white
 -- | ```
 -- | 
--- | For more information, see `PrismsForSumTypes` in the
+-- | For more information, see `PrismsForSumTypes.purs` in the
 -- | `examples/src` directory.
 
 module Data.Lens.Prism
   ( prism, prism'
   , only, nearly
   , review
-  , is, isn't
-  , clonePrism, withPrism, matching
+  , is, isn't, matching
+  , clonePrism, withPrism
   , module ExportTypes
   ) where
 
@@ -60,8 +61,8 @@ import Data.Newtype (under)
 -- | produces an `Either`:
 -- | 
 -- | ```purescript
--- | solidFocus' :: Prism' Fill Color
--- | solidFocus' = prism Solid case _ of
+-- | solidFocus :: Prism' Fill Color
+-- | solidFocus = prism Solid case _ of
 -- |   Solid color -> Right color
 -- |   anotherCase -> Left anotherCase
 -- | ```
@@ -69,11 +70,11 @@ prism :: forall s t a b. (b -> t) -> (s -> Either t a) -> Prism s t a b
 prism to fro pab = dimap fro (either id id) (right (rmap to pab))
 
 -- | Create a `Prism` from a constructor and a "focus" function that
--- | produces an `Maybe`:
+-- | produces a `Maybe`:
 -- | 
 -- | ```purescript
--- | solidFocus' :: Prism' Fill Color
--- | solidFocus' = prism' Solid case _ of
+-- | solidFocus :: Prism' Fill Color
+-- | solidFocus = prism' Solid case _ of
 -- |   Solid color -> Just color
 -- |   _ -> Nothing
 -- | ```
@@ -123,7 +124,6 @@ only x = nearly x (_ == x)
 -- | Create the "whole" corresponding to a specific "part":
 -- |
 -- | ```purescript
--- | -- solidFocus is a `Prism Fill Color`
 -- | review solidFocus Color.white == Solid Color.white
 -- | ```
 review :: forall s t a b. Review s t a b -> b -> t
@@ -139,10 +139,10 @@ withPrism l f = case l (Market id Right) of
 matching :: forall s t a b. APrism s t a b -> s -> Either t a
 matching l = withPrism l \_ f -> f
 
---| Would `preview prism` produce a `Just`?
+--| Ask if `preview prism` would produce a `Just`.
 is :: forall s t a b r. HeytingAlgebra r => APrism s t a b -> s -> r
 is l = either (const ff) (const tt) <<< matching l
 
---| Would `preview prism` produce a `Nothing`?
+--| Ask if `preview prism` would produce a `Nothing`.
 isn't :: forall s t a b r. HeytingAlgebra r => APrism s t a b -> s -> r
 isn't l = not <<< is l
