@@ -1,12 +1,30 @@
--- | This module defines functions for working with traversals.
+-- | `Traversal` is an optic that focuses on zero or more functor values. An
+-- | `Array` would be a typical example:
+-- |
+-- | ```purescript
+-- | over    traversed negate [1, 2, 3] == [-1, -2, -3]
+-- | preview traversed [1, 2, 3] == Just 1
+-- | firstOf traversed [1, 2, 3] == Just 1  -- same as `preview`
+-- | lastOf  traversed [1, 2, 3] == Just 3
+-- | ```
+-- |
+-- | `view` might surprise you. It assumes that the wrapped values
+-- | are a monoid, and `append`s them together:
+-- |
+-- | ```purescript
+-- | view traversed ["D", "a", "w", "n"] == "Dawn"
+-- | ```
+-- |
+-- | Many of the functions you'll use are documented in `Data.Lens.Fold`. 
+
 module Data.Lens.Traversal
   ( traversed
+  , element
   , traverseOf
   , sequenceOf
   , failover
   , elementsOf
   , itraverseOf
-  , element
   , module ExportTypes
   ) where
 
@@ -24,7 +42,12 @@ import Data.Traversable (class Traversable, traverse)
 import Data.Tuple (Tuple(..), uncurry)
 import Data.Newtype (under, unwrap)
 
--- | Create a `Traversal` which traverses the elements of a `Traversable` functor.
+-- | A `Traversal` for the elements of a `Traversable` functor.
+-- |
+-- | ```purescript
+-- | over traversed negate [1, 2, 3] == [-1,-2,-3]
+-- | over traversed negate (Just 3) == Just -3
+-- | ```
 traversed :: forall t a b. Traversable t => Traversal (t a) (t b) a b
 traversed = wander traverse
 
@@ -37,6 +60,29 @@ traverseOf = under Star
 
 -- | Sequence the foci of a `Traversal`, pulling out an `Applicative` effect.
 -- | If you do not need the result, see `sequenceOf_` for `Fold`s.
+-- |
+-- | `sequenceOf traversed` has the same result as `Data.Traversable.sequence`:
+-- |
+-- | ```purescript
+-- | sequenceOf traversed (Just [1, 2]) == [Just 1, Just 2]
+-- | sequence             (Just [1, 2]) == [Just 1, Just 2]
+-- | ```
+-- |
+-- | An example with effects:
+-- | ```purescript
+-- | > array = [random, random]
+-- | > :t array
+-- | Array (Eff ... Number)
+-- |
+-- | > effect = sequenceOf traversed array
+-- | > :t effect
+-- | Eff ... (Array Number)
+-- |
+-- | > effect >>= logShow
+-- | [0.15556037108154985,0.28500369615270515]
+-- | unit
+-- | ```
+
 sequenceOf
   :: forall f s t a
    . Applicative f
@@ -56,7 +102,14 @@ failover t f s = case unwrap (t $ Star $ Tuple (Disj true) <<< f) s of
   Tuple (Disj true) x  -> pure x
   Tuple (Disj false) _ -> empty
 
--- | Affine traversal the `n`-th focus of a `Traversal`.
+-- | Combine an index and a traversal to narrow the focus to a single
+-- | element. This is called an "affine traversal". Compare to `Data.Lens.Index`. 
+-- |
+-- | ```purescript
+-- | set     (element 2 traversed) 8888 [0, 0, 3] == [0, 0, 8888]
+-- | preview (element 2 traversed)      [0, 0, 3] == Just 3
+-- | ```
+
 element
   :: forall p s t a
    . Wander p
