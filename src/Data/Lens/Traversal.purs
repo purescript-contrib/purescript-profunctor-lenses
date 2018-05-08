@@ -32,15 +32,14 @@ import Prelude
 
 import Control.Alternative (class Alternative)
 import Control.Plus (empty)
-
 import Data.Lens.Indexed (iwander, positions, unIndex)
 import Data.Lens.Types (IndexedTraversal, IndexedOptic, Indexed(..), Traversal, Optic, class Wander, wander)
 import Data.Lens.Types (Traversal, Traversal') as ExportTypes
 import Data.Monoid.Disj (Disj(..))
+import Data.Newtype (under, unwrap)
 import Data.Profunctor.Star (Star(..))
 import Data.Traversable (class Traversable, traverse)
 import Data.Tuple (Tuple(..), uncurry)
-import Data.Newtype (under, unwrap)
 
 -- | A `Traversal` for the elements of a `Traversable` functor.
 -- |
@@ -87,7 +86,7 @@ sequenceOf
   :: forall f s t a
    . Applicative f
   => Optic (Star f) s t (f a) a -> s -> f t
-sequenceOf t = traverseOf t id
+sequenceOf t = traverseOf t identity
 
 -- | Tries to map over a `Traversal`; returns `empty` if the traversal did
 -- | not have any new focus.

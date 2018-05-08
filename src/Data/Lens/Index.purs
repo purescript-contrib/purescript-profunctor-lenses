@@ -12,7 +12,7 @@ import Data.Lens.Types (Traversal')
 import Data.Map as M
 import Data.Maybe (Maybe, maybe, fromMaybe)
 import Data.Set as S
-import Data.StrMap as SM
+import Foreign.Object as FO
 import Data.Traversable (traverse)
 
 -- | `Index` is a type class whose instances are optics used when:
@@ -80,10 +80,10 @@ instance indexMap :: Ord k => Index (M.Map k v) k v where
           (pure m)
           (coalg >>> map \v -> M.insert k v m)
 
-instance indexStrMap :: Index (SM.StrMap v) String v where
+instance indexForeignObject :: Index (FO.Object v) String v where
   ix k =
     wander \coalg m ->
-      SM.lookup k m #
+      FO.lookup k m #
         maybe
           (pure m)
-          (coalg >>> map \v -> SM.insert k v m)
+          (coalg >>> map \v -> FO.insert k v m)

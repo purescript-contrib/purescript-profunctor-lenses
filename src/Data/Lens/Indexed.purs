@@ -21,14 +21,14 @@ unIndex
    . Profunctor p
   => IndexedOptic p i s t a b
   -> Optic p s t a b
-unIndex l = l <<< Indexed <<< dimap snd id
+unIndex l = l <<< Indexed <<< dimap snd identity
 
 asIndex
   :: forall p i s t a b
    . Profunctor p
   => IndexedOptic p i s t a b
   -> Optic p s t i b
-asIndex l = l <<< Indexed <<< dimap fst id
+asIndex l = l <<< Indexed <<< dimap fst identity
 
 -- | Remap the index.
 reindexed :: forall p i j r a b . Profunctor p =>

@@ -2,8 +2,6 @@ module Test.Main where
 
 import Prelude
 
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (CONSOLE, logShow)
 import Control.Monad.State (evalState, get)
 import Data.Distributive (class Distributive)
 import Data.Either (Either(..))
@@ -20,6 +18,8 @@ import Data.Lens.Zoom (IndexedTraversal', Traversal, Traversal', Lens, Lens', zo
 import Data.Maybe (Maybe(..))
 import Data.Symbol (SProxy(..))
 import Data.Tuple (Tuple(..), fst, snd)
+import Effect (Effect)
+import Effect.Console (logShow)
 import Partial.Unsafe (unsafePartial)
 
 -- Traversing an array nested within a record
@@ -84,7 +84,7 @@ collectOfTest = collectOf aGrateExample
 summing :: Tuple Int Int -> Tuple Int Int -> Tuple Int Int
 summing = zipWithOf (cloneGrate aGrateExample) (+)
 
-main :: forall e. Eff (console :: CONSOLE | e) Unit
+main :: Effect Unit
 main = do
   logShow $ view bars doc
   logShow $ view barAndFoo { bar: "bar", foo: "foo" }

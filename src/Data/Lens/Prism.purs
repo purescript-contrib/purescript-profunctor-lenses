@@ -78,15 +78,14 @@ module Data.Lens.Prism
 import Prelude
 
 import Control.MonadPlus (guard)
-
 import Data.Either (Either(..), either)
 import Data.HeytingAlgebra (tt, ff)
 import Data.Lens.Types (Prism, Prism', APrism, APrism', Review, Review') as ExportTypes
 import Data.Lens.Types (Prism, Prism', APrism, Market(..), Review, Tagged(..))
 import Data.Maybe (Maybe, maybe)
+import Data.Newtype (under)
 import Data.Profunctor (dimap, rmap)
 import Data.Profunctor.Choice (right)
-import Data.Newtype (under)
 
 -- | Create a `Prism` from a constructor and a matcher function that
 -- | produces an `Either`:
@@ -102,7 +101,7 @@ import Data.Newtype (under)
 -- | to allow for type-changing prisms in the case where the input does
 -- | not match.
 prism :: forall s t a b. (b -> t) -> (s -> Either t a) -> Prism s t a b
-prism to fro pab = dimap fro (either id id) (right (rmap to pab))
+prism to fro pab = dimap fro (either identity identity) (right (rmap to pab))
 
 -- | Create a `Prism` from a constructor and a matcher function that
 -- | produces a `Maybe`:
@@ -161,7 +160,7 @@ clonePrism :: forall s t a b. APrism s t a b -> Prism s t a b
 clonePrism l = withPrism l \x y p -> prism x y p
 
 withPrism :: forall s t a b r. APrism s t a b -> ((b -> t) -> (s -> Either t a) -> r) -> r
-withPrism l f = case l (Market id Right) of
+withPrism l f = case l (Market identity Right) of
   Market g h -> f g h
 
 matching :: forall s t a b. APrism s t a b -> s -> Either t a
