@@ -5,7 +5,6 @@ import Prelude
 import Data.Const (Const(..))
 import Data.Either (Either(..), either)
 import Data.Lens.Internal.Wander (class Wander)
-import Data.Monoid (class Monoid, mempty)
 import Data.Newtype (class Newtype, alaF)
 import Data.Profunctor (class Profunctor)
 import Data.Profunctor.Choice (class Choice)
