@@ -1,4 +1,4 @@
--- | `Traversal` is an optic that focuses on zero or more functor values. An
+-- | `Traversal` is an optic that focuses on zero or more values. An
 -- | `Array` would be a typical example:
 -- |
 -- | ```purescript
@@ -103,13 +103,15 @@ failover t f s = case unwrap (t $ Star $ Tuple (Disj true) <<< f) s of
   Tuple (Disj false) _ -> empty
 
 -- | Combine an index and a traversal to narrow the focus to a single
--- | element. This is called an "affine traversal". Compare to `Data.Lens.Index`. 
+-- | element. Compare to `Data.Lens.Index`. 
 -- |
 -- | ```purescript
 -- | set     (element 2 traversed) 8888 [0, 0, 3] == [0, 0, 8888]
 -- | preview (element 2 traversed)      [0, 0, 3] == Just 3
 -- | ```
-
+-- | The resulting traversal is called an *affine traversal*, which
+-- | means that the traversal focuses on one or zero (if the index is out of range)
+-- | results.
 element
   :: forall p s t a
    . Wander p

@@ -34,9 +34,40 @@
 -- | 
 -- | For more information, see `PrismsForSumTypes.purs` in the
 -- | `examples/src` directory.
+-- |
+-- | ---------------
+-- |
+-- | A well-behaved `Prism` will follow these laws:
+-- |
+-- | **review-preview**: `preview` retrieves what `review` creates. Equationally:
+-- |   
+-- | ```purescript
+-- | review prism >>> preview prism ≡ Just
+-- | ```
+-- |
+-- | An example:
+-- | 
+-- | ```purescript
+-- | Color.white # review solidFocus # preview solidFocus
+-- |   == Just Color.white
+-- | ```
+-- | 
+-- | **preview-review**: If `preview` retrieves something, `review` can create
+-- | the original from that something. Equationally:
+-- | 
+-- | ```purescript
+-- | if preview prism s ≡ Just a then review prism a ≡ s
+-- | ```
+-- |
+-- | An example:
+-- |
+-- | ```purescript
+-- | Solid Color.white # preview solidFocus <#> review solidFocus
+-- |   == Solid Color.white
+-- | ```
 
 module Data.Lens.Prism
-  ( prism, prism'
+  ( prism', prism
   , only, nearly
   , review
   , is, isn't, matching
@@ -57,7 +88,7 @@ import Data.Profunctor (dimap, rmap)
 import Data.Profunctor.Choice (right)
 import Data.Newtype (under)
 
--- | Create a `Prism` from a constructor and a "focus" function that
+-- | Create a `Prism` from a constructor and a matcher function that
 -- | produces an `Either`:
 -- | 
 -- | ```purescript
@@ -66,10 +97,14 @@ import Data.Newtype (under)
 -- |   Solid color -> Right color
 -- |   anotherCase -> Left anotherCase
 -- | ```
+-- |
+-- | _Note_: The matcher function returns a result wrapped in `Either t`
+-- | to allow for type-changing prisms in the case where the input does
+-- | not match.
 prism :: forall s t a b. (b -> t) -> (s -> Either t a) -> Prism s t a b
 prism to fro pab = dimap fro (either id id) (right (rmap to pab))
 
--- | Create a `Prism` from a constructor and a "focus" function that
+-- | Create a `Prism` from a constructor and a matcher function that
 -- | produces a `Maybe`:
 -- | 
 -- | ```purescript
@@ -81,29 +116,18 @@ prism to fro pab = dimap fro (either id id) (right (rmap to pab))
 prism' :: forall s a. (a -> s) -> (s -> Maybe a) -> Prism' s a
 prism' to fro = prism to (\s -> maybe (Left s) Right (fro s))
 
--- | Create a prism that focuses on only some of the values of a case,
--- | such as solid colors that are "bright enough":
+-- | `nearly` is a variant of `only`. Like `only`, `nearly` produces
+-- | a prism that matches
+-- | a single value. Unlike `only`, it uses a predicate you supply
+-- | instead of depending on `class Eq`: 
 -- | 
 -- | ```purescript
--- | brightSolidFocus :: Prism' Fill Unit
--- | brightSolidFocus = nearly (Solid referenceColor) predicate
+-- | solidWhiteFocus :: Prism' Fill Unit
+-- | solidWhiteFocus = nearly (Solid Color.white) predicate
 -- |   where
--- |     referenceColor = Color.graytone 0.8
--- |     predicate = case _ of
--- |       Solid color ->
--- |         Color.brightness color >= Color.brightness referenceColor
--- |       _ ->
--- |         false
--- |
--- | preview brightSolidFocus (Solid Color.white) == Just unit
--- | preview brightSolidFocus (Solid Color.black) == Nothing
--- | preview brightSolidFocus NoFill              == Nothing
--- |
--- | is      brightSolidFocus (Solid Color.white) == true
--- | review  brightSolidFocus unit                == Color.graytone 0.8
+-- |     predicate candidate =
+-- |       color.toHexString == Color.white.toHexString
 -- | ```
-
-
 nearly :: forall a. a -> (a -> Boolean) -> Prism' a Unit
 nearly x f = prism' (const x) (guard <<< f)
 
@@ -117,6 +141,10 @@ nearly x f = prism' (const x) (guard <<< f)
 -- | preview solidWhiteFocus (Solid Color.white) == Just unit
 -- | review  solidWhiteFocus unit                == Solid Color.white
 -- | ```
+-- |
+-- | *Note*: `only` depends on `Eq`. Strange definitions of `(==)`
+-- | (for example, that it counts any `Fill` as being equal to `Solid Color.white`)
+-- | will create a prism that violates the preview-review law. 
 only :: forall a. Eq a => a -> Prism a a Unit Unit
 only x = nearly x (_ == x)
 
