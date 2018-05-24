@@ -9,7 +9,7 @@ import Data.Lens.Iso.Newtype (_Newtype)
 import Data.Lens.Setter ((%~))
 import Data.Lens.Types (wander, Optic, IndexedOptic, Indexed(..), Traversal, IndexedTraversal)
 import Data.Newtype (unwrap)
-import Data.Profunctor (class Profunctor, dimap, lmap)
+import Data.Profunctor (class Profunctor, dimap, lcmap)
 import Data.Profunctor.Star (Star(..))
 import Data.Profunctor.Strong (first)
 import Data.TraversableWithIndex (class TraversableWithIndex, traverseWithIndex)
@@ -33,7 +33,7 @@ asIndex l = l <<< Indexed <<< dimap fst identity
 -- | Remap the index.
 reindexed :: forall p i j r a b . Profunctor p =>
              (i -> j) -> (Indexed p i a b -> r) -> Indexed p j a b -> r
-reindexed ij = (_ <<< _Newtype %~ lmap (first ij))
+reindexed ij = (_ <<< _Newtype %~ lcmap (first ij))
 
 -- | Converts a `lens`-like indexed traversal to an `IndexedTraversal`.
 iwander

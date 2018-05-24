@@ -12,7 +12,6 @@
     "url": "git://github.com/purescript-contrib/purescript-profunctor-lenses.git"
   },
   "dependencies": {
-    "purescript-const": "#compiler/0.12",
     "purescript-functors": "#compiler/0.12",
     "purescript-foldable-traversable": "#compiler/0.12",
     "purescript-identity": "#compiler/0.12",
@@ -23,7 +22,29 @@
     "purescript-transformers": "#compiler/0.12",
     "purescript-record": "#compiler/0.12"
   },
+  "dependencies": {
+    "purescript-arrays": "^4.0.0",
+    "purescript-bifunctors": "^4.0.0",
+    "purescript-const": "^4.0.0",
+    "purescript-control": "^4.0.0",
+    "purescript-distributive": "^4.0.0",
+    "purescript-either": "^4.0.0",
+    "purescript-foldable-traversable": "^4.0.0",
+    "purescript-foreign-object": "^1.0.0",
+    "purescript-functors": "^3.0.0",
+    "purescript-identity": "^4.0.0",
+    "purescript-lists": "^5.0.0",
+    "purescript-maybe": "^4.0.0",
+    "purescript-newtype": "^3.0.0",
+    "purescript-ordered-collections": "^1.0.0",
+    "purescript-partial": "^2.0.0",
+    "purescript-prelude": "^4.0.0",
+    "purescript-profunctor": "^4.0.0",
+    "purescript-record": "^1.0.0",
+    "purescript-transformers": "^4.0.0",
+    "purescript-tuples": "^5.0.0"
+  },
   "devDependencies": {
-    "purescript-console": "#compiler/0.12"
+    "purescript-console": "^4.0.0"
   }
 }

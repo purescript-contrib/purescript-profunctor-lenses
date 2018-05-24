@@ -6,7 +6,7 @@ import Prelude
 import Data.Either (Either(..), either)
 import Data.Lens.Internal.Wander (class Wander, wander)
 import Data.Newtype (class Newtype)
-import Data.Profunctor (class Profunctor, lmap, dimap)
+import Data.Profunctor (class Profunctor, lcmap, dimap)
 import Data.Profunctor.Choice (class Choice, right, left)
 import Data.Profunctor.Strong (class Strong, first, second)
 import Data.Tuple (Tuple(..))
@@ -21,15 +21,15 @@ instance profunctorIndexed :: Profunctor p => Profunctor (Indexed p i) where
 
 instance strongIndexed :: Strong p => Strong (Indexed p i) where
   first (Indexed p) =
-    Indexed $ lmap (\(Tuple i (Tuple a c)) -> (Tuple (Tuple i a) c)) $ first p
+    Indexed $ lcmap (\(Tuple i (Tuple a c)) -> (Tuple (Tuple i a) c)) $ first p
   second (Indexed p) =
-    Indexed $ lmap (\(Tuple i (Tuple c a)) -> (Tuple c (Tuple i a))) $ second p
+    Indexed $ lcmap (\(Tuple i (Tuple c a)) -> (Tuple c (Tuple i a))) $ second p
 
 instance choiceIndexed :: Choice p => Choice (Indexed p i) where
   left (Indexed p) =
-    Indexed $ lmap (\(Tuple i ac) -> either (Left <<< Tuple i) Right ac) $ left p
+    Indexed $ lcmap (\(Tuple i ac) -> either (Left <<< Tuple i) Right ac) $ left p
   right (Indexed p) =
-    Indexed $ lmap (\(Tuple i ac) -> either Left (Right <<< Tuple i) ac) $ right p
+    Indexed $ lcmap (\(Tuple i ac) -> either Left (Right <<< Tuple i) ac) $ right p
 
 instance wanderIndexed :: Wander p => Wander (Indexed p i) where
   wander trav (Indexed p) =
