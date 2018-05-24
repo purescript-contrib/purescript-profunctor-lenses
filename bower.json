@@ -12,17 +12,6 @@
     "url": "git://github.com/purescript-contrib/purescript-profunctor-lenses.git"
   },
   "dependencies": {
-    "purescript-functors": "#compiler/0.12",
-    "purescript-foldable-traversable": "#compiler/0.12",
-    "purescript-identity": "#compiler/0.12",
-    "purescript-profunctor": "#compiler/0.12",
-    "purescript-ordered-collections": "#compiler/0.12",
-    "purescript-foreign-object": "#compiler/0.12",
-    "purescript-unsafe-coerce": "#compiler/0.12",
-    "purescript-transformers": "#compiler/0.12",
-    "purescript-record": "#compiler/0.12"
-  },
-  "dependencies": {
     "purescript-arrays": "^4.0.0",
     "purescript-bifunctors": "^4.0.0",
     "purescript-const": "^4.0.0",
