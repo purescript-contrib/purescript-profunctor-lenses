@@ -12,7 +12,7 @@
     "url": "git://github.com/purescript-contrib/purescript-profunctor-lenses.git"
   },
   "dependencies": {
-    "purescript-arrays": "^4.0.0",
+    "purescript-arrays": "^5.0.0",
     "purescript-bifunctors": "^4.0.0",
     "purescript-const": "^4.0.0",
     "purescript-control": "^4.0.0",
