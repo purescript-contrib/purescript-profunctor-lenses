@@ -97,11 +97,11 @@ setJust p = set p <<< Just
 
 -- | Set the foci of a `Setter` in a monadic state to a constant value.
 assign :: forall s a b m. MonadState s m => Setter s s a b -> b -> m Unit
-assign p b = modify (set p b)
+assign p b = void (modify (set p b))
 
 -- | Modify the foci of a `Setter` in a monadic state.
 modifying :: forall s a b m. MonadState s m => Setter s s a b -> (a -> b) -> m Unit
-modifying p f = modify (over p f)
+modifying p f = void (modify (over p f))
 
 addModifying :: forall s a m. MonadState s m => Semiring a => Setter' s a -> a -> m Unit
 addModifying p = modifying p <<< add

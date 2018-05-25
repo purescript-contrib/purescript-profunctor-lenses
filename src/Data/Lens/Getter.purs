@@ -18,11 +18,11 @@ infixl 8 viewOn as ^.
 
 -- | View the focus of a `Getter`.
 view :: forall s t a b. Getter s t a b -> s -> a
-view l = unwrap (l (Forget id))
+view l = unwrap (l (Forget identity))
 
 -- | View the focus of a `Getter` and its index.
 iview :: forall i s t a b. IndexedFold (Tuple i a) i s t a b -> s -> Tuple i a
-iview l = unwrap (l (Indexed $ Forget id))
+iview l = unwrap (l (Indexed $ Forget identity))
 
 -- | Synonym for `view`, flipped.
 viewOn :: forall s t a b. s -> Getter s t a b -> a
@@ -34,7 +34,7 @@ to f p = Forget (unwrap p <<< f)
 
 -- | Combine two getters.
 takeBoth :: forall s t a b c d. Getter s t a b -> Getter s t c d -> Getter s t (Tuple a c) (Tuple b d)
-takeBoth l r a = cmps (l (Forget id)) (r (Forget id))
+takeBoth l r a = cmps (l (Forget identity)) (r (Forget identity))
   where
     cmps :: Forget a s t -> Forget c s t -> Forget (Tuple a c) s t
     cmps (Forget f) (Forget g) = Forget (f &&& g)
