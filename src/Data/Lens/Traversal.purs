@@ -32,6 +32,7 @@ import Prelude
 
 import Control.Alternative (class Alternative)
 import Control.Plus (empty)
+import Data.Bitraversable (class Bitraversable, bitraverse)
 import Data.Lens.Indexed (iwander, positions, unIndex)
 import Data.Lens.Types (IndexedTraversal, IndexedOptic, Indexed(..), Traversal, Optic, class Wander, wander)
 import Data.Lens.Types (Traversal, Traversal') as ExportTypes
@@ -148,3 +149,6 @@ iforOf
   -> (i -> a -> f b)
   -> f t
 iforOf = flip <<< itraverseOf
+
+both :: forall r a b. Bitraversable r => Traversal (r a a) (r b b) a b
+both = wander (join bitraverse)

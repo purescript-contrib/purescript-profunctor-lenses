@@ -80,12 +80,13 @@ import Prelude
 import Control.MonadPlus (guard)
 import Data.Either (Either(..), either)
 import Data.HeytingAlgebra (tt, ff)
+import Data.Lens.Types (Prism, Prism', APrism, APrism', Market(..), Review, Tagged(..))
 import Data.Lens.Types (Prism, Prism', APrism, APrism', Review, Review') as ExportTypes
-import Data.Lens.Types (Prism, Prism', APrism, Market(..), Review, Tagged(..))
 import Data.Maybe (Maybe, maybe)
 import Data.Newtype (under)
 import Data.Profunctor (dimap, rmap)
 import Data.Profunctor.Choice (right)
+import Data.Traversable (class Traversable, traverse)
 
 -- | Create a `Prism` from a constructor and a matcher function that
 -- | produces an `Either`:
@@ -165,6 +166,14 @@ withPrism l f = case l (Market identity Right) of
 
 matching :: forall s t a b. APrism s t a b -> s -> Either t a
 matching l = withPrism l \_ f -> f
+
+below :: forall f s a. Traversable f => APrism' s a -> Prism' (f s) (f a)
+below k =
+  withPrism k $ \bt seta ->
+    prism (map bt) $ \s ->
+      case traverse seta s of
+        Left _  -> Left s
+        Right t -> Right t
 
 --| Ask if `preview prism` would produce a `Just`.
 is :: forall s t a b r. HeytingAlgebra r => APrism s t a b -> s -> r
