@@ -72,6 +72,7 @@ module Data.Lens.Prism
   , review
   , is, isn't, matching
   , clonePrism, withPrism
+  , below
   , module ExportTypes
   ) where
 
