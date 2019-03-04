@@ -19,7 +19,7 @@
     "purescript-distributive": "^4.0.0",
     "purescript-either": "^4.0.0",
     "purescript-foldable-traversable": "^4.0.0",
-    "purescript-foreign-object": "^1.0.0",
+    "purescript-foreign-object": "^2.0.0",
     "purescript-functors": "^3.0.0",
     "purescript-identity": "^4.0.0",
     "purescript-lists": "^5.0.0",
@@ -29,7 +29,7 @@
     "purescript-partial": "^2.0.0",
     "purescript-prelude": "^4.0.0",
     "purescript-profunctor": "^4.0.0",
-    "purescript-record": "^1.0.0",
+    "purescript-record": "^2.0.0",
     "purescript-transformers": "^4.0.0",
     "purescript-tuples": "^5.0.0"
   },
