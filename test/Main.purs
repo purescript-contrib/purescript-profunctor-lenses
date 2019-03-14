@@ -5,7 +5,7 @@ import Prelude
 import Control.Monad.State (evalState, get)
 import Data.Distributive (class Distributive)
 import Data.Either (Either(..))
-import Data.Lens (Getter', _1, _2, _Just, _Left, collectOf, lens, takeBoth, traversed, view)
+import Data.Lens (Getter', _1, _2, _Just, _Left, collectOf, lens, preview, takeBoth, traversed, view)
 import Data.Lens.Fold ((^?))
 import Data.Lens.Fold.Partial ((^?!), (^@?!))
 import Data.Lens.Grate (Grate, cloneGrate, grate, zipWithOf)
@@ -14,7 +14,8 @@ import Data.Lens.Indexed (itraversed, reindexed)
 import Data.Lens.Lens (ilens, IndexedLens, cloneIndexedLens)
 import Data.Lens.Record (prop)
 import Data.Lens.Setter (iover)
-import Data.Lens.Zoom (IndexedTraversal', Traversal, Traversal', Lens, Lens', zoom)
+import Data.Lens.Traversal (cloneTraversal)
+import Data.Lens.Zoom (ATraversal', IndexedTraversal', Traversal, Traversal', Lens, Lens', zoom)
 import Data.Maybe (Maybe(..))
 import Data.Symbol (SProxy(..))
 import Data.Tuple (Tuple(..), fst, snd)
@@ -94,6 +95,15 @@ collectOfTest = collectOf aGrateExample
 summing :: Tuple Int Int -> Tuple Int Int -> Tuple Int Int
 summing = zipWithOf (cloneGrate aGrateExample) (+)
 
+-- Test cloning of traversals
+cloneTraversalTest :: Maybe Int
+cloneTraversalTest =
+  let t :: Traversal' (Array Int) Int
+      t = ix 1
+      wrapper :: { traversal :: ATraversal' (Array Int) Int }
+      wrapper = { traversal: t }
+  in preview (cloneTraversal wrapper.traversal) [ 0, 1, 2 ]
+
 main :: Effect Unit
 main = do
   logShow $ view bars doc
@@ -104,3 +114,4 @@ main = do
   logShow stateTest
   logShow cloneTest
   logShow (summing (Tuple 1 2) (Tuple 3 4))
+  logShow cloneTraversalTest
