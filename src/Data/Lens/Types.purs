@@ -13,6 +13,8 @@ module Data.Lens.Types
   ) where
 
 import Data.Tuple
+
+import Data.Lens.Internal.Bazaar (Bazaar)
 import Data.Lens.Internal.Exchange (Exchange(..))
 import Data.Lens.Internal.Forget (Forget(..))
 import Data.Lens.Internal.Grating (Grating)
@@ -88,8 +90,8 @@ type Iso' s a = Iso s s a a
 type Traversal s t a b = forall p. Wander p => Optic p s t a b
 type Traversal' s a = Traversal s s a a
 
-
-
+type ATraversal s t a b = Optic (Bazaar (->) a b) s t a b
+type ATraversal' s a = ATraversal s s a a
 
 -- | A general-purpose Data.Lens.
 type Optic p s t a b = p a b -> p s t

@@ -25,6 +25,7 @@ module Data.Lens.Traversal
   , failover
   , elementsOf
   , itraverseOf
+  , cloneTraversal
   , module ExportTypes
   ) where
 
@@ -33,7 +34,8 @@ import Prelude
 import Control.Alternative (class Alternative)
 import Control.Plus (empty)
 import Data.Lens.Indexed (iwander, positions, unIndex)
-import Data.Lens.Types (IndexedTraversal, IndexedOptic, Indexed(..), Traversal, Optic, class Wander, wander)
+import Data.Lens.Internal.Bazaar (Bazaar(..), runBazaar)
+import Data.Lens.Types (ATraversal, IndexedTraversal, IndexedOptic, Indexed(..), Traversal, Optic, class Wander, wander)
 import Data.Lens.Types (Traversal, Traversal') as ExportTypes
 import Data.Monoid.Disj (Disj(..))
 import Data.Newtype (under, unwrap)
@@ -148,3 +150,6 @@ iforOf
   -> (i -> a -> f b)
   -> f t
 iforOf = flip <<< itraverseOf
+
+cloneTraversal :: forall s t a b. ATraversal s t a b -> Traversal s t a b
+cloneTraversal l = wander (runBazaar (l (Bazaar identity)))
