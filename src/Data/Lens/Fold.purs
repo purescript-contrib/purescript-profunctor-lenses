@@ -13,7 +13,7 @@ module Data.Lens.Fold
 
 import Prelude
 
-import Data.Array (cons) as Array
+import Data.Array (fromFoldable) as Array
 import Data.Either (Either(..), either)
 import Data.Foldable (class Foldable, foldMap)
 import Data.HeytingAlgebra (tt, ff)
@@ -150,11 +150,11 @@ toListOfOn s p = toListOf p s
 infixl 8 toListOfOn as ^..
 
 -- | Collects the foci of a `Fold` into an array.
-toArrayOf :: forall s t a b. Fold (Endo (->) (Array a)) s t a b -> s -> Array a
-toArrayOf p = foldrOf p Array.cons [] 
+toArrayOf :: forall s t a b. Fold (Endo (->) (List a)) s t a b -> s -> Array a
+toArrayOf p = Array.fromFoldable <<< toListOf p
 
 -- | Synonym for `toArrayOf`, reversed.
-toArrayOfOn :: forall s t a b. s -> Fold (Endo (->) (Array a)) s t a b -> Array a
+toArrayOfOn :: forall s t a b. s -> Fold (Endo (->) (List a)) s t a b -> Array a
 toArrayOfOn s p = toArrayOf p s
 
 
