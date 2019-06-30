@@ -5,7 +5,7 @@ import Prelude
 import Control.Monad.State (evalState, get)
 import Data.Distributive (class Distributive)
 import Data.Either (Either(..))
-import Data.Lens (Getter', _1, _2, _Just, _Left, collectOf, lens, preview, takeBoth, traversed, view)
+import Data.Lens (Getter', Prism', _1, _2, _Just, _Left, collectOf, lens, preview, prism', takeBoth, toArrayOf, traversed, view)
 import Data.Lens.Fold ((^?))
 import Data.Lens.Fold.Partial ((^?!), (^@?!))
 import Data.Lens.Grate (Grate, cloneGrate, grate, zipWithOf)
@@ -38,6 +38,23 @@ fooGetter = foo
 
 barGetter :: forall x. Getter' { bar :: x } x
 barGetter = bar
+
+-- testing toArrayOf with traversed and a couple of prisms
+data ABC = A (Array XYZ) | B | C
+data XYZ = X Number | Y | Z
+
+_A :: Prism' ABC (Array XYZ)
+_A = prism' A case _ of 
+  (A array) -> Just array
+  _ -> Nothing
+
+_X :: Prism' XYZ Number
+_X = prism' X case _ of
+  (X number) -> Just number
+  _ -> Nothing
+
+arrayOfNumbers :: ABC -> Array Number
+arrayOfNumbers = toArrayOf (_A <<< traversed <<< _X)
 
 -- check we can compose getters
 fooBarGetter :: forall x. Getter' { foo :: { bar :: x } } x
@@ -109,6 +126,7 @@ main = do
   logShow $ view bars doc
   logShow $ view barAndFoo { bar: "bar", foo: "foo" }
   logShow $ doc2 ^? _1bars
+  logShow $ arrayOfNumbers $ A [(X 1.0), (X 2.0), (X 3.0)]
   logShow $ unsafePartial $ doc2 ^?! _1bars
   logShow $ unsafePartial $ Tuple 0 1 ^@?! i_2
   logShow stateTest
