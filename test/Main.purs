@@ -5,7 +5,7 @@ import Prelude
 import Control.Monad.State (evalState, get)
 import Data.Distributive (class Distributive)
 import Data.Either (Either(..))
-import Data.Lens (Getter', Prism', _1, _2, _Just, _Left, collectOf, lens, preview, prism', takeBoth, toArrayOf, traversed, view)
+import Data.Lens (Getter', Prism', _1, _2, _Just, _Left, collectOf, lens, lens', preview, prism', takeBoth, toArrayOf, traversed, view, lensStore)
 import Data.Lens.Fold ((^?))
 import Data.Lens.Fold.Partial ((^?!), (^@?!))
 import Data.Lens.Grate (Grate, cloneGrate, grate, zipWithOf)
@@ -120,6 +120,14 @@ cloneTraversalTest =
       wrapper :: { traversal :: ATraversal' (Array Int) Int }
       wrapper = { traversal: t }
   in preview (cloneTraversal wrapper.traversal) [ 0, 1, 2 ]
+
+-- lensStore example
+data LensStoreExample = LensStoreA Int | LensStoreB (Tuple Boolean Int)
+
+lensStoreExampleInt :: Lens' LensStoreExample Int
+lensStoreExampleInt = lens' case _ of
+  LensStoreA i -> map LensStoreA <$> lensStore identity i
+  LensStoreB i -> map LensStoreB <$> lensStore _2 i
 
 main :: Effect Unit
 main = do

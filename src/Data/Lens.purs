@@ -25,7 +25,7 @@ module Data.Lens
 
 import Data.Lens.Iso (AnIso, AnIso', Iso, Iso', Optic, Exchange(..), Re(..), au, auf, cloneIso, non, curried, flipped, iso, re, uncurried, under, withIso)
 import Data.Lens.Grate (Grate, Grate', zipWithOf, zipFWithOf, collectOf)
-import Data.Lens.Lens (ALens, ALens', Lens, Lens', cloneLens, lens, lens', withLens)
+import Data.Lens.Lens (ALens, ALens', Lens, Lens', cloneLens, lens, lens', withLens, lensStore)
 import Data.Lens.Prism (APrism, APrism', Prism, Prism', Review, Review', clonePrism, is, isn't, matching, nearly, only, prism, prism', review, withPrism)
 import Data.Lens.Traversal (Traversal, Traversal', element, elementsOf, failover, itraverseOf, sequenceOf, traverseOf, traversed)
 import Data.Lens.Types (class Wander, ALens, ALens', APrism, APrism', AnIso, AnIso', ATraversal, ATraversal', Fold, Fold', Getter, Getter', AGetter, AGetter', IndexedFold, IndexedFold', IndexedGetter, IndexedGetter', IndexedOptic, IndexedOptic', IndexedSetter, IndexedSetter', IndexedTraversal, IndexedTraversal', Iso, Iso', Lens, Lens', Optic, Optic', Prism, Prism', Review, Review', Setter, Setter', Traversal, Traversal', Exchange(..), Forget(..), Indexed(..), Market(..), Re(..), Shop(..), Tagged(..), wander)
