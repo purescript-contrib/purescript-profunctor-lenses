@@ -10,6 +10,8 @@ import Data.Array.NonEmpty as NEA
 import Data.Identity (Identity)
 import Data.Lens.Internal.Wander (wander)
 import Data.Lens.Types (Traversal')
+import Data.List (List)
+import Data.List as L
 import Data.Map as M
 import Data.Maybe (Maybe, maybe, fromMaybe)
 import Data.Set as S
@@ -75,6 +77,14 @@ instance indexNonEmptyArray :: Index (NEA.NonEmptyArray a) Int a where
         maybe
           (pure xs)
           (coalg >>> map \x -> fromMaybe xs (NEA.updateAt n x xs))
+
+instance indexList :: Index (List a) Int a where
+  ix n =
+    wander \coalg xs ->
+      xs L.!! n #
+        maybe
+          (pure xs)
+          (coalg >>> map \x -> fromMaybe xs (L.updateAt n x xs))
 
 instance indexSet :: Ord a => Index (S.Set a) a Unit where
   ix x =
