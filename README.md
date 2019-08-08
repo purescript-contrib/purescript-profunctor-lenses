@@ -30,16 +30,20 @@ values within nested data structures. As in:
 ## Installation
 
 ```
+# with Bower
 bower install purescript-profunctor-lenses
+
+# with Spago
+spago install profunctor-lenses
 ```
 
 ## Documentation
 
-Module documentation is [published on Pursuit](http://pursuit.purescript.org/packages/purescript-profunctor-lenses).
+Module documentation is [published on Pursuit](http://pursuit.purescript.org/packages/purescript-profunctor-lenses). You can find examples in the [tests](test/Main.purs) and the [examples](examples/README.md) directory.
 
-You can find examples in the [tests](test/Main.purs) and the [examples](examples/README.md) directory.
-
-There is an [ebook](https://leanpub.com/lenses).
+There are other in-depth materials for learning about profunctor optics and lenses in PureScript.
+  * A book, [Lenses for the Mere Mortal](https://leanpub.com/lenses)
+  * A long-form guide, [Practical Profunctor Lenses & Optics in PureScript](https://thomashoneyman.com/articles/practical-profunctor-lenses-optics)
 
 ## Contributing
 
