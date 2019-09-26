@@ -3,8 +3,8 @@ module Data.Lens.Indexed where
 import Prelude
 
 import Control.Monad.State (modify, get, evalState)
-
 import Data.Functor.Compose (Compose(..))
+import Data.Lens.Internal.Indexable (indexed)
 import Data.Lens.Iso.Newtype (_Newtype)
 import Data.Lens.Setter ((%~))
 import Data.Lens.Types (wander, Optic, IndexedOptic, Indexed(..), Traversal, IndexedTraversal)
@@ -13,7 +13,47 @@ import Data.Profunctor (class Profunctor, dimap, lcmap)
 import Data.Profunctor.Star (Star(..))
 import Data.Profunctor.Strong (first)
 import Data.TraversableWithIndex (class TraversableWithIndex, traverseWithIndex)
-import Data.Tuple (curry, fst, snd)
+import Data.Tuple (Tuple(..), curry, fst, snd)
+
+infixr 9 icomposeBoth as <.>
+infixr 9 icomposeLeft as <.
+infixr 9 icomposeRight as .>
+
+withIndex :: forall p i s t. p (Tuple i s) t -> Indexed p i s t
+withIndex = Indexed
+
+icompose 
+  :: forall p i s t a b i' k s' t'
+   . Profunctor p 
+  => (i -> i' -> k) 
+  -> IndexedOptic p i s t s' t' 
+  -> IndexedOptic (Indexed p i) i' s' t' a b 
+  -> IndexedOptic p k s t a b
+icompose f l r = l <<< r <<< withIndex <<< withIndex <<< lcmap (\(Tuple i (Tuple j a)) -> Tuple (f i j) a) <<< indexed
+
+icomposeBoth 
+  :: forall p i s t a b i' s' t'
+   . Profunctor p 
+  => IndexedOptic p i s t s' t' 
+  -> IndexedOptic (Indexed p i) i' s' t' a b 
+  -> IndexedOptic p (Tuple i i') s t a b 
+icomposeBoth = icompose Tuple
+
+icomposeLeft 
+  :: forall p i s t a b i' s' t'
+   . Profunctor p 
+  => IndexedOptic p i s t s' t' 
+  -> IndexedOptic (Indexed p i) i' s' t' a b 
+  -> IndexedOptic p i s t a b 
+icomposeLeft = icompose const
+
+icomposeRight 
+  :: forall p i s t a b i' s' t'
+   . Profunctor p 
+  => IndexedOptic p i s t s' t' 
+  -> IndexedOptic (Indexed p i) i' s' t' a b 
+  -> IndexedOptic p i' s t a b 
+icomposeRight = icompose (const identity)
 
 -- | Converts an `IndexedOptic` to an `Optic` by forgetting indices.
 unIndex
