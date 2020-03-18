@@ -4,6 +4,7 @@ module Data.Lens.Types
   , module Data.Lens.Internal.Exchange
   , module Data.Lens.Internal.Market
   , module Data.Lens.Internal.Shop
+  , module Data.Lens.Internal.Stall
   , module Data.Lens.Internal.Tagged
   , module Data.Lens.Internal.Forget
   , module Data.Lens.Internal.Grating
