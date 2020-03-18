@@ -5,11 +5,12 @@ module Data.Lens.Iso
   ) where
 
 import Prelude
+
 import Data.Lens.Types (Iso, Iso', AnIso, AnIso', Optic, Exchange(..), Re(..))
 import Data.Maybe (Maybe(..), fromMaybe)
+import Data.Newtype (unwrap)
 import Data.Profunctor (class Profunctor, dimap, rmap)
 import Data.Tuple (Tuple, curry, uncurry)
-import Data.Newtype (unwrap)
 
 -- | Create an `Iso` from a pair of morphisms.
 iso :: forall s t a b. (s -> a) -> (b -> t) -> Iso s t a b
@@ -17,7 +18,7 @@ iso f g pab = dimap f g pab
 
 -- | Extracts the pair of morphisms from an isomorphism.
 withIso :: forall s t a b r. AnIso s t a b -> ((s -> a) -> (b -> t) -> r) -> r
-withIso l f = case l (Exchange id id) of
+withIso l f = case l (Exchange identity identity) of
   Exchange g h -> f g h
 
 -- | Extracts an `Iso` from `AnIso`.
@@ -26,7 +27,7 @@ cloneIso l = withIso l \x y p -> iso x y p
 
 -- | Reverses an optic.
 re :: forall p s t a b. Optic (Re p a b) s t a b -> Optic p b a t s
-re t = unwrap (t (Re id))
+re t = unwrap (t (Re identity))
 
 au :: forall s t a b e. AnIso s t a b -> ((b -> t) -> e -> s) -> e -> a
 au l = withIso l \sa bt f e -> sa (f bt e)

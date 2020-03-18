@@ -13,6 +13,7 @@ module Data.Lens.Grate
   ) where
 
 import Prelude
+
 import Data.Distributive (class Distributive, cotraverse)
 import Data.Lens.Internal.Grating (Grating(..))
 import Data.Lens.Internal.Zipping (Zipping(..))
@@ -27,13 +28,13 @@ grate :: forall s t a b. (((s -> a) -> b) -> t) -> Grate s t a b
 grate f pab = dimap (#) f (closed pab)
 
 withGrate :: forall s t a b. AGrate s t a b -> ((s -> a) -> b) -> t
-withGrate g = unwrap (g (Grating \f -> f id))
+withGrate g = unwrap (g (Grating \f -> f identity))
 
 cloneGrate :: forall s t a b. AGrate s t a b -> Grate s t a b
 cloneGrate g = grate (withGrate g)
 
 cotraversed :: forall f a b. Distributive f => Grate (f a) (f b) a b
-cotraversed = grate \f -> cotraverse f id
+cotraversed = grate \f -> cotraverse f identity
 
 zipWithOf :: forall s t a b. Optic Zipping s t a b -> (a -> a -> b) -> s -> s -> t
 zipWithOf g f = unwrap (g (Zipping f))
