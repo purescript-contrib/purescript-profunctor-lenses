@@ -7,20 +7,17 @@ import Prelude
 
 import Data.Array as A
 import Data.Array.NonEmpty as NEA
+import Data.Either (Either(..))
 import Data.Identity (Identity)
-import Data.Lens (Prism', _1, _2, _Just, lens, prism')
+import Data.Lens (_Just, lens)
 import Data.Lens.Iso.Newtype (_Newtype)
-import Data.Lens.Types (AffineTraversal')
-import Data.Lens.Internal.Wander (wander)
-import Data.Lens.Types (Traversal')
-import Data.List (List(..), (:))
+import Data.Lens.AffineTraversal (AffineTraversal', affineTraversal)
+import Data.List as L
 import Data.Map as M
-import Data.Maybe (Maybe(..), maybe)
+import Data.Maybe (Maybe(..), maybe, fromMaybe)
 import Data.Set as S
-import Data.StrMap as SM
-import Data.Tuple.Nested (Tuple3, tuple3, uncurry3)
-import Data.Traversable (traverse)
 import Foreign.Object as FO
+
 
 -- | `Index` is a type class whose instances are optics used when:
 -- | 1. The focus element might not be present.
@@ -64,29 +61,28 @@ instance indexIdentity :: Index (Identity a) Unit a where
   ix _ = _Newtype
 
 instance indexArray :: Index (Array a) Int a where
-  ix n = separateIndex <<< _2 <<< _1
+  ix n = affineTraversal set pre
     where
-      separateIndex :: Prism' (Array a) (Tuple3 (Array a) a (Array a))
-      separateIndex = prism'
-        (uncurry3 \l e r -> l <> [e] <> r)
-        \as -> A.index as n <#> \e -> tuple3
-          (A.take n as) e (A.drop (n+1) as)
+      set :: Array a -> a -> Array a
+      set s b = fromMaybe s $ A.updateAt n b s
+      pre :: Array a -> Either (Array a) a
+      pre s = maybe (Left s) Right $ A.index s n
 
 instance indexNonEmptyArray :: Index (NEA.NonEmptyArray a) Int a where
-  ix n =
-    wander \coalg xs ->
-      xs NEA.!! n #
-        maybe
-          (pure xs)
-          (coalg >>> map \x -> fromMaybe xs (NEA.updateAt n x xs))
+  ix n = affineTraversal set pre
+    where
+      set :: NEA.NonEmptyArray a -> a -> NEA.NonEmptyArray a
+      set s b = fromMaybe s $ NEA.updateAt n b s
+      pre :: NEA.NonEmptyArray a -> Either (NEA.NonEmptyArray a) a
+      pre s = maybe (Left s) Right $ NEA.index s n
 
-instance indexList :: Index (List a) Int a where
-  ix n | n < 0     = wander \_ xs -> pure xs
-       | otherwise = wander \coalg xs -> go xs n coalg where
-    go :: forall f. Applicative f => List a -> Int -> (a -> f a) -> f (List a)
-    go Nil _ _ = pure Nil
-    go (a:as) 0 coalg = coalg a <#> (_:as)
-    go (a:as) i coalg = (a:_) <$> (go as (i - 1) coalg)
+instance indexList :: Index (L.List a) Int a where
+  ix n = affineTraversal set pre
+    where
+      set :: L.List a -> a -> L.List a
+      set s b = fromMaybe s $ L.updateAt n b s
+      pre :: L.List a -> Either (L.List a) a
+      pre s = maybe (Left s) Right $ L.index s n
 
 instance indexSet :: Ord a => Index (S.Set a) a Unit where
   ix x = lens get (flip update) <<< _Just
@@ -99,19 +95,17 @@ instance indexSet :: Ord a => Index (S.Set a) a Unit where
       update (Just _) = S.insert x
 
 instance indexMap :: Ord k => Index (M.Map k v) k v where
-  ix k = _Just >>>
-    lens (M.lookup k) \m ->
-      maybe (M.delete k m) \v -> M.insert k v m
-
-instance indexStrMap :: Index (SM.StrMap v) String v where
-  ix k = _Just >>>
-    lens (SM.lookup k) \m ->
-      maybe (SM.delete k m) \ v -> SM.insert k v m
+  ix k = affineTraversal set pre
+    where
+      set :: M.Map k v -> v -> M.Map k v
+      set s b = M.update (\_ -> Just b) k s
+      pre :: M.Map k v -> Either (M.Map k v) v
+      pre s = maybe (Left s) Right $ M.lookup k s
 
 instance indexForeignObject :: Index (FO.Object v) String v where
-  ix k =
-    wander \coalg m ->
-      FO.lookup k m #
-        maybe
-          (pure m)
-          (coalg >>> map \v -> FO.insert k v m)
+  ix k = affineTraversal set pre
+    where
+      set :: FO.Object v -> v -> FO.Object v
+      set s b = FO.update (\_ -> Just b) k s
+      pre :: FO.Object v -> Either (FO.Object v) v
+      pre s = maybe (Left s) Right $ FO.lookup k s

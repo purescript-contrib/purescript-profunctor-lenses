@@ -22,6 +22,7 @@ import Data.Lens.Internal.Indexed (Indexed(..))
 import Data.Lens.Internal.Market (Market(..))
 import Data.Lens.Internal.Re (Re(..))
 import Data.Lens.Internal.Shop (Shop(..))
+import Data.Lens.Internal.Stall (Stall(..))
 import Data.Lens.Internal.Tagged (Tagged(..))
 import Data.Lens.Internal.Wander (class Wander, wander)
 import Data.Profunctor (class Profunctor)
@@ -116,6 +117,9 @@ type APrism' s a = APrism s s a a
 -- | An affine traversal (has at most one focus, but is not a prism).
 type AffineTraversal s t a b = forall p. Strong p => Choice p => Optic p s t a b
 type AffineTraversal' s a = AffineTraversal s s a a
+
+type AnAffineTraversal s t a b = Optic (Stall a b) s t a b
+type AnAffineTraversal' s a = AnAffineTraversal s s a a
 
 -- | A grate (http://r6research.livejournal.com/28050.html)
 type Grate s t a b = forall p. Closed p => Optic p s t a b
