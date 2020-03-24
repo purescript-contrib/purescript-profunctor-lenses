@@ -88,7 +88,7 @@ instance indexSet :: Ord a => Index (S.Set a) a Unit where
   ix x = affineTraversal set pre
     where
       set :: S.Set a -> Unit -> S.Set a
-      set xs _ = S.insert x xs
+      set xs _ = xs
       pre :: S.Set a -> Either (S.Set a) Unit
       pre xs = if S.member x xs then Right unit else Left xs
 
