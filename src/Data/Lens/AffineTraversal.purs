@@ -1,6 +1,7 @@
--- | This module defines functions for working with grates.
+-- | This module defines functions for working with affine traversals.
+-- | An `AffineTraversal` is a `Traversal` that applies to at most one element.
 -- |
--- | See <http://r6research.livejournal.com/28050.html>.
+-- | These arise most frequently as the composition of a `Lens` with a `Prism`.
 module Data.Lens.AffineTraversal
   ( affineTraversal
   , affineTraversal'
