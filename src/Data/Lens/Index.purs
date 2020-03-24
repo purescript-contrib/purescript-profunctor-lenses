@@ -85,14 +85,12 @@ instance indexList :: Index (L.List a) Int a where
       pre s = maybe (Left s) Right $ L.index s n
 
 instance indexSet :: Ord a => Index (S.Set a) a Unit where
-  ix x = lens get (flip update) <<< _Just
+  ix x = affineTraversal set pre
     where
-      get xs =
-        if S.member x xs
-           then Just unit
-           else Nothing
-      update Nothing = S.delete x
-      update (Just _) = S.insert x
+      set :: S.Set a -> Unit -> S.Set a
+      set xs _ = S.insert x xs
+      pre :: S.Set a -> Either (S.Set a) Unit
+      pre xs = if S.member x xs then Right unit else Left xs
 
 instance indexMap :: Ord k => Index (M.Map k v) k v where
   ix k = affineTraversal set pre
