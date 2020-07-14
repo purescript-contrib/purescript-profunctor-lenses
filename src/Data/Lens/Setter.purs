@@ -63,6 +63,11 @@ infix 4 assignJust as ?=
 over :: forall s t a b. Setter s t a b -> (a -> b) -> s -> t
 over l = l
 
+overPost :: forall s t a b. Lens s t a b -> (a -> b) -> s -> Tuple b t
+overPost l f x = Tuple y (x # l .~ y)
+  where
+    y = x ^. l <<< to f
+
 -- | Apply a function to the foci of a `Setter` that may vary with the index.
 iover :: forall i s t a b. IndexedSetter i s t a b -> (i -> a -> b) -> s -> t
 iover l f = l (Indexed $ uncurry f)
@@ -104,11 +109,6 @@ assign p b = void (modify (set p b))
 -- | Modify the foci of a `Setter` in a monadic state.
 modifying :: forall s a b m. MonadState s m => Setter s s a b -> (a -> b) -> m Unit
 modifying p f = void (modify (over p f))
-
-overPost :: forall s t a b. Lens s t a b -> (a -> b) -> s -> Tuple b t
-overPost l f x = Tuple y (x # l .~ y)
-  where
-    y = x ^. l <<< to f
 
 modifyingLensPost :: forall s a m. MonadState s m => Lens' s a -> (a -> a) -> m a
 modifyingLensPost l f = do
