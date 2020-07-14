@@ -27,11 +27,12 @@ module Data.Lens.Setter
 
 import Prelude
 
-import Control.Monad.State.Class (class MonadState, modify)
+import Control.Monad.State.Class (class MonadState, modify, get, put)
 
-import Data.Lens.Types (IndexedSetter, Indexed(..), Setter, Setter')
+import Data.Lens.Getter ((^.), to)
+import Data.Lens.Types (IndexedSetter, Indexed(..), Setter, Setter', Lens, Lens')
 import Data.Maybe (Maybe(..))
-import Data.Tuple (uncurry)
+import Data.Tuple (Tuple(Tuple), uncurry)
 
 infixr 4 over as %~
 infixr 4 overPost as <%~ 
