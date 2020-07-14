@@ -26,11 +26,13 @@ module Data.Lens.Traversal
   , elementsOf
   , itraverseOf
   , cloneTraversal
+  , (%%=), modifyingTraverse
   , module ExportTypes
   ) where
 
 import Prelude
 
+import Control.Monad.State.Class (class MonadState, get, put)
 import Control.Alternative (class Alternative)
 import Control.Plus (empty)
 import Data.Lens.Indexed (iwander, positions, unIndex)
@@ -146,3 +148,13 @@ iforOf = flip <<< itraverseOf
 
 cloneTraversal :: forall s t a b. ATraversal s t a b -> Traversal s t a b
 cloneTraversal l = wander (runBazaar (l (Bazaar identity)))
+
+-- | Modify the foci of a `Setter` in a monadic state with a traversal.
+modifyingTraverse
+  :: forall s a b m
+   . MonadState s m
+  => Traversal s s a b
+  -> (a -> m b)
+  -> m Unit
+modifyingTraverse t f = get >>= traverseOf t f >>= put
+infix 4 modifyingTraverse as %%=
