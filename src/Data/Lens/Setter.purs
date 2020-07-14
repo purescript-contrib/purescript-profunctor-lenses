@@ -1,6 +1,7 @@
 -- | This module defines functions for working with setters.
 module Data.Lens.Setter
   ( (%~),  over, iover
+  , (<%~), overPost
   , (.~),  set
   , (+~),  addOver
   , (-~),  subOver
@@ -13,6 +14,7 @@ module Data.Lens.Setter
   , (?~),  setJust
   , (.=),  assign
   , (%=),  modifying
+  , (<%=), modifyingLensPost
   , (+=),  addModifying
   , (*=),  mulModifying
   , (-=),  subModifying
