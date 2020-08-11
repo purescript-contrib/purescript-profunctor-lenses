@@ -25,6 +25,7 @@ module Data.Lens.Traversal
   , failover
   , elementsOf
   , itraverseOf
+  , cloneTraversal
   , module ExportTypes
   ) where
 
@@ -33,7 +34,8 @@ import Prelude
 import Control.Alternative (class Alternative)
 import Control.Plus (empty)
 import Data.Lens.Indexed (iwander, positions, unIndex)
-import Data.Lens.Types (IndexedTraversal, IndexedOptic, Indexed(..), Traversal, Optic, class Wander, wander)
+import Data.Lens.Internal.Bazaar (Bazaar(..), runBazaar)
+import Data.Lens.Types (ATraversal, IndexedTraversal, IndexedOptic, Indexed(..), Traversal, Optic, class Wander, wander)
 import Data.Lens.Types (Traversal, Traversal') as ExportTypes
 import Data.Monoid.Disj (Disj(..))
 import Data.Newtype (under, unwrap)
@@ -52,12 +54,10 @@ traversed = wander traverse
 
 -- | Turn a pure profunctor `Traversal` into a `lens`-like `Traversal`.
 traverseOf
-  :: forall f s t a b
-   . Applicative f
-  => Optic (Star f) s t a b -> (a -> f b) -> s -> f t
+  :: forall f s t a b . Optic (Star f) s t a b -> (a -> f b) -> s -> f t
 traverseOf = under Star
 
--- | Sequence the foci of a `Traversal`, pulling out an `Applicative` effect.
+-- | Sequence the foci of an optic, pulling out an "effect".
 -- | If you do not need the result, see `sequenceOf_` for `Fold`s.
 -- |
 -- | `sequenceOf traversed` has the same result as `Data.Traversable.sequence`:
@@ -81,11 +81,8 @@ traverseOf = under Star
 -- | [0.15556037108154985,0.28500369615270515]
 -- | unit
 -- | ```
-
 sequenceOf
-  :: forall f s t a
-   . Applicative f
-  => Optic (Star f) s t (f a) a -> s -> f t
+  :: forall f s t a . Optic (Star f) s t (f a) a -> s -> f t
 sequenceOf t = traverseOf t identity
 
 -- | Tries to map over a `Traversal`; returns `empty` if the traversal did
@@ -132,8 +129,7 @@ elementsOf tr pr = iwander \f ->
 -- | Turn a pure profunctor `IndexedTraversal` into a `lens`-like `IndexedTraversal`.
 itraverseOf
   :: forall f i s t a b
-  . Applicative f
-  => IndexedOptic (Star f) i s t a b
+  .  IndexedOptic (Star f) i s t a b
   -> (i -> a -> f b)
   -> s
   -> f t
@@ -142,9 +138,11 @@ itraverseOf t = under Star (t <<< Indexed) <<< uncurry
 -- | Flipped version of `itraverseOf`.
 iforOf
   :: forall f i s t a b
-  . Applicative f
-  => IndexedOptic (Star f) i s t a b
+  .  IndexedOptic (Star f) i s t a b
   -> s
   -> (i -> a -> f b)
   -> f t
 iforOf = flip <<< itraverseOf
+
+cloneTraversal :: forall s t a b. ATraversal s t a b -> Traversal s t a b
+cloneTraversal l = wander (runBazaar (l (Bazaar identity)))

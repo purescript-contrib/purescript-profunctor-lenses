@@ -4,6 +4,7 @@ module Data.Lens.Types
   , module Data.Lens.Internal.Exchange
   , module Data.Lens.Internal.Market
   , module Data.Lens.Internal.Shop
+  , module Data.Lens.Internal.Stall
   , module Data.Lens.Internal.Tagged
   , module Data.Lens.Internal.Forget
   , module Data.Lens.Internal.Grating
@@ -13,6 +14,8 @@ module Data.Lens.Types
   ) where
 
 import Data.Tuple
+
+import Data.Lens.Internal.Bazaar (Bazaar)
 import Data.Lens.Internal.Exchange (Exchange(..))
 import Data.Lens.Internal.Forget (Forget(..))
 import Data.Lens.Internal.Grating (Grating)
@@ -20,6 +23,7 @@ import Data.Lens.Internal.Indexed (Indexed(..))
 import Data.Lens.Internal.Market (Market(..))
 import Data.Lens.Internal.Re (Re(..))
 import Data.Lens.Internal.Shop (Shop(..))
+import Data.Lens.Internal.Stall (Stall(..))
 import Data.Lens.Internal.Tagged (Tagged(..))
 import Data.Lens.Internal.Wander (class Wander, wander)
 import Data.Profunctor (class Profunctor)
@@ -29,8 +33,8 @@ import Data.Profunctor.Strong (class Strong)
 
 -- | Given a type whose "focus element" always exists,
 -- | a lens provides a convenient way to view, set, and transform
--- | that element. 
--- | 
+-- | that element.
+-- |
 -- | For example, `_2` is a tuple-specific `Lens` available from `Data.Lens`, so:
 -- | ```purescript
 -- | over _2 String.length $ Tuple "ignore" "four" == Tuple "ignore" 4
@@ -42,7 +46,7 @@ import Data.Profunctor.Strong (class Strong)
 -- | * `t` is `Tuple String Int`
 -- | * `a` is `String`
 -- | * `b` is `Int`
--- | 
+-- |
 -- | See `Data.Lens.Getter` and `Data.Lens.Setter` for functions and operators
 -- | frequently used with lenses.
 
@@ -54,7 +58,7 @@ type Lens s t a b = forall p. Strong p => Optic p s t a b
 -- | not its type. As an example, consider the `Lens` `_2`, which has this type:
 -- |
 -- | ```purescript
--- | _2 :: forall s t a b. Lens (Tuple s a) (Tuple t b) a b 
+-- | _2 :: forall s t a b. Lens (Tuple s a) (Tuple t b) a b
 -- | ```
 -- |
 -- | `_2` can produce a `Tuple Int String` from a `Tuple Int Int`:
@@ -88,8 +92,8 @@ type Iso' s a = Iso s s a a
 type Traversal s t a b = forall p. Wander p => Optic p s t a b
 type Traversal' s a = Traversal s s a a
 
-
-
+type ATraversal s t a b = Optic (Bazaar (->) a b) s t a b
+type ATraversal' s a = ATraversal s s a a
 
 -- | A general-purpose Data.Lens.
 type Optic p s t a b = p a b -> p s t
@@ -111,6 +115,13 @@ type AnIndexedLens' i s a = AnIndexedLens i s s a a
 type APrism s t a b = Optic (Market a b) s t a b
 type APrism' s a = APrism s s a a
 
+-- | An affine traversal (has at most one focus, but is not a prism).
+type AffineTraversal s t a b = forall p. Strong p => Choice p => Optic p s t a b
+type AffineTraversal' s a = AffineTraversal s s a a
+
+type AnAffineTraversal s t a b = Optic (Stall a b) s t a b
+type AnAffineTraversal' s a = AnAffineTraversal s s a a
+
 -- | A grate (http://r6research.livejournal.com/28050.html)
 type Grate s t a b = forall p. Closed p => Optic p s t a b
 type Grate' s a = Grate s s a a
@@ -119,8 +130,11 @@ type AGrate s t a b = Optic (Grating a b) s t a b
 type AGrate' s a = AGrate s s a a
 
 -- | A getter.
-type Getter s t a b = Fold a s t a b
+type Getter s t a b = forall r. Fold r s t a b
 type Getter' s a = Getter s s a a
+
+type AGetter s t a b = Fold a s t a b
+type AGetter' s a = AGetter s s a a
 
 -- | A setter.
 type Setter s t a b = Optic Function s t a b
