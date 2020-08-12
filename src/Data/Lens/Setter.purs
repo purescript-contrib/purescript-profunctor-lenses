@@ -176,12 +176,13 @@ assignJust p = assign p <<< Just
 -- | fused setter.
 -- |
 -- | ```purescript
--- | over (fuseSetters _1 (fuseSetters _1 _2 _2) _2)
--- |       ( cTuple
--- |           ((+) 55)
--- |           (cTuple (flip (-) 101) ((*) 57))
--- |       )
--- |       (Tuple 0 (Tuple 0 (Tuple 1 2)))
+-- |over
+-- |  (_2 <<< (fuseSetters _1 (_2 <<< (fuseSetters _1 _2))))
+-- |  ( cTuple
+-- |    ((+) 55)
+-- |    (cTuple (flip (-) 101) ((*) 57))
+-- |  )
+-- |  (Tuple 0 (Tuple 0 (Tuple 1 2)))
 -- | ```
 -- |
 -- | This yields:
@@ -192,10 +193,10 @@ assignJust p = assign p <<< Just
 -- |
 -- | Use `cTuple` along with `fuseSetters` to create the tree of functions used
 -- | by `over`.
-fuseSetters :: forall s a b c. Setter' a b -> Setter' a c -> Setter' s a -> Setter' s (Tuple (b -> b) (c -> c))
-fuseSetters a b c l = over c (over a fa <<< over b fb)
+fuseSetters :: forall a b c. Setter' a b -> Setter' a c -> Setter' a (Tuple (b -> b) (c -> c))
+fuseSetters ba ca l = (over ba fa <<< over ca fb)
   where
-  t = l $ Tuple identity identity
+  t = l (Tuple identity identity)
 
   fa = fst t
 
