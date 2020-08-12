@@ -52,7 +52,7 @@ import Prelude
 import Control.Monad.State.Class (class MonadState, modify)
 import Data.Lens.Types (IndexedSetter, Indexed(..), Setter, Setter')
 import Data.Maybe (Maybe(..))
-import Data.Tuple (uncurry, Tuple(..))
+import Data.Tuple (uncurry, Tuple(..), fst, snd)
 
 infixr 4 over as %~
 
