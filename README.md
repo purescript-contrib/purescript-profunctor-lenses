@@ -1,13 +1,27 @@
-# purescript-profunctor-lenses
+# Profunctor Lenses
 
-[![Latest release](http://img.shields.io/github/release/purescript-contrib/purescript-profunctor-lenses.svg)](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases)
-[![Build status](https://travis-ci.org/purescript-contrib/purescript-profunctor-lenses.svg?branch=master)](https://travis-ci.org/purescript-contrib/purescript-profunctor-lenses)
-[![Pursuit](http://pursuit.purescript.org/packages/purescript-profunctor-lenses/badge)](http://pursuit.purescript.org/packages/purescript-profunctor-lenses/)
-[![Maintainer: garyb](https://img.shields.io/badge/maintainer-garyb-lightgrey.svg)](http://github.com/garyb)
-[![Maintainer: thomashoneyman](https://img.shields.io/badge/maintainer-thomashoneyman-lightgrey.svg)](http://github.com/thomashoneyman)
+[![CI](https://github.com/purescript-contrib/purescript-profunctor-lenses/workflows/CI/badge.svg?branch=main)](https://github.com/purescript-contrib/purescript-profunctor-lenses/actions?query=workflow%3ACI+branch%3Amain)
+[![Release](https://img.shields.io/github/release/purescript-contrib/purescript-profunctor-lenses.svg)](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases)
+[![Pursuit](https://pursuit.purescript.org/packages/purescript-profunctor-lenses/badge)](https://pursuit.purescript.org/packages/purescript-profunctor-lenses)
+[![Maintainer: garyb](https://img.shields.io/badge/maintainer-garyb-teal.svg)](https://github.com/garyb)
+[![Maintainer: thomashoneyman](https://img.shields.io/badge/maintainer-thomashoneyman-teal.svg)](https://github.com/thomashoneyman)
 
-Pure profunctor lenses. A mechanism for updating, viewing, and setting
-values within nested data structures. As in:
+Pure profunctor lenses: a mechanism for updating, viewing, and setting values within nested data structures.
+
+Learn more about profunctor lenses with:
+
+- [Practical Profunctor Optics & Lenses in PureScript](https://thomashoneyman.com/articles/practical-profunctor-lenses-optics/), a practical introduction to profunctor optics in PureScript
+- [Lenses for the Mere Mortal](https://leanpub.com/lenses), a book about lenses in PureScript
+
+## Installation
+
+Install `profunctor-lenses` with [Spago](https://github.com/purescript/spago):
+
+```sh
+spago install profunctor-lenses
+```
+
+## Quick start
 
 ```purescript
 > structure = Tuple (Tuple (Tuple "hi!" 3) 2) 1
@@ -18,33 +32,39 @@ values within nested data structures. As in:
 > view _leftmost structure
 "hi!"
 
-> set _leftmost "Bye!" structure 
+> set _leftmost "Bye!" structure
 (Tuple (Tuple (Tuple "Bye!" 3) 2) 1)
 
 > over _leftmost String.toUpper structure
 (Tuple (Tuple (Tuple "HI!" 3) 2) 1)
-
 ```
 
-
-## Installation
+You can try out the [examples](./examples) in the REPL by running:
 
 ```
-# with Bower
-bower install purescript-profunctor-lenses
-
-# with Spago
-spago install profunctor-lenses
+spago -x examples.dhall repl
 ```
 
 ## Documentation
 
-Module documentation is [published on Pursuit](http://pursuit.purescript.org/packages/purescript-profunctor-lenses). You can find examples in the [tests](test/Main.purs) and the [examples](examples/README.md) directory.
+`profunctor-lenses` documentation is stored in a few places:
 
-There are other in-depth materials for learning about profunctor optics and lenses in PureScript.
-  * A book, [Lenses for the Mere Mortal](https://leanpub.com/lenses)
-  * A long-form guide, [Practical Profunctor Lenses & Optics in PureScript](https://thomashoneyman.com/articles/practical-profunctor-lenses-optics)
+1. Module documentation is [published on Pursuit](https://pursuit.purescript.org/packages/purescript-profunctor-lenses).
+1. Usage examples can be found in [the test suite](./test) and [`examples`](./examples) directory.
+1. [Practical Profunctor Optics & Lenses in PureScript](https://thomashoneyman.com/articles/practical-profunctor-lenses-optics/), a practical introduction to profunctor optics in PureScript
+1. [Lenses for the Mere Mortal](https://leanpub.com/lenses), a book about lenses in PureScript
+
+If you get stuck, there are several ways to get help:
+
+- [Open an issue](https://github.com/purescript-contrib/purescript-profunctor-lenses/issues) if you have encountered a bug or problem.
+- [Search or start a thread on the PureScript Discourse](https://discourse.purescript.org) if you have general questions. You can also ask questions in the `#purescript` and `#purescript-beginners` channels on the [Functional Programming Slack](https://functionalprogramming.slack.com) ([invite link](https://fpchat-invite.herokuapp.com/)).
 
 ## Contributing
 
-Read the [contribution guidelines](https://github.com/purescript-contrib/purescript-profunctor-lenses/blob/master/.github/contributing.md) to get started and see helpful related resources.
+You can contribute to `profunctor-lenses` in several ways:
+
+1. If you encounter a problem or have a question, please [open an issue](https://github.com/purescript-contrib/purescript-profunctor-lenses/issues). We'll do our best to work with you to resolve or answer it.
+
+1. If you would like to contribute code, tests, or documentation, please [read the contributor guide](./CONTRIBUTING.md). It's a short, helpful introduction to contributing to this library, including development instructions.
+
+1. If you have written a library, tutorial, guide, or other resource based on this package, please share it on the [PureScript Discourse](https://discourse.purescript.org)! Writing libraries and learning resources are a great way to help this library succeed.
