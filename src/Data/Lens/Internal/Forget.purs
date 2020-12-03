@@ -17,6 +17,7 @@ import Data.Tuple (fst, snd)
 -- |
 -- | `Forget r` is isomorphic to `Star (Const r)`, but can be given a `Cochoice`
 -- | instance.
+newtype Forget :: forall k. Type -> Type -> k -> Type
 newtype Forget r a b = Forget (a -> r)
 
 derive instance newtypeForget :: Newtype (Forget r a b) _
