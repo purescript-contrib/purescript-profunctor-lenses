@@ -1,4 +1,4 @@
 let upstream =
-      https://raw.githubusercontent.com/purescript/package-sets/prepare-0.14/src/packages.dhall sha256:f9b49a477fcd822a7119413b689123f8e1694b0008c156971f1931751079a56f
+      https://raw.githubusercontent.com/purescript/package-sets/prepare-0.14/src/packages.dhall sha256:f591635bcfb73053bcb6de2ecbf2896489fa5b580563396f52a1051ede439849
 
 in  upstream
