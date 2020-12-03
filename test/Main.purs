@@ -17,11 +17,11 @@ import Data.Lens.Setter (iover)
 import Data.Lens.Traversal (cloneTraversal)
 import Data.Lens.Zoom (ATraversal', IndexedTraversal', Traversal, Traversal', Lens, Lens', zoom)
 import Data.Maybe (Maybe(..))
-import Data.Proxy (Proxy(..))
 import Data.Tuple (Tuple(..), fst, snd)
 import Effect (Effect)
 import Effect.Console (logShow)
 import Partial.Unsafe (unsafePartial)
+import Type.Proxy (Proxy(..))
 
 -- Traversing an array nested within a record
 foo :: forall a b r. Lens { foo :: a | r } { foo :: b | r } a b
