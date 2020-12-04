@@ -96,10 +96,10 @@ type ATraversal s t a b = Optic (Bazaar (->) a b) s t a b
 type ATraversal' s a = ATraversal s s a a
 
 -- | A general-purpose Data.Lens.
-type Optic :: forall k1 k2. (k1 -> k2 -> Type) -> k1 -> k2 -> k1 -> k2 -> Type
+type Optic :: (Type -> Type -> Type) -> Type -> Type -> Type -> Type -> Type
 type Optic p s t a b = p a b -> p s t
 
-type Optic' :: forall k. (k -> k -> Type) -> k -> k -> Type
+type Optic' :: (Type -> Type -> Type) -> Type -> Type -> Type
 type Optic' p s a = Optic p s s a a
 
 type AnIso s t a b = Optic (Exchange a b) s t a b
@@ -133,11 +133,11 @@ type AGrate s t a b = Optic (Grating a b) s t a b
 type AGrate' s a = AGrate s s a a
 
 -- | A getter.
-type Getter :: forall k. Type -> k -> Type -> k -> Type
+type Getter :: Type -> Type -> Type -> Type -> Type
 type Getter s t a b = forall r. Fold r s t a b
 type Getter' s a = Getter s s a a
 
-type AGetter :: forall k. Type -> k -> Type -> k -> Type
+type AGetter :: Type -> Type -> Type -> Type -> Type
 type AGetter s t a b = Fold a s t a b
 type AGetter' s a = AGetter s s a a
 
@@ -146,17 +146,17 @@ type Setter s t a b = Optic Function s t a b
 type Setter' s a = Setter s s a a
 
 -- | A review.
-type Review :: forall k. k -> Type -> k -> Type -> Type
+type Review :: Type -> Type -> Type -> Type -> Type
 type Review s t a b = Optic Tagged s t a b
 type Review' s a = Review s s a a
 
 -- | A fold.
-type Fold :: forall k. Type -> Type -> k -> Type -> k -> Type
+type Fold :: Type -> Type -> Type -> Type -> Type -> Type
 type Fold r s t a b = Optic (Forget r) s t a b
 type Fold' r s a = Fold r s s a a
 
 -- | An indexed optic.
-type IndexedOptic :: forall k. (Type -> k -> Type) -> Type -> Type -> k -> Type -> k -> Type
+type IndexedOptic :: (Type -> Type -> Type) -> Type -> Type -> Type -> Type -> Type -> Type
 type IndexedOptic p i s t a b = Indexed p i a b -> p s t
 type IndexedOptic' p i s a = IndexedOptic p i s s a a
 
@@ -165,12 +165,12 @@ type IndexedTraversal i s t a b = forall p. Wander p => IndexedOptic p i s t a b
 type IndexedTraversal' i s a = IndexedTraversal i s s a a
 
 -- | An indexed fold.
-type IndexedFold :: forall k. Type -> Type -> Type -> k -> Type -> k -> Type
+type IndexedFold :: Type -> Type -> Type -> Type -> Type -> Type -> Type
 type IndexedFold r i s t a b = IndexedOptic (Forget r) i s t a b
 type IndexedFold' r i s a = IndexedFold r i s s a a
 
 -- | An indexed getter.
-type IndexedGetter :: forall k. Type -> Type -> k -> Type -> k -> Type
+type IndexedGetter :: Type -> Type -> Type -> Type -> Type -> Type
 type IndexedGetter i s t a b = IndexedFold a i s t a b
 type IndexedGetter' i s a = IndexedGetter i s s a a
 
