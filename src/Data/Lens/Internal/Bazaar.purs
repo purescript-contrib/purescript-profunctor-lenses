@@ -11,6 +11,7 @@ import Data.Traversable (traverse)
 import Data.Tuple (Tuple(..))
 
 -- | This is used to characterize a Traversal.
+newtype Bazaar :: (Type -> Type -> Type) -> Type -> Type -> Type -> Type -> Type
 newtype Bazaar p a b s t = Bazaar (forall f. Applicative f => p a (f b) -> s -> f t)
 
 runBazaar :: forall p a b s t. Bazaar p a b s t -> (forall f. Applicative f => p a (f b) -> s -> f t)

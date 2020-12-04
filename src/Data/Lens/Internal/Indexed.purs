@@ -12,6 +12,7 @@ import Data.Profunctor.Strong (class Strong, first, second)
 import Data.Tuple (Tuple(..))
 
 -- | Profunctor used for `IndexedOptic`s.
+newtype Indexed :: (Type -> Type -> Type) -> Type -> Type -> Type -> Type
 newtype Indexed p i s t = Indexed (p (Tuple i s) t)
 
 derive instance newtypeIndexed :: Newtype (Indexed p i s t) _
