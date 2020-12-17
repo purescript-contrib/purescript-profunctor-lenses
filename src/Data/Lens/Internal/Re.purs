@@ -10,6 +10,7 @@ import Data.Profunctor.Cochoice (class Cochoice, unleft, unright)
 import Data.Profunctor.Costrong (class Costrong, unfirst, unsecond)
 import Data.Profunctor.Strong (class Strong, first, second)
 
+newtype Re :: (Type -> Type -> Type) -> Type -> Type -> Type -> Type -> Type
 newtype Re p s t a b = Re (p b a -> p t s)
 
 derive instance newtypeRe :: Newtype (Re p s t a b) _
