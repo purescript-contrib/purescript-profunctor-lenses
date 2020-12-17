@@ -3,7 +3,6 @@ module Test.Main where
 import Prelude
 
 import Control.Monad.State (evalState, get)
-import Data.Distributive (class Distributive)
 import Data.Either (Either(..))
 import Data.Lens (Getter', Prism', _1, _2, _Just, _Left, collectOf, lens, lens', preview, prism', takeBoth, toArrayOf, traversed, view, lensStore)
 import Data.Lens.Fold ((^?))
@@ -106,7 +105,7 @@ i_2 = ilens (\(Tuple _ b) -> Tuple 0 b) (\(Tuple a _) b -> Tuple a b)
 aGrateExample :: forall a b. Grate (Tuple a a) (Tuple b b) a b
 aGrateExample = grate \f -> Tuple (f fst) (f snd)
 
-collectOfTest :: forall f a b. Distributive f => (a -> f b) -> Tuple a a -> f (Tuple b b)
+collectOfTest :: forall f a b. Functor f => (a -> Tuple b b) -> f a -> Tuple (f b) (f b)
 collectOfTest = collectOf aGrateExample
 
 summing :: Tuple Int Int -> Tuple Int Int -> Tuple Int Int
@@ -140,4 +139,5 @@ main = do
   logShow stateTest
   logShow cloneTest
   logShow (summing (Tuple 1 2) (Tuple 3 4))
+  logShow (collectOfTest (\a -> Tuple (a + a) (a * a)) [4, 5])
   logShow cloneTraversalTest
