@@ -42,4 +42,4 @@ zipFWithOf :: forall f s t a b. Optic (Costar f) s t a b -> (f a -> b) -> (f s -
 zipFWithOf g f = unwrap (g (Costar f))
 
 collectOf :: forall f s t a b. Functor f => Optic (Costar f) s t a (f a) -> (b -> s) -> f b -> t
-collectOf g f = zipFWithOf g id <<< map f
+collectOf g f = zipFWithOf g identity <<< map f
