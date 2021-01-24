@@ -5,22 +5,29 @@ Notable changes to this project are documented in this file. The format is based
 ## [Unreleased]
 
 Breaking changes (😱!!!):
+- Added support for PureScript 0.14 and dropped support for all previous versions (#122, #123)
+- Removed `(++~)` and `(++=)` operators, as they are meant to mimic the long-removed `(++)` in `prelude` (#58)
 
 New features:
+- Added `unto` (#93)
+- Added affine traversals (#112)
 
 Bugfixes:
+- Fixed `collectOf` in the `Grate` module (#63)
 
 Other improvements:
+- Changed default branch to `main` from `master`
+- Updated to comply with Contributors library guidelines by adding new issue and pull request templates, updating documentation, and migrating to Spago for local development and CI (#108, #121)
 
 ## [v6.3.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v6.3.0) - 2020-02-10
 
 This release includes a number of small but meaningful improvements to the library:
 
-- Makes `indexList` more efficient and adds an `Index` instance for `List` (@cscalfani)
-- Adds a re-export for `ATraversal` and `ATraversal'` (@pbrant)
-- Adds a new function, `simple`, which can be used to restrict the type of an optic to aid type inference (@LiamGoodacre)
-- Adds a new `lensStore` function which can be used to construct a lens when a type appears under every constructor in a sum type (@LiamGoodacre)
-- Adds `toArrayOf` and `toArrayOfOn` which behave like the existing `toListOf` and `toListOfOn` optics, but for arrays (@dwhitney)
+- Made `indexList` more efficient and added an `Index` instance for `List` (@cscalfani)
+- Added a re-export for `ATraversal` and `ATraversal'` (@pbrant)
+- Added a new function, `simple`, which can be used to restrict the type of an optic to aid type inference (@LiamGoodacre)
+- Added a new `lensStore` function which can be used to construct a lens when a type appears under every constructor in a sum type (@LiamGoodacre)
+- Added `toArrayOf` and `toArrayOfOn` which behave like the existing `toListOf` and `toListOfOn` optics, but for arrays (@dwhitney)
 
 ## [v6.2.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v6.2.0) - 2019-04-08
 
@@ -40,7 +47,7 @@ This release includes a number of small but meaningful improvements to the libra
 
 ## [v5.0.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v5.0.0) - 2018-10-15
 
-- Make Getters compose and define AGetter/cloneGetter (@LiamGoodacre)
+- Made Getters compose and define AGetter/cloneGetter (@LiamGoodacre)
 
 ## [v4.0.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v4.0.0) - 2018-05-25
 
@@ -52,55 +59,55 @@ This release includes a number of small but meaningful improvements to the libra
 
 ## [v3.7.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v3.7.0) - 2017-09-13
 
-- Add `takeBoth` (@coot)
+- Added `takeBoth` (@coot)
 
 ## [v3.6.1](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v3.6.1) - 2017-08-31
 
-- Add explicit `foldable-traversable` dependency
+- Added explicit `foldable-traversable` dependency
 
 ## [v3.6.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v3.6.0) - 2017-08-13
 
-- Add `Monoid Forget` instance (@joneshf)
+- Added `Monoid Forget` instance (@joneshf)
 
 ## [v3.5.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v3.5.0) - 2017-08-13
 
-- Add `Closed Tagged` instance (@joneshf)
+- Added `Closed Tagged` instance (@joneshf)
 
 ## [v3.4.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v3.4.0) - 2017-07-31
 
-- Use `purescript-record` (@coot)
+- Now uses `purescript-record` (@coot)
 
 ## [v3.3.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v3.3.0) - 2017-07-27
 
-- Add `iforOf`, `iforOf_`, `itraversed` and `reindexed` (@Rufflewind)
+- Added `iforOf`, `iforOf_`, `itraversed` and `reindexed` (@Rufflewind)
 
 ## [v3.2.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v3.2.0) - 2017-04-13
 
-- Add `prop` lenses for record fields.
+- Added `prop` lenses for record fields.
 
 ## [v3.1.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v3.1.0) - 2017-04-12
 
-- Add `Grate` and corresponding functions.
+- Added `Grate` and corresponding functions.
 
 ## [v3.0.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v3.0.0) - 2017-04-02
 
-- Updates for 0.11.1
+- Updated for 0.11.1
 
 ## [v2.5.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v2.5.0) - 2017-01-16
 
-- Add `unsafeView` and `unsafeIndexedFold` (@boothead)
+- Added `unsafeView` and `unsafeIndexedFold` (@boothead)
 
 ## [v2.4.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v2.4.0) - 2017-01-13
 
-- Add indexed lenses (@Roxxik)
+- Added indexed lenses (@Roxxik)
 
 ## [v2.3.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v2.3.0) - 2016-12-20
 
-- Export `traverseOf_` (@Roxxik)
+- Exported `traverseOf_` (@Roxxik)
 
 ## [v2.1.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v2.1.0) - 2016-10-31
 
-- Add `asIndex` (@puffnfresh)
+- Added `asIndex` (@puffnfresh)
 
 ## [v2.0.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v2.0.0) - 2016-10-22
 
@@ -111,19 +118,15 @@ This release includes a number of small but meaningful improvements to the libra
 
 ## [v1.0.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v1.0.0) - 2016-06-02
 
-- Updates for 1.0 core libraries.
-
-## [v1.0.0-rc.1](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v1.0.0-rc.1) - 2016-05-21
-
-- Release candidate for the PureScript 0.9 compiler.
+- Updated for 1.0 core libraries and PureScript 0.9
 
 ## [v0.5.4](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v0.5.4) - 2016-05-02
 
-- Update bower.json (@hdgarrood)
+- Updated `bower.json` (@hdgarrood)
 
 ## [v0.5.3](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v0.5.3) - 2016-04-24
 
-- Export `iover` (@nathanfaubion)
+- Exported `iover` (@nathanfaubion)
 
 ## [v0.5.2](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v0.5.2) - 2016-04-21
 
@@ -131,15 +134,15 @@ This release includes a number of small but meaningful improvements to the libra
 
 ## [v0.5.1](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v0.5.1) - 2016-04-16
 
-- Export `itraverseOf` and `element` (@zrho)
+- Exported `itraverseOf` and `element` (@zrho)
 
 ## [v0.5.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v0.5.0) - 2016-02-27
 
-- Convert functions to `Forget`, including `to` (@zrho)
+- Converted functions to `Forget`, including `to` (@zrho)
 
 ## [v0.4.2](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v0.4.2) - 2016-01-28
 
-- Add `IndexedTraversal` and friends (@zrho)
+- Added `IndexedTraversal` and friends (@zrho)
 
 ## [v0.4.1](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v0.4.1) - 2016-01-24
 
@@ -147,8 +150,8 @@ This release includes a number of small but meaningful improvements to the libra
 
 ## [v0.4.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v0.4.0) - 2016-01-12
 
-- Add `zoom` and `MonadState` combinators.
-- Add `Re` profunctor to turn around isos into isos, lenses into reviews, etc.
+- Added `zoom` and `MonadState` combinators.
+- Added `Re` profunctor to turn around isos into isos, lenses into reviews, etc.
 
 By @zrho
 
@@ -158,7 +161,7 @@ By @zrho
 
 ## [v0.3.4](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v0.3.4) - 2015-11-07
 
-- Reexport `first`, `second`, `left` and `right`.
+- Reexported `first`, `second`, `left` and `right`.
 
 ## [v0.3.3](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v0.3.3) - 2015-11-02
 
@@ -173,19 +176,19 @@ By @zrho
 
 ## [v0.3.1](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v0.3.1) - 2015-10-29
 
-- Add `At` and `Index` (@jonsterling)
+- Added `At` and `Index` (@jonsterling)
 
 ## [v0.3.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v0.3.0) - 2015-09-23
 
 - Generalize `Wander`
-- Add standard lenses, traversals and folds
+- Added standard lenses, traversals and folds
 
 by @zrho
 
 ## [v0.2.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v0.2.0) - 2015-09-13
 
-- Add functions based on `purescript-lens` and `purescript-optic` (@zrho)
+- Added functions based on `purescript-lens` and `purescript-optic` (@zrho)
 
 ## [v0.1.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v0.1.0) - 2015-09-06
 
-Initial release
+- Initial release
