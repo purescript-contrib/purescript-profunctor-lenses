@@ -21,7 +21,7 @@ import Data.Lens.Types (Grate, Grate', Optic, AGrate)
 import Data.Newtype (unwrap)
 import Data.Profunctor (dimap)
 import Data.Profunctor.Closed (closed)
-import Data.Profunctor.Costar (Costar(..))
+import Data.Functor.Costar (Costar(..))
 
 grate :: forall s t a b. (((s -> a) -> b) -> t) -> Grate s t a b
 grate f pab = dimap (#) f (closed pab)
