@@ -4,7 +4,17 @@ Notable changes to this project are documented in this file. The format is based
 
 ## [Unreleased]
 
-Breaking changes (😱!!!):
+Breaking changes:
+
+New features:
+
+Bugfixes:
+
+Other improvements:
+
+## [v7.0.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v7.0.0) - 2021-02-26
+
+Breaking changes:
 - Added support for PureScript 0.14 and dropped support for all previous versions (#122, #123)
 - Removed `(++~)` and `(++=)` operators, as they are meant to mimic the long-removed `(++)` in `prelude` (#58)
 
