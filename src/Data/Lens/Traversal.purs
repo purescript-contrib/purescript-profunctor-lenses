@@ -16,7 +16,6 @@
 -- | ```
 -- |
 -- | Many of the functions you'll use are documented in `Data.Lens.Fold`. 
-
 module Data.Lens.Traversal
   ( traversed
   , element
@@ -30,7 +29,6 @@ module Data.Lens.Traversal
   ) where
 
 import Prelude
-
 import Control.Alternative (class Alternative)
 import Control.Plus (empty)
 import Data.Lens.Indexed (iwander, positions, unIndex)
@@ -53,8 +51,8 @@ traversed :: forall t a b. Traversable t => Traversal (t a) (t b) a b
 traversed = wander traverse
 
 -- | Turn a pure profunctor `Traversal` into a `lens`-like `Traversal`.
-traverseOf
-  :: forall f s t a b . Optic (Star f) s t a b -> (a -> f b) -> s -> f t
+traverseOf ::
+  forall f s t a b. Optic (Star f) s t a b -> (a -> f b) -> s -> f t
 traverseOf = under Star
 
 -- | Sequence the foci of an optic, pulling out an "effect".
@@ -81,21 +79,21 @@ traverseOf = under Star
 -- | [0.15556037108154985,0.28500369615270515]
 -- | unit
 -- | ```
-sequenceOf
-  :: forall f s t a . Optic (Star f) s t (f a) a -> s -> f t
+sequenceOf ::
+  forall f s t a. Optic (Star f) s t (f a) a -> s -> f t
 sequenceOf t = traverseOf t identity
 
 -- | Tries to map over a `Traversal`; returns `empty` if the traversal did
 -- | not have any new focus.
-failover
-  :: forall f s t a b
-   . Alternative f
-  => Optic (Star (Tuple (Disj Boolean))) s t a b
-  -> (a -> b)
-  -> s
-  -> f t
+failover ::
+  forall f s t a b.
+  Alternative f =>
+  Optic (Star (Tuple (Disj Boolean))) s t a b ->
+  (a -> b) ->
+  s ->
+  f t
 failover t f s = case unwrap (t $ Star $ Tuple (Disj true) <<< f) s of
-  Tuple (Disj true) x  -> pure x
+  Tuple (Disj true) x -> pure x
   Tuple (Disj false) _ -> empty
 
 -- | Combine an index and a traversal to narrow the focus to a single
@@ -108,40 +106,41 @@ failover t f s = case unwrap (t $ Star $ Tuple (Disj true) <<< f) s of
 -- | The resulting traversal is called an *affine traversal*, which
 -- | means that the traversal focuses on one or zero (if the index is out of range)
 -- | results.
-element
-  :: forall p s t a
-   . Wander p
-  => Int
-  -> Traversal s t a a
-  -> Optic p s t a a
+element ::
+  forall p s t a.
+  Wander p =>
+  Int ->
+  Traversal s t a a ->
+  Optic p s t a a
 element n tr = unIndex $ elementsOf (positions tr) (_ == n)
 
 -- | Traverse elements of an `IndexedTraversal` whose index satisfy a predicate.
-elementsOf
-  :: forall p i s t a
-   . Wander p
-  => IndexedTraversal i s t a a
-  -> (i -> Boolean)
-  -> IndexedOptic p i s t a a
-elementsOf tr pr = iwander \f ->
-  unwrap $ tr $ Indexed $ Star $ \(Tuple i a) -> if pr i then f i a else pure a
+elementsOf ::
+  forall p i s t a.
+  Wander p =>
+  IndexedTraversal i s t a a ->
+  (i -> Boolean) ->
+  IndexedOptic p i s t a a
+elementsOf tr pr =
+  iwander \f ->
+    unwrap $ tr $ Indexed $ Star $ \(Tuple i a) -> if pr i then f i a else pure a
 
 -- | Turn a pure profunctor `IndexedTraversal` into a `lens`-like `IndexedTraversal`.
-itraverseOf
-  :: forall f i s t a b
-  .  IndexedOptic (Star f) i s t a b
-  -> (i -> a -> f b)
-  -> s
-  -> f t
+itraverseOf ::
+  forall f i s t a b.
+  IndexedOptic (Star f) i s t a b ->
+  (i -> a -> f b) ->
+  s ->
+  f t
 itraverseOf t = under Star (t <<< Indexed) <<< uncurry
 
 -- | Flipped version of `itraverseOf`.
-iforOf
-  :: forall f i s t a b
-  .  IndexedOptic (Star f) i s t a b
-  -> s
-  -> (i -> a -> f b)
-  -> f t
+iforOf ::
+  forall f i s t a b.
+  IndexedOptic (Star f) i s t a b ->
+  s ->
+  (i -> a -> f b) ->
+  f t
 iforOf = flip <<< itraverseOf
 
 cloneTraversal :: forall s t a b. ATraversal s t a b -> Traversal s t a b
