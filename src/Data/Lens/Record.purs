@@ -1,4 +1,4 @@
-module Data.Lens.Record (prop) where
+module Data.Lens.Record (prop, propF) where
 
 import Prelude
 import Data.Lens (Lens, lens)
@@ -27,17 +27,12 @@ prop
 prop l = lens (get l) (flip (set l))
 
 -- | Like `prop`, but for monadic contexts
-propM
-  :: forall l r1 r2 r a b proxy m
+propF
+  :: forall l r1 r2 r a b proxy f
    . IsSymbol l
   => Row.Cons l a r r1
   => Row.Cons l b r r2
-  => Monad m
+  => Functor f
   => proxy l
-  -> Lens (Record r1) (m (Record r2)) a (m b)
-propM l =
-  lens (get l)
-    ( \s mb -> do
-        b <- mb
-        pure $ set l b s
-    )
+  -> Lens (Record r1) (f (Record r2)) a (f b)
+propF l = lens (get l) (map <<< flip (set l))
