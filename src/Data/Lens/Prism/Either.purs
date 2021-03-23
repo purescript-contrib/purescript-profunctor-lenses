@@ -8,7 +8,7 @@ module Data.Lens.Prism.Either
 
 import Prelude
 import Data.Bifunctor (lmap)
-import Data.Either (Either(..), either)
+import Data.Either (Either(..))
 import Data.Lens.Prism (Prism, prism)
 import Data.Profunctor.Choice (left, right)
 
@@ -20,9 +20,14 @@ _Left = left
 _Right :: forall a b c. Prism (Either c a) (Either c b) a b
 _Right = right
 
+swap :: forall a b. Either a b -> Either b a
+swap = case _ of
+  Left a -> Right a
+  Right a -> Left a
+
 -- | Prism for the `Left` constructor of `Either` in a monadic context.
 _LeftM :: forall a b c m. Monad m => Prism (Either a c) (m (Either b c)) a (m b)
-_LeftM = prism (map Left) (either Right (Left <<< pure <<< Right))
+_LeftM = prism (map Left) (lmap (pure <<< Right) <<< swap)
 
 -- | Prism for the `Right` constructor of `Either` in a monadic context.
 _RightM :: forall a b c m. Monad m => Prism (Either c a) (m (Either c b)) a (m b)
