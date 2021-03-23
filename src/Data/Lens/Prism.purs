@@ -78,6 +78,7 @@ module Data.Lens.Prism
 import Prelude
 
 import Control.MonadPlus (guard)
+import Data.Bifunctor (lmap)
 import Data.Either (Either(..), either)
 import Data.HeytingAlgebra (tt, ff)
 import Data.Lens.Types (Prism, Prism', APrism, APrism', Review, Review') as ExportTypes
@@ -104,7 +105,7 @@ prism :: forall s t a b. (b -> t) -> (s -> Either t a) -> Prism s t a b
 prism to fro pab = dimap fro (either identity identity) (right (rmap to pab))
 
 prismF :: forall s t a b f. Functor f => Applicative f => (b -> t) -> (s -> Either t a) -> Prism s (f t) a (f b)
-prismF to = prism (map to) <<< compose (either (Left <<< pure) Right)
+prismF to = prism (map to) <<< compose (lmap pure)
 
 -- | Create a `Prism` from a constructor and a matcher function that
 -- | produces a `Maybe`:
