@@ -103,6 +103,9 @@ import Data.Profunctor.Choice (right)
 prism :: forall s t a b. (b -> t) -> (s -> Either t a) -> Prism s t a b
 prism to fro pab = dimap fro (either identity identity) (right (rmap to pab))
 
+prismF :: forall s t a b f. Functor f => Applicative f => (b -> t) -> (s -> Either t a) -> Prism s (f t) a (f b)
+prismF to = prism (map to) <<< compose (either (Left <<< pure) Right)
+
 -- | Create a `Prism` from a constructor and a matcher function that
 -- | produces a `Maybe`:
 -- | 
