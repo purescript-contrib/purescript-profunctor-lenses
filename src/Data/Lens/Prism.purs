@@ -67,7 +67,7 @@
 -- | ```
 
 module Data.Lens.Prism
-  ( prism', prism
+  ( prism', prism, prismF
   , only, nearly
   , review
   , is, isn't, matching

@@ -19,6 +19,7 @@
 
 module Data.Lens.Traversal
   ( traversed
+  , traversedM
   , element
   , traverseOf
   , sequenceOf

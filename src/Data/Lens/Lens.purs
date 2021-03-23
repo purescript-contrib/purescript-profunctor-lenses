@@ -2,6 +2,8 @@
 module Data.Lens.Lens
   ( lens
   , lens'
+  , lensF
+  , lensF'
   , withLens
   , cloneLens
   , ilens

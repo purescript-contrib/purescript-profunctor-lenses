@@ -1,6 +1,8 @@
 module Data.Lens.Prism.Either
   ( _Left
   , _Right
+  , _LeftM
+  , _RightM
   , module Data.Profunctor.Choice
   ) where
 
