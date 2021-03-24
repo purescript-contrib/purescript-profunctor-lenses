@@ -67,7 +67,8 @@
 -- | ```
 
 module Data.Lens.Prism
-  ( prism', prism, prismF, prismFF
+  ( prism', prism
+  , prismF, prismF', prismFF, prismFF'
   , only, nearly
   , review
   , is, isn't, matching
@@ -105,11 +106,17 @@ import Data.Traversable (class Traversable, sequence)
 prism :: forall s t a b. (b -> t) -> (s -> Either t a) -> Prism s t a b
 prism to fro pab = dimap fro (either identity identity) (right (rmap to pab))
 
+prismF' :: forall s t a b f. Functor f => (t -> f t) -> (b -> t) -> (s -> Either t a) -> Prism s (f t) a (f b)
+prismF' pure' to = prism (map to) <<< compose (lmap pure')
+
 prismF :: forall s t a b f. Functor f => Applicative f => (b -> t) -> (s -> Either t a) -> Prism s (f t) a (f b)
-prismF to = prism (map to) <<< compose (lmap pure)
+prismF = prismF' pure
+
+prismFF' :: forall s t a b f. Functor f => Traversable f => (t -> f t) -> (b -> t) -> (s -> Either t a) -> Prism (f s) (f t) (f a) (f b)
+prismFF' pure' to = prism (map to) <<< (compose (lmap pure' <<< sequence) <<< map)
 
 prismFF :: forall s t a b f. Functor f => Applicative f => Traversable f => (b -> t) -> (s -> Either t a) -> Prism (f s) (f t) (f a) (f b)
-prismFF to = prism (map to) <<< (compose (lmap pure <<< sequence) <<< map)
+prismFF = prismFF' pure
 
 -- | Create a `Prism` from a constructor and a matcher function that
 -- | produces a `Maybe`:
