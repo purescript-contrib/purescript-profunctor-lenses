@@ -67,7 +67,7 @@
 -- | ```
 
 module Data.Lens.Prism
-  ( prism', prism, prismF
+  ( prism', prism, prismF, prismFF
   , only, nearly
   , review
   , is, isn't, matching
@@ -87,6 +87,7 @@ import Data.Maybe (Maybe, maybe)
 import Data.Newtype (under)
 import Data.Profunctor (dimap, rmap)
 import Data.Profunctor.Choice (right)
+import Data.Traversable (class Traversable, sequence)
 
 -- | Create a `Prism` from a constructor and a matcher function that
 -- | produces an `Either`:
@@ -106,6 +107,9 @@ prism to fro pab = dimap fro (either identity identity) (right (rmap to pab))
 
 prismF :: forall s t a b f. Functor f => Applicative f => (b -> t) -> (s -> Either t a) -> Prism s (f t) a (f b)
 prismF to = prism (map to) <<< compose (lmap pure)
+
+prismFF :: forall s t a b f. Functor f => Applicative f => Traversable f => (b -> t) -> (s -> Either t a) -> Prism (f s) (f t) (f a) (f b)
+prismFF to = prism (map to) <<< (compose (lmap pure <<< sequence) <<< map)
 
 -- | Create a `Prism` from a constructor and a matcher function that
 -- | produces a `Maybe`:
