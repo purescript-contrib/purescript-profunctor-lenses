@@ -7,7 +7,7 @@ Notable changes to this project are documented in this file. The format is based
 Breaking changes:
 
 New features:
-- Export `ifindOf` and `iforOf_` implemented in #66 by @Rufflewind and #21 by @zrho (#131 by @JordanMartinez)
+- Export `ifindOf`, `iforOf`, and `iforOf_` implemented in #66 by @Rufflewind and #21 by @zrho (#131 by @JordanMartinez)
 
 Bugfixes:
 

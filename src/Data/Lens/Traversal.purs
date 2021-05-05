@@ -25,6 +25,7 @@ module Data.Lens.Traversal
   , failover
   , elementsOf
   , itraverseOf
+  , iforOf
   , cloneTraversal
   , module ExportTypes
   ) where
