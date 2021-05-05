@@ -178,7 +178,7 @@ filtered f =
 replicated :: forall a b t r. Monoid r => Int -> Fold r a b a t
 replicated i (Forget a) = Forget (go i a)
   where
-  go 0 x = mempty
+  go 0 _ = mempty
   go n x = x <> go (n - 1) x
 
 -- | Folds over a `Foldable` container.
