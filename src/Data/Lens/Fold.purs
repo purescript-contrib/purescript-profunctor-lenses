@@ -6,7 +6,7 @@ module Data.Lens.Fold
   , maximumOf, minimumOf, allOf, anyOf, andOf, orOf, elemOf, notElemOf, sumOf
   , productOf, lengthOf, findOf, sequenceOf_, traverseOf_, has, hasn't
   , replicated, filtered, folded, unfolded, toArrayOf, toArrayOfOn
-  , ifoldMapOf, ifoldrOf, ifoldlOf, iallOf, ianyOf, itoListOf, itraverseOf_
+  , ifoldMapOf, ifoldrOf, ifoldlOf, iallOf, ianyOf, ifindOf, itoListOf, itraverseOf_, iforOf_
   , module ExportTypes
   )
   where
