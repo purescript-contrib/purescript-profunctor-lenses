@@ -7,10 +7,12 @@ Notable changes to this project are documented in this file. The format is based
 Breaking changes:
 
 New features:
+- Export `ifindOf`, `iforOf`, and `iforOf_` implemented in #66 by @Rufflewind and #21 by @zrho (#131 by @JordanMartinez)
 
 Bugfixes:
 
 Other improvements:
+- Fix warnings revealed by PS v0.14.1 (#131 by @JordanMartinez)
 
 ## [v7.0.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v7.0.0) - 2021-02-26
 

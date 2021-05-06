@@ -6,7 +6,7 @@ module Data.Lens.Fold
   , maximumOf, minimumOf, allOf, anyOf, andOf, orOf, elemOf, notElemOf, sumOf
   , productOf, lengthOf, findOf, sequenceOf_, traverseOf_, has, hasn't
   , replicated, filtered, folded, unfolded, toArrayOf, toArrayOfOn
-  , ifoldMapOf, ifoldrOf, ifoldlOf, iallOf, ianyOf, itoListOf, itraverseOf_
+  , ifoldMapOf, ifoldrOf, ifoldlOf, iallOf, ianyOf, ifindOf, itoListOf, itraverseOf_, iforOf_
   , module ExportTypes
   )
   where
@@ -178,7 +178,7 @@ filtered f =
 replicated :: forall a b t r. Monoid r => Int -> Fold r a b a t
 replicated i (Forget a) = Forget (go i a)
   where
-  go 0 x = mempty
+  go 0 _ = mempty
   go n x = x <> go (n - 1) x
 
 -- | Folds over a `Foldable` container.
