@@ -1,6 +1,7 @@
 { name = "profunctor-lenses"
 , dependencies =
   [ "arrays"
+  , "assert"
   , "bifunctors"
   , "console"
   , "const"
