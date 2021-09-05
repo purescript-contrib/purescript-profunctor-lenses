@@ -11,6 +11,7 @@ New features:
 Bugfixes:
 
 Other improvements:
+ - Replace manual tests with automated tests using `assert` #135 by @neppord
 
 ## [v7.0.1](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v7.0.1) - 2021-05-06
 
