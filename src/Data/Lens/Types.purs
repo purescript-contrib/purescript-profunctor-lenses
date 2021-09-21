@@ -1,4 +1,11 @@
 -- | This module defines types for working with lenses.
+-- |
+-- | All optics have their normal name (e.g. `Lens`)
+-- | and one whose name is prefixed with either "A"
+-- | or "An" (e.g. `ALens`). Prefixed versions avoid the
+-- | issue of "impredicativity". To understand that concept
+-- | more and why prefixed names are sometimes necessary,
+-- | see the `./docs` folder.
 module Data.Lens.Types
   ( module Data.Lens.Types
   , module Data.Lens.Internal.Exchange
@@ -92,6 +99,8 @@ type Iso' s a = Iso s s a a
 type Traversal s t a b = forall p. Wander p => Optic p s t a b
 type Traversal' s a = Traversal s s a a
 
+-- | A traversal defined in terms of `Bazaar`, which can be used
+-- | to avoid issues with impredicativity.
 type ATraversal s t a b = Optic (Bazaar (->) a b) s t a b
 type ATraversal' s a = ATraversal s s a a
 
@@ -102,9 +111,13 @@ type Optic p s t a b = p a b -> p s t
 type Optic' :: (Type -> Type -> Type) -> Type -> Type -> Type
 type Optic' p s a = Optic p s s a a
 
+-- | An isomorphism defined in terms of `Exchange`, which can be used
+-- | to avoid issues with impredicativity.
 type AnIso s t a b = Optic (Exchange a b) s t a b
 type AnIso' s a = AnIso s s a a
 
+-- | A lens defined in terms of `Shop`, which can be used
+-- | to avoid issues with impredicativity.
 type ALens s t a b = Optic (Shop a b) s t a b
 type ALens' s a = ALens s s a a
 
@@ -112,9 +125,14 @@ type ALens' s a = ALens s s a a
 type IndexedLens i s t a b = forall p. Strong p => IndexedOptic p i s t a b
 type IndexedLens' i s a = IndexedLens i s s a a
 
+-- | An indexed lens defined in terms of `Shop`, which can be used
+-- | to avoid issues with impredicativity.
 type AnIndexedLens i s t a b = IndexedOptic (Shop (Tuple i a) b) i s t a b
 type AnIndexedLens' i s a = AnIndexedLens i s s a a
 
+-- | A prism defined in terms of `Market` to be safe from impredicativity
+-- | issues in the type checker. See the `docs/` folder for a more detailed
+-- | explanation.
 type APrism s t a b = Optic (Market a b) s t a b
 type APrism' s a = APrism s s a a
 
@@ -122,6 +140,8 @@ type APrism' s a = APrism s s a a
 type AffineTraversal s t a b = forall p. Strong p => Choice p => Optic p s t a b
 type AffineTraversal' s a = AffineTraversal s s a a
 
+-- | An affine traversal defined in terms of `Stall`, which can be used
+-- | to avoid issues with impredicativity.
 type AnAffineTraversal s t a b = Optic (Stall a b) s t a b
 type AnAffineTraversal' s a = AnAffineTraversal s s a a
 
@@ -129,6 +149,8 @@ type AnAffineTraversal' s a = AnAffineTraversal s s a a
 type Grate s t a b = forall p. Closed p => Optic p s t a b
 type Grate' s a = Grate s s a a
 
+-- | A grate defined in terms of `Grating`, which can be used
+-- | to avoid issues with impredicativity.
 type AGrate s t a b = Optic (Grating a b) s t a b
 type AGrate' s a = AGrate s s a a
 
