@@ -129,7 +129,7 @@ data Exchange a b s t = Exchange (s -> a) (b -> t)
 ```
 
 What's the difference? Well, if you explore `Optic` and `Exchange`, you won't
-find any constraints! All we're doing here is side-stepping the type-checking
+find any constraints! All we're doing here is side-stepping the impredicativity
 issue. Afterwards, we can use `cloneIso` to turn our `AnIso` back into the `Iso`
 that we've always wanted.
 
