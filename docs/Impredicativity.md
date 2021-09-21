@@ -57,16 +57,16 @@ Now, we've generalised our `foo` to work with any `Category`, and not just
 
 Let's break this line down into two parts:
 
-1. We extract `forall k a. foo :: Category k => k a a` out our record.
+1. We extract `foo` out of our record, which has the type signature: `forall k a. Category k => k a a`.
 2. We specialise `forall k a. Category k => k a a` to `String -> String`.
 
 Now, step `1` and `2`, independently, seem fine and dandy; they certainly work
 if we try it with a function _not_ wrapped in a record. The issue is with how
 these lines *interact*. We started with our record type, then extracted a value.
 At this point, the compiler has to hold onto its value, the `id` function, and
-its type, `forall k a. foo :: Category k => k a a`. At this point, we can
-observe something a bit weird: in this signature, `a` could correspond to our
-original record!
+its type, `forall k a. Category k => k a a`. At this point, we can
+observe something a bit weird: in this signature, the `a` type could correspond to our
+original record type!
 
 In fact, with this step, we've made a *more general* type signature, which is
 not something that the compiler wants to do. After all, if we keep getting more
