@@ -72,7 +72,7 @@ In fact, with this step, we've made a *more general* type signature, which is
 not something that the compiler wants to do. After all, if we keep getting more
 general, how will we ever solve the type equations? This situation, (where a
 type signature is general enough to contain the structure containing it), is
-called *impredicativity*.
+called **impredicativity**.
 
 The next question is: why did `foo` work when we specialised it to `a -> a`? The
 answer to this is that the compiler actually can work certain situations out,
