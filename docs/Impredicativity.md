@@ -115,8 +115,17 @@ Here, instead of using `Iso'`, we use `AnIso'`. There's a difference in the type
 signatures:
 
 ```purescript
+-- The main comparison
 type Iso'   s a = Iso s s a a
 type AnIso' s a = Optic (Exchange a a) s s a a
+
+-- For context
+type Optic :: (Type -> Type -> Type) -> Type -> Type -> Type -> Type -> Type
+type Optic p s t a b = p a b -> p s t
+
+type Iso s t a b = forall p. Profunctor p => Optic p s t a b
+
+data Exchange a b s t = Exchange (s -> a) (b -> t)
 ```
 
 What's the difference? Well, if you explore `Optic` and `Exchange`, you won't
