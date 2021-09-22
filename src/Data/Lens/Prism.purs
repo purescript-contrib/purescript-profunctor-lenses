@@ -86,6 +86,7 @@ import Data.Maybe (Maybe, maybe)
 import Data.Newtype (under)
 import Data.Profunctor (dimap, rmap)
 import Data.Profunctor.Choice (right)
+import Data.Traversable (class Traversable, traverse)
 
 -- | Create a `Prism` from a constructor and a matcher function that
 -- | produces an `Either`:
