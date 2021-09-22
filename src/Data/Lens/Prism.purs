@@ -2,6 +2,7 @@
 module Data.Lens.Prism
   ( prism, prism', review, nearly, only, clonePrism, withPrism, matching
   , is, isn't
+  , below
   , module ExportTypes
   ) where
 
