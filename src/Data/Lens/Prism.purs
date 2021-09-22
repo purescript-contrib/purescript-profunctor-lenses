@@ -12,7 +12,7 @@ import Control.MonadPlus (guard)
 import Data.Either (Either(..), either)
 import Data.HeytingAlgebra (tt, ff)
 import Data.Lens.Types (Prism, Prism', APrism, APrism', Review, Review') as ExportTypes
-import Data.Lens.Types (Prism, Prism', APrism, Market(..), Review, Tagged(..))
+import Data.Lens.Types (Prism, Prism', APrism, APrism', Market(..), Review, Tagged(..))
 import Data.Maybe (Maybe, maybe)
 import Data.Profunctor (dimap, rmap)
 import Data.Profunctor.Choice (right)
