@@ -9,20 +9,32 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/purescript-contrib/purescript-profunctor-lenses.git"
+    "url": "https://github.com/purescript-contrib/purescript-profunctor-lenses.git"
   },
   "dependencies": {
-    "purescript-const": "^3.0.0",
-    "purescript-functors": "^2.0.0",
-    "purescript-foldable-traversable": "^3.4.0",
-    "purescript-identity": "^3.0.0",
-    "purescript-profunctor": "^3.0.0",
-    "purescript-sets": "^3.0.0",
-    "purescript-unsafe-coerce": "^3.0.0",
-    "purescript-transformers": "^3.0.0",
-    "purescript-record": "^0.2.0"
+    "purescript-arrays": "^6.0.0",
+    "purescript-bifunctors": "^5.0.0",
+    "purescript-const": "^5.0.0",
+    "purescript-control": "^5.0.0",
+    "purescript-distributive": "^5.0.0",
+    "purescript-either": "^5.0.0",
+    "purescript-foldable-traversable": "^5.0.0",
+    "purescript-foreign-object": "^3.0.0",
+    "purescript-functors": "^4.0.0",
+    "purescript-identity": "^5.0.0",
+    "purescript-lists": "^6.0.0",
+    "purescript-maybe": "^5.0.0",
+    "purescript-newtype": "^4.0.0",
+    "purescript-ordered-collections": "^2.0.0",
+    "purescript-partial": "^3.0.0",
+    "purescript-prelude": "^5.0.0",
+    "purescript-profunctor": "^5.0.0",
+    "purescript-record": "^3.0.0",
+    "purescript-transformers": "^5.0.0",
+    "purescript-tuples": "^6.0.0"
   },
   "devDependencies": {
-    "purescript-console": "^3.0.0"
+    "purescript-console": "^5.0.0",
+    "purescript-effect": "^3.0.0"
   }
 }

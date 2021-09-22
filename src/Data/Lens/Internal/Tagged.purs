@@ -15,6 +15,7 @@ import Data.Profunctor.Costrong (class Costrong)
 import Data.Traversable (class Traversable)
 import Data.Tuple (Tuple(..))
 
+newtype Tagged :: forall k. k -> Type -> Type
 newtype Tagged a b = Tagged b
 
 derive instance newtypeTagged :: Newtype (Tagged a b) _

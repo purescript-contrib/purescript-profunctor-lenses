@@ -19,4 +19,4 @@ zoom
    . Optic' (Star (Focusing m r)) s a
   -> StateT a m r
   -> StateT s m r
-zoom p = StateT <<< underF Focusing (under Star p) <<< runStateT
+zoom p = StateT <<< underF Focusing (under Star p :: (a -> Focusing m r a) -> s -> Focusing m r s) <<< runStateT

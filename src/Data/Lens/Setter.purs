@@ -9,7 +9,6 @@ module Data.Lens.Setter
   , (||~), disjOver
   , (&&~), conjOver
   , (<>~), appendOver
-  , (++~)
   , (?~),  setJust
   , (.=),  assign
   , (%=),  modifying
@@ -20,7 +19,6 @@ module Data.Lens.Setter
   , (||=), disjModifying
   , (&&=), conjModifying
   , (<>=), appendModifying
-  , (++=)
   , (?=),  assignJust
   , module Data.Lens.Types
   ) where
@@ -42,7 +40,6 @@ infixr 4 divOver as //~
 infixr 4 disjOver as ||~
 infixr 4 conjOver as &&~
 infixr 4 appendOver as <>~
-infixr 4 appendOver as ++~
 infixr 4 setJust as ?~
 
 infix 4 assign as .=
@@ -54,7 +51,6 @@ infix 4 divModifying as //=
 infix 4 disjModifying as ||=
 infix 4 conjModifying as &&=
 infix 4 appendModifying as <>=
-infix 4 appendModifying as ++=
 infix 4 assignJust as ?=
 
 -- | Apply a function to the foci of a `Setter`.
@@ -97,11 +93,11 @@ setJust p = set p <<< Just
 
 -- | Set the foci of a `Setter` in a monadic state to a constant value.
 assign :: forall s a b m. MonadState s m => Setter s s a b -> b -> m Unit
-assign p b = modify (set p b)
+assign p b = void (modify (set p b))
 
 -- | Modify the foci of a `Setter` in a monadic state.
 modifying :: forall s a b m. MonadState s m => Setter s s a b -> (a -> b) -> m Unit
-modifying p f = modify (over p f)
+modifying p f = void (modify (over p f))
 
 addModifying :: forall s a m. MonadState s m => Semiring a => Setter' s a -> a -> m Unit
 addModifying p = modifying p <<< add
