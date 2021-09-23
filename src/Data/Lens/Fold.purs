@@ -5,14 +5,15 @@ module Data.Lens.Fold
   , preview, foldOf, foldMapOf, foldrOf, foldlOf, toListOf, firstOf, lastOf
   , maximumOf, minimumOf, allOf, anyOf, andOf, orOf, elemOf, notElemOf, sumOf
   , productOf, lengthOf, findOf, sequenceOf_, traverseOf_, has, hasn't
-  , replicated, filtered, folded, unfolded
-  , ifoldMapOf, ifoldrOf, ifoldlOf, iallOf, ianyOf, itoListOf, itraverseOf_
+  , replicated, filtered, folded, unfolded, toArrayOf, toArrayOfOn
+  , ifoldMapOf, ifoldrOf, ifoldlOf, iallOf, ianyOf, ifindOf, itoListOf, itraverseOf_, iforOf_
   , module ExportTypes
   )
   where
 
 import Prelude
 
+import Data.Array (fromFoldable) as Array
 import Data.Either (Either(..), either)
 import Data.Foldable (class Foldable, foldMap)
 import Data.HeytingAlgebra (tt, ff)
@@ -148,6 +149,15 @@ toListOfOn s p = toListOf p s
 
 infixl 8 toListOfOn as ^..
 
+-- | Collects the foci of a `Fold` into an array.
+toArrayOf :: forall s t a b. Fold (Endo (->) (List a)) s t a b -> s -> Array a
+toArrayOf p = Array.fromFoldable <<< toListOf p
+
+-- | Synonym for `toArrayOf`, reversed.
+toArrayOfOn :: forall s t a b. s -> Fold (Endo (->) (List a)) s t a b -> Array a
+toArrayOfOn s p = toArrayOf p s
+
+
 -- | Determines whether a `Fold` has at least one focus.
 has :: forall s t a b r. HeytingAlgebra r => Fold (Disj r) s t a b -> s -> r
 has p = unwrap <<< foldMapOf p (const (Disj tt))
@@ -168,7 +178,7 @@ filtered f =
 replicated :: forall a b t r. Monoid r => Int -> Fold r a b a t
 replicated i (Forget a) = Forget (go i a)
   where
-  go 0 x = mempty
+  go 0 _ = mempty
   go n x = x <> go (n - 1) x
 
 -- | Folds over a `Foldable` container.

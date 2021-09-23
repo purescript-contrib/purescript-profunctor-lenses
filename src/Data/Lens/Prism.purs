@@ -65,7 +65,6 @@
 -- | Solid Color.white # preview solidFocus <#> review solidFocus
 -- |   == Solid Color.white
 -- | ```
-
 module Data.Lens.Prism
   ( prism', prism
   , only, nearly
@@ -183,3 +182,24 @@ is l = either (const ff) (const tt) <<< matching l
 --| Ask if `preview prism` would produce a `Nothing`.
 isn't :: forall s t a b r. HeytingAlgebra r => APrism s t a b -> s -> r
 isn't l = not <<< is l
+
+-- Ported from Haskell: https://hackage.haskell.org/package/lens-4.16/docs/src/Control-Lens-Prism.html#below
+-- | `lift` a `Prism` through a `Traversable` functor, giving a `Prism` that matches 
+-- | only if all the elements of the container match the `Prism`.
+-- |
+-- | ``` purescript
+-- | >>> [Left 1, Right "foo", Left 4, Right "woot"]^..below _Right
+-- | []
+-- | ```
+-- | 
+-- | ``` purescript
+-- | >>> [Right "hail hydra!", Right "foo", Right "blah", Right "woot"]^..below _Right
+-- | [["hail hydra!","foo","blah","woot"]]
+-- | ```
+below :: forall f s a. Traversable f => APrism' s a -> Prism' (f s) (f a)
+below k =
+  withPrism k     $ \bt seta ->
+  prism (map bt) $ \s ->
+  case traverse seta s of
+    Left _  -> Left s
+    Right t -> Right t

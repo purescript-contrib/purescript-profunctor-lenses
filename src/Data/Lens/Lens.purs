@@ -8,11 +8,13 @@ module Data.Lens.Lens
   , ilens'
   , withIndexedLens
   , cloneIndexedLens
+  , lensStore
   , module Data.Lens.Types
   ) where
 
 import Prelude
 
+import Control.Apply (lift2)
 import Data.Lens.Internal.Shop (Shop(..))
 import Data.Lens.Internal.Indexed (Indexed(..))
 import Data.Lens.Types
@@ -64,3 +66,23 @@ withIndexedLens l f = case l (Indexed (Shop identity \_ b -> b)) of Shop x y -> 
 
 cloneIndexedLens :: forall i s t a b. AnIndexedLens i s t a b -> IndexedLens i s t a b
 cloneIndexedLens l = withIndexedLens l \x y p -> ilens x y p
+
+-- | Converts a lens into the form that `lens'` accepts.
+-- |
+-- | Can be useful when defining a lens where the focus appears under multiple
+-- | constructors of an algebraic data type.  This function would be called for
+-- | each case of the data type.
+-- |
+-- | For example:
+-- |
+-- | ```
+-- | data LensStoreExample = LensStoreA Int | LensStoreB (Tuple Boolean Int)
+-- |
+-- | lensStoreExampleInt :: Lens' LensStoreExample Int
+-- | lensStoreExampleInt = lens' case _ of
+-- |   LensStoreA i -> map LensStoreA <$> lensStore identity i
+-- |   LensStoreB i -> map LensStoreB <$> lensStore _2 i
+-- | ```
+lensStore :: forall s t a b . ALens s t a b -> s -> Tuple a (b -> t)
+lensStore l = withLens l (lift2 Tuple)
+
