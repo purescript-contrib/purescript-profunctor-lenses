@@ -27,6 +27,7 @@ module Data.Lens.Traversal
   , itraverseOf
   , iforOf
   , cloneTraversal
+  , both
   , module ExportTypes
   ) where
 
@@ -34,6 +35,7 @@ import Prelude
 
 import Control.Alternative (class Alternative)
 import Control.Plus (empty)
+import Data.Bitraversable (class Bitraversable, bitraverse)
 import Data.Lens.Indexed (iwander, positions, unIndex)
 import Data.Lens.Internal.Bazaar (Bazaar(..), runBazaar)
 import Data.Lens.Types (ATraversal, IndexedTraversal, IndexedOptic, Indexed(..), Traversal, Optic, class Wander, wander)
@@ -147,3 +149,6 @@ iforOf = flip <<< itraverseOf
 
 cloneTraversal :: forall s t a b. ATraversal s t a b -> Traversal s t a b
 cloneTraversal l = wander (runBazaar (l (Bazaar identity)))
+
+both :: forall r a b. Bitraversable r => Traversal (r a a) (r b b) a b
+both = wander (join bitraverse)

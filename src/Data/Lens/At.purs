@@ -1,13 +1,14 @@
 module Data.Lens.At
   ( class At
   , at
+  , sans
   ) where
 
 
 import Prelude
 
 import Data.Identity (Identity(..))
-import Data.Lens (Lens', lens)
+import Data.Lens (Lens', lens, set)
 import Data.Lens.Index (class Index)
 import Data.Map as M
 import Data.Maybe (Maybe(..), maybe, maybe')
@@ -60,3 +61,6 @@ instance atForeignObject :: At (FO.Object v) String v where
   at k =
     lens (FO.lookup k) \m ->
       maybe' (\_ -> FO.delete k m) \v -> FO.insert k v m
+
+sans :: forall m a b. At m a b => a -> m -> m
+sans k = at k `set` Nothing
