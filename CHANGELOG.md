@@ -12,6 +12,17 @@ New features:
 Bugfixes:
 
 Other improvements:
+  - Replace manual tests with automated tests using `assert` (#135 by @neppord)
+  - Improve documentation for `united` (#134 by @neppord)
+  - Add guide on impredicativity explaining difference between `Lens` vs `ALens` (#136 by @i-am-tom and @JordanMartinez)
+
+## [v7.0.1](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v7.0.1) - 2021-05-06
+
+New features:
+- Export `ifindOf`, `iforOf`, and `iforOf_` implemented in #66 by @Rufflewind and #21 by @zrho (#131 by @JordanMartinez)
+
+Other improvements:
+- Fix warnings revealed by PS v0.14.1 (#131 by @JordanMartinez)
 
 ## [v7.0.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v7.0.0) - 2021-02-26
 
