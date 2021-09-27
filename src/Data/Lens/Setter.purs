@@ -1,6 +1,7 @@
 -- | This module defines functions for working with setters.
 module Data.Lens.Setter
   ( (%~),  over, iover
+  , (<%~), overPost
   , (.~),  set
   , (+~),  addOver
   , (-~),  subOver
@@ -12,6 +13,7 @@ module Data.Lens.Setter
   , (?~),  setJust
   , (.=),  assign
   , (%=),  modifying
+  , (<%=), modifyingLensPost
   , (+=),  addModifying
   , (*=),  mulModifying
   , (-=),  subModifying
@@ -25,13 +27,15 @@ module Data.Lens.Setter
 
 import Prelude
 
-import Control.Monad.State.Class (class MonadState, modify)
+import Control.Monad.State.Class (class MonadState, modify, get, put)
 
-import Data.Lens.Types (IndexedSetter, Indexed(..), Setter, Setter')
+import Data.Lens.Getter ((^.), to)
+import Data.Lens.Types (IndexedSetter, Indexed(..), Setter, Setter', Lens, Lens')
 import Data.Maybe (Maybe(..))
-import Data.Tuple (uncurry)
+import Data.Tuple (Tuple(Tuple), uncurry)
 
 infixr 4 over as %~
+infixr 4 overPost as <%~ 
 infixr 4 set as .~
 infixr 4 addOver as +~
 infixr 4 subOver as -~
@@ -44,6 +48,7 @@ infixr 4 setJust as ?~
 
 infix 4 assign as .=
 infix 4 modifying as %=
+infix 4 modifyingLensPost as <%=
 infix 4 addModifying as +=
 infix 4 mulModifying as *=
 infix 4 subModifying as -=
@@ -56,6 +61,11 @@ infix 4 assignJust as ?=
 -- | Apply a function to the foci of a `Setter`.
 over :: forall s t a b. Setter s t a b -> (a -> b) -> s -> t
 over l = l
+
+overPost :: forall s t a b. Lens s t a b -> (a -> b) -> s -> Tuple b t
+overPost l f x = Tuple y (x # l .~ y)
+  where
+    y = x ^. l <<< to f
 
 -- | Apply a function to the foci of a `Setter` that may vary with the index.
 iover :: forall i s t a b. IndexedSetter i s t a b -> (i -> a -> b) -> s -> t
@@ -98,6 +108,13 @@ assign p b = void (modify (set p b))
 -- | Modify the foci of a `Setter` in a monadic state.
 modifying :: forall s a b m. MonadState s m => Setter s s a b -> (a -> b) -> m Unit
 modifying p f = void (modify (over p f))
+
+modifyingLensPost :: forall s a m. MonadState s m => Lens' s a -> (a -> a) -> m a
+modifyingLensPost l f = do
+  s <- get
+  let Tuple x s' = s # l <%~ f
+  put s'
+  pure x
 
 addModifying :: forall s a m. MonadState s m => Semiring a => Setter' s a -> a -> m Unit
 addModifying p = modifying p <<< add
