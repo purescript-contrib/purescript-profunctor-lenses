@@ -152,4 +152,3 @@ cloneTraversal l = wander (runBazaar (l (Bazaar identity)))
 
 both :: forall r a b. Bitraversable r => Traversal (r a a) (r b b) a b
 both = wander (join bitraverse)
-
