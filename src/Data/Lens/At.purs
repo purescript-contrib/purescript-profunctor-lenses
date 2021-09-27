@@ -63,4 +63,4 @@ instance atForeignObject :: At (FO.Object v) String v where
       maybe' (\_ -> FO.delete k m) \v -> FO.insert k v m
 
 sans :: forall m a b. At m a b => a -> m -> m
-sans k = at k set Nothing
+sans k = at k `set` Nothing
