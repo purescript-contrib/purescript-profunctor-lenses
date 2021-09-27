@@ -2,6 +2,9 @@
 module Data.Lens.Lens
   ( lens
   , lens'
+  , lensF
+  , lensFF
+  , lensF'
   , withLens
   , cloneLens
   , ilens
@@ -41,8 +44,17 @@ import Data.Newtype(un)
 lens :: forall s t a b. (s -> a) -> (s -> b -> t) -> Lens s t a b
 lens get set = lens' \s -> Tuple (get s) \b -> set s b
 
+lensF :: forall s t a b f. Functor f => (s -> a) -> (s -> b -> t) -> Lens s (f t) a (f b)
+lensF get = lens get <<< (compose map)
+
+lensFF :: forall s t a b f. Functor f => Apply f => (s -> a) -> (s -> b -> t) -> Lens (f s) (f t) (f a) (f b)
+lensFF get = lens (map get) <<< compose apply <<< map
+
 lens' :: forall s t a b. (s -> Tuple a (b -> t)) -> Lens s t a b
 lens' to pab = dimap to (\(Tuple b f) -> f b) (first pab)
+
+lensF' :: forall s t a b f. Functor f => (s -> Tuple a (b -> t)) -> Lens s (f t) a (f b)
+lensF' = lens' <<< ((map <<< map) map)
 
 withLens :: forall s t a b r. ALens s t a b -> ((s -> a) -> (s -> b -> t) -> r) -> r
 withLens l f = case l (Shop identity \_ b -> b) of Shop x y -> f x y

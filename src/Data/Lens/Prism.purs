@@ -67,6 +67,7 @@
 -- | ```
 module Data.Lens.Prism
   ( prism', prism
+  , prismF, prismF', prismFF, prismFF'
   , only, nearly
   , review
   , is, isn't, matching
@@ -78,6 +79,7 @@ module Data.Lens.Prism
 import Prelude
 
 import Control.MonadPlus (guard)
+import Data.Bifunctor (lmap)
 import Data.Either (Either(..), either)
 import Data.HeytingAlgebra (tt, ff)
 import Data.Lens.Types (Prism, Prism', APrism, APrism', Review, Review') as ExportTypes
@@ -86,7 +88,7 @@ import Data.Maybe (Maybe, maybe)
 import Data.Newtype (under)
 import Data.Profunctor (dimap, rmap)
 import Data.Profunctor.Choice (right)
-import Data.Traversable (class Traversable, traverse)
+import Data.Traversable (class Traversable, sequence, traverse)
 
 -- | Create a `Prism` from a constructor and a matcher function that
 -- | produces an `Either`:
@@ -103,6 +105,18 @@ import Data.Traversable (class Traversable, traverse)
 -- | not match.
 prism :: forall s t a b. (b -> t) -> (s -> Either t a) -> Prism s t a b
 prism to fro pab = dimap fro (either identity identity) (right (rmap to pab))
+
+prismF' :: forall s t a b f. Functor f => (t -> f t) -> (b -> t) -> (s -> Either t a) -> Prism s (f t) a (f b)
+prismF' pure' to = prism (map to) <<< compose (lmap pure')
+
+prismF :: forall s t a b f. Functor f => Applicative f => (b -> t) -> (s -> Either t a) -> Prism s (f t) a (f b)
+prismF = prismF' pure
+
+prismFF' :: forall s t a b f. Functor f => Traversable f => (t -> f t) -> (b -> t) -> (s -> Either t a) -> Prism (f s) (f t) (f a) (f b)
+prismFF' pure' to = prism (map to) <<< (compose (lmap pure' <<< sequence) <<< map)
+
+prismFF :: forall s t a b f. Functor f => Applicative f => Traversable f => (b -> t) -> (s -> Either t a) -> Prism (f s) (f t) (f a) (f b)
+prismFF = prismFF' pure
 
 -- | Create a `Prism` from a constructor and a matcher function that
 -- | produces a `Maybe`:

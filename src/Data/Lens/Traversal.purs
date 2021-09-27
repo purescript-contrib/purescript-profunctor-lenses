@@ -19,6 +19,7 @@
 
 module Data.Lens.Traversal
   ( traversed
+  , traversedM
   , element
   , traverseOf
   , sequenceOf
@@ -36,12 +37,14 @@ import Control.Alternative (class Alternative)
 import Control.Plus (empty)
 import Data.Lens.Indexed (iwander, positions, unIndex)
 import Data.Lens.Internal.Bazaar (Bazaar(..), runBazaar)
+import Data.Lens.Lens (lens')
 import Data.Lens.Types (ATraversal, IndexedTraversal, IndexedOptic, Indexed(..), Traversal, Optic, class Wander, wander)
 import Data.Lens.Types (Traversal, Traversal') as ExportTypes
 import Data.Monoid.Disj (Disj(..))
 import Data.Newtype (under, unwrap)
 import Data.Profunctor.Star (Star(..))
-import Data.Traversable (class Traversable, traverse)
+import Data.Profunctor.Strong (class Strong)
+import Data.Traversable (class Traversable, sequence, traverse)
 import Data.Tuple (Tuple(..), uncurry)
 
 -- | A `Traversal` for the elements of a `Traversable` functor.
@@ -52,6 +55,10 @@ import Data.Tuple (Tuple(..), uncurry)
 -- | ```
 traversed :: forall t a b. Traversable t => Traversal (t a) (t b) a b
 traversed = wander traverse
+
+-- Like `traversed`, but for monadic output.
+traversedM :: forall t a b m p. Traversable t => Wander p => Strong p => Monad m => Optic p (t a) (m (t b)) a (m b)
+traversedM = lens' (flip Tuple sequence) <<< traversed
 
 -- | Turn a pure profunctor `Traversal` into a `lens`-like `Traversal`.
 traverseOf

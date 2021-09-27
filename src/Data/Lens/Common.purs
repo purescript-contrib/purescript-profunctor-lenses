@@ -8,10 +8,10 @@ module Data.Lens.Common
   ) where
 
 import Data.Lens.Types (Optic')
-import Data.Lens.Lens.Tuple (_1, _2, first, second)
+import Data.Lens.Lens.Tuple (_1, _1F, _2, _2F, first, second)
 import Data.Lens.Lens.Unit (united)
-import Data.Lens.Prism.Either (_Left, _Right, left, right)
-import Data.Lens.Prism.Maybe (_Just, _Nothing)
+import Data.Lens.Prism.Either (_Left, _LeftF, _Right, _RightF, left, right)
+import Data.Lens.Prism.Maybe (_Just, _JustF, _Nothing, _NothingF)
 
 -- | This is useful for when you want to restrict the type of another optic.
 -- | For example, suppose you have the following declarations:
