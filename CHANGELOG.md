@@ -8,6 +8,7 @@ Breaking changes:
 
 New features:
 - Add `sans` and `both` (#97 by @xgrommx)
+- Generic prisms (#137 by @amesgen)
 
 Bugfixes:
 
