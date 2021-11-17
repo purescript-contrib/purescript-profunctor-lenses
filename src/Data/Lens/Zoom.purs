@@ -6,7 +6,7 @@ module Data.Lens.Zoom
 
 import Prelude ((<<<))
 
-import Control.Monad.State.Trans (StateT (..), runStateT)
+import Control.Monad.State.Trans (StateT(..), runStateT)
 
 import Data.Lens.Internal.Focusing (Focusing(..))
 import Data.Lens.Types

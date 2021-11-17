@@ -1,25 +1,46 @@
 -- | This module defines functions for working with setters.
 module Data.Lens.Setter
-  ( (%~),  over, iover
-  , (.~),  set
-  , (+~),  addOver
-  , (-~),  subOver
-  , (*~),  mulOver
-  , (//~), divOver
-  , (||~), disjOver
-  , (&&~), conjOver
-  , (<>~), appendOver
-  , (?~),  setJust
-  , (.=),  assign
-  , (%=),  modifying
-  , (+=),  addModifying
-  , (*=),  mulModifying
-  , (-=),  subModifying
-  , (//=), divModifying
-  , (||=), disjModifying
-  , (&&=), conjModifying
-  , (<>=), appendModifying
-  , (?=),  assignJust
+  ( (%~)
+  , over
+  , iover
+  , (.~)
+  , set
+  , (+~)
+  , addOver
+  , (-~)
+  , subOver
+  , (*~)
+  , mulOver
+  , (//~)
+  , divOver
+  , (||~)
+  , disjOver
+  , (&&~)
+  , conjOver
+  , (<>~)
+  , appendOver
+  , (?~)
+  , setJust
+  , (.=)
+  , assign
+  , (%=)
+  , modifying
+  , (+=)
+  , addModifying
+  , (*=)
+  , mulModifying
+  , (-=)
+  , subModifying
+  , (//=)
+  , divModifying
+  , (||=)
+  , disjModifying
+  , (&&=)
+  , conjModifying
+  , (<>=)
+  , appendModifying
+  , (?=)
+  , assignJust
   , module Data.Lens.Types
   ) where
 

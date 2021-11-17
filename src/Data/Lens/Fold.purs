@@ -1,15 +1,50 @@
 -- | This module defines functions for working with folds.
 module Data.Lens.Fold
-  ( (^?), previewOn
-  , (^..), toListOfOn
-  , preview, foldOf, foldMapOf, foldrOf, foldlOf, toListOf, firstOf, lastOf
-  , maximumOf, minimumOf, allOf, anyOf, andOf, orOf, elemOf, notElemOf, sumOf
-  , productOf, lengthOf, findOf, sequenceOf_, traverseOf_, has, hasn't
-  , replicated, filtered, folded, unfolded, toArrayOf, toArrayOfOn
-  , ifoldMapOf, ifoldrOf, ifoldlOf, iallOf, ianyOf, ifindOf, itoListOf, itraverseOf_, iforOf_
+  ( (^?)
+  , previewOn
+  , (^..)
+  , toListOfOn
+  , preview
+  , foldOf
+  , foldMapOf
+  , foldrOf
+  , foldlOf
+  , toListOf
+  , firstOf
+  , lastOf
+  , maximumOf
+  , minimumOf
+  , allOf
+  , anyOf
+  , andOf
+  , orOf
+  , elemOf
+  , notElemOf
+  , sumOf
+  , productOf
+  , lengthOf
+  , findOf
+  , sequenceOf_
+  , traverseOf_
+  , has
+  , hasn't
+  , replicated
+  , filtered
+  , folded
+  , unfolded
+  , toArrayOf
+  , toArrayOfOn
+  , ifoldMapOf
+  , ifoldrOf
+  , ifoldlOf
+  , iallOf
+  , ianyOf
+  , ifindOf
+  , itoListOf
+  , itraverseOf_
+  , iforOf_
   , module ExportTypes
-  )
-  where
+  ) where
 
 import Prelude
 
@@ -107,12 +142,14 @@ lastOf p = unwrap <<< foldMapOf p (Last <<< Just)
 
 -- | The maximum of all foci of a `Fold`, if there is any.
 maximumOf :: forall s t a b. Ord a => Fold (Endo (->) (Maybe a)) s t a b -> s -> Maybe a
-maximumOf p = foldrOf p (\a -> Just <<< maybe a (max a)) Nothing where
+maximumOf p = foldrOf p (\a -> Just <<< maybe a (max a)) Nothing
+  where
   max a b = if a > b then a else b
 
 -- | The minimum of all foci of a `Fold`, if there is any.
 minimumOf :: forall s t a b. Ord a => Fold (Endo (->) (Maybe a)) s t a b -> s -> Maybe a
-minimumOf p = foldrOf p (\a -> Just <<< maybe a (min a)) Nothing where
+minimumOf p = foldrOf p (\a -> Just <<< maybe a (min a)) Nothing
+  where
   min a b = if a < b then a else b
 
 -- | Find the first focus of a `Fold` that satisfies a predicate, if there is any.
@@ -156,7 +193,6 @@ toArrayOf p = Array.fromFoldable <<< toListOf p
 -- | Synonym for `toArrayOf`, reversed.
 toArrayOfOn :: forall s t a b. s -> Fold (Endo (->) (List a)) s t a b -> Array a
 toArrayOfOn s p = toArrayOf p s
-
 
 -- | Determines whether a `Fold` has at least one focus.
 has :: forall s t a b r. HeytingAlgebra r => Fold (Disj r) s t a b -> s -> r
@@ -231,10 +267,10 @@ ifoldlOf p f r =
 iallOf
   :: forall i s t a b r
    . HeytingAlgebra r
-   => IndexedFold (Conj r) i s t a b
-   -> (i -> a -> r)
-   -> s
-   -> r
+  => IndexedFold (Conj r) i s t a b
+  -> (i -> a -> r)
+  -> s
+  -> r
 iallOf p f = unwrap <<< ifoldMapOf p (\i -> Conj <<< f i)
 
 -- | Whether any focus of an `IndexedFold` satisfies a predicate.
@@ -271,7 +307,8 @@ itoListOf p = ifoldrOf p (\i x xs -> Tuple i x : xs) Nil
 
 -- | Traverse the foci of an `IndexedFold`, discarding the results.
 itraverseOf_
-  :: forall i f s t a b r. (Applicative f)
+  :: forall i f s t a b r
+   . (Applicative f)
   => IndexedFold (Endo (->) (f Unit)) i s t a b
   -> (i -> a -> f r)
   -> s
@@ -280,7 +317,8 @@ itraverseOf_ p f = ifoldrOf p (\i a fu -> void (f i a) *> fu) (pure unit)
 
 -- | Flipped version of `itraverseOf_`.
 iforOf_
-  :: forall i f s t a b r. (Applicative f)
+  :: forall i f s t a b r
+   . (Applicative f)
   => IndexedFold (Endo (->) (f Unit)) i s t a b
   -> s
   -> (i -> a -> f r)

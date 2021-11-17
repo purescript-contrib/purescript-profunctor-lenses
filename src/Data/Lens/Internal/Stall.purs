@@ -24,27 +24,31 @@ instance profunctorStall :: Profunctor (Stall a b) where
 instance strongStall :: Strong (Stall a b) where
   first (Stall u p) =
     Stall (\(Tuple s x) b -> Tuple (u s b) x)
-          (\(Tuple s x) -> lmap (\t -> Tuple t x) (p s))
+      (\(Tuple s x) -> lmap (\t -> Tuple t x) (p s))
 
   second (Stall u p) =
     Stall (\(Tuple x s) b -> Tuple x (u s b))
-          (\(Tuple x s) -> lmap (Tuple x) (p s))
+      (\(Tuple x s) -> lmap (Tuple x) (p s))
 
 instance choiceStall :: Choice (Stall a b) where
   left (Stall u p) =
     Stall
-      (case _ of
-        Left s -> \b -> Left (u s b)
-        Right x -> \_ -> Right x)
-      (case _ of
-        Left s -> lmap Left (p s)
-        Right x -> Left (Right x))
+      ( case _ of
+          Left s -> \b -> Left (u s b)
+          Right x -> \_ -> Right x
+      )
+      ( case _ of
+          Left s -> lmap Left (p s)
+          Right x -> Left (Right x)
+      )
 
   right (Stall u p) =
     Stall
-      (case _ of
-        Left x -> \_ -> Left x
-        Right s -> \b -> Right (u s b))
-      (case _ of
-        Left x -> Left (Left x)
-        Right s -> lmap Right (p s))
+      ( case _ of
+          Left x -> \_ -> Left x
+          Right s -> \b -> Right (u s b)
+      )
+      ( case _ of
+          Left x -> Left (Left x)
+          Right s -> lmap Right (p s)
+      )

@@ -1,7 +1,13 @@
 -- | This module defines functions for working with getters.
 module Data.Lens.Getter
-  ( (^.), viewOn
-  , view, to, takeBoth, use, iview, iuse
+  ( (^.)
+  , viewOn
+  , view
+  , to
+  , takeBoth
+  , use
+  , iview
+  , iuse
   , cloneGetter
   , module Data.Lens.Types
   ) where
@@ -48,5 +54,6 @@ use p = gets (_ ^. p)
 iuse
   :: forall i s t a b m
    . MonadState s m
-  => IndexedFold (Tuple i a) i s t a b -> m (Tuple i a)
+  => IndexedFold (Tuple i a) i s t a b
+  -> m (Tuple i a)
 iuse p = gets (iview p)

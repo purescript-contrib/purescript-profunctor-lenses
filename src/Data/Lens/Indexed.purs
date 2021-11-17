@@ -31,8 +31,13 @@ asIndex
 asIndex l = l <<< Indexed <<< dimap fst identity
 
 -- | Remap the index.
-reindexed :: forall p i j r a b . Profunctor p =>
-             (i -> j) -> (Indexed p i a b -> r) -> Indexed p j a b -> r
+reindexed
+  :: forall p i j r a b
+   . Profunctor p
+  => (i -> j)
+  -> (Indexed p i a b -> r)
+  -> Indexed p j a b
+  -> r
 reindexed ij = (_ <<< _Newtype %~ lcmap (first ij))
 
 -- | Converts a `lens`-like indexed traversal to an `IndexedTraversal`.

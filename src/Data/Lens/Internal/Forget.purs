@@ -30,15 +30,15 @@ instance profunctorForget :: Profunctor (Forget r) where
   dimap f _ (Forget z) = Forget (z <<< f)
 
 instance choiceForget :: Monoid r => Choice (Forget r) where
-  left  (Forget z) = Forget (either z mempty)
+  left (Forget z) = Forget (either z mempty)
   right (Forget z) = Forget (either mempty z)
 
 instance strongForget :: Strong (Forget r) where
-  first  (Forget z) = Forget (z <<< fst)
+  first (Forget z) = Forget (z <<< fst)
   second (Forget z) = Forget (z <<< snd)
 
 instance cochoiceForget :: Cochoice (Forget r) where
-  unleft  (Forget z) = Forget (z <<< Left)
+  unleft (Forget z) = Forget (z <<< Left)
   unright (Forget z) = Forget (z <<< Right)
 
 instance wanderForget :: Monoid r => Wander (Forget r) where

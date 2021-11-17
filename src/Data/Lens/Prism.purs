@@ -66,11 +66,16 @@
 -- |   == Solid Color.white
 -- | ```
 module Data.Lens.Prism
-  ( prism', prism
-  , only, nearly
+  ( prism'
+  , prism
+  , only
+  , nearly
   , review
-  , is, isn't, matching
-  , clonePrism, withPrism
+  , is
+  , isn't
+  , matching
+  , clonePrism
+  , withPrism
   , below
   , module ExportTypes
   ) where
@@ -148,7 +153,6 @@ nearly x f = prism' (const x) (guard <<< f)
 only :: forall a. Eq a => a -> Prism a a Unit Unit
 only x = nearly x (_ == x)
 
-
 -- | Create the "whole" corresponding to a specific "part":
 -- |
 -- | ```purescript
@@ -190,8 +194,8 @@ isn't l = not <<< is l
 -- | ```
 below :: forall f s a. Traversable f => APrism' s a -> Prism' (f s) (f a)
 below k =
-  withPrism k     $ \bt seta ->
-  prism (map bt) $ \s ->
-  case traverse seta s of
-    Left _  -> Left s
-    Right t -> Right t
+  withPrism k $ \bt seta ->
+    prism (map bt) $ \s ->
+      case traverse seta s of
+        Left _ -> Left s
+        Right t -> Right t

@@ -4,7 +4,6 @@ module Data.Lens.At
   , sans
   ) where
 
-
 import Prelude
 
 import Data.Identity (Identity(..))
@@ -45,12 +44,11 @@ instance atMaybe :: At (Maybe a) Unit a where
 instance atSet :: Ord v => At (S.Set v) v Unit where
   at x = lens get (flip update)
     where
-      get xs =
-        if S.member x xs
-           then Just unit
-           else Nothing
-      update Nothing = S.delete x
-      update (Just _) = S.insert x
+    get xs =
+      if S.member x xs then Just unit
+      else Nothing
+    update Nothing = S.delete x
+    update (Just _) = S.insert x
 
 instance atMap :: Ord k => At (M.Map k v) k v where
   at k =

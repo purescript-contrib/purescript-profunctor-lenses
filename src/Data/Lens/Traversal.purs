@@ -57,7 +57,7 @@ traversed = wander traverse
 
 -- | Turn a pure profunctor `Traversal` into a `lens`-like `Traversal`.
 traverseOf
-  :: forall f s t a b . Optic (Star f) s t a b -> (a -> f b) -> s -> f t
+  :: forall f s t a b. Optic (Star f) s t a b -> (a -> f b) -> s -> f t
 traverseOf = under Star
 
 -- | Sequence the foci of an optic, pulling out an "effect".
@@ -85,7 +85,7 @@ traverseOf = under Star
 -- | unit
 -- | ```
 sequenceOf
-  :: forall f s t a . Optic (Star f) s t (f a) a -> s -> f t
+  :: forall f s t a. Optic (Star f) s t (f a) a -> s -> f t
 sequenceOf t = traverseOf t identity
 
 -- | Tries to map over a `Traversal`; returns `empty` if the traversal did
@@ -98,7 +98,7 @@ failover
   -> s
   -> f t
 failover t f s = case unwrap (t $ Star $ Tuple (Disj true) <<< f) s of
-  Tuple (Disj true) x  -> pure x
+  Tuple (Disj true) x -> pure x
   Tuple (Disj false) _ -> empty
 
 -- | Combine an index and a traversal to narrow the focus to a single
@@ -132,7 +132,7 @@ elementsOf tr pr = iwander \f ->
 -- | Turn a pure profunctor `IndexedTraversal` into a `lens`-like `IndexedTraversal`.
 itraverseOf
   :: forall f i s t a b
-  .  IndexedOptic (Star f) i s t a b
+   . IndexedOptic (Star f) i s t a b
   -> (i -> a -> f b)
   -> s
   -> f t
@@ -141,7 +141,7 @@ itraverseOf t = under Star (t <<< Indexed) <<< uncurry
 -- | Flipped version of `itraverseOf`.
 iforOf
   :: forall f i s t a b
-  .  IndexedOptic (Star f) i s t a b
+   . IndexedOptic (Star f) i s t a b
   -> s
   -> (i -> a -> f b)
   -> f t

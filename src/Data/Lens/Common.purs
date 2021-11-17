@@ -37,6 +37,6 @@ import Data.Lens.Prism.Maybe (_Just, _Nothing)
 -- |  X 42 ^. simple _Newtype
 -- | ```
 -- | We get the expected result `42`.
-simple :: forall p s a . Optic' p s a -> Optic' p s a
+simple :: forall p s a. Optic' p s a -> Optic' p s a
 simple x = x
 

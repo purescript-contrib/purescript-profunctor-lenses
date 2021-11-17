@@ -57,7 +57,6 @@ import Data.Profunctor.Strong (class Strong)
 -- | See `Data.Lens.Getter` and `Data.Lens.Setter` for functions and operators
 -- | frequently used with lenses.
 
-
 type Lens s t a b = forall p. Strong p => Optic p s t a b
 
 -- | `Lens'` is a specialization of `Lens`. An optic of type `Lens'`
@@ -157,10 +156,12 @@ type AGrate' s a = AGrate s s a a
 -- | A getter.
 type Getter :: Type -> Type -> Type -> Type -> Type
 type Getter s t a b = forall r. Fold r s t a b
+
 type Getter' s a = Getter s s a a
 
 type AGetter :: Type -> Type -> Type -> Type -> Type
 type AGetter s t a b = Fold a s t a b
+
 type AGetter' s a = AGetter s s a a
 
 -- | A setter.
@@ -170,16 +171,19 @@ type Setter' s a = Setter s s a a
 -- | A review.
 type Review :: Type -> Type -> Type -> Type -> Type
 type Review s t a b = Optic Tagged s t a b
+
 type Review' s a = Review s s a a
 
 -- | A fold.
 type Fold :: Type -> Type -> Type -> Type -> Type -> Type
 type Fold r s t a b = Optic (Forget r) s t a b
+
 type Fold' r s a = Fold r s s a a
 
 -- | An indexed optic.
 type IndexedOptic :: (Type -> Type -> Type) -> Type -> Type -> Type -> Type -> Type -> Type
 type IndexedOptic p i s t a b = Indexed p i a b -> p s t
+
 type IndexedOptic' p i s a = IndexedOptic p i s s a a
 
 -- | An indexed traversal.
@@ -189,11 +193,13 @@ type IndexedTraversal' i s a = IndexedTraversal i s s a a
 -- | An indexed fold.
 type IndexedFold :: Type -> Type -> Type -> Type -> Type -> Type -> Type
 type IndexedFold r i s t a b = IndexedOptic (Forget r) i s t a b
+
 type IndexedFold' r i s a = IndexedFold r i s s a a
 
 -- | An indexed getter.
 type IndexedGetter :: Type -> Type -> Type -> Type -> Type -> Type
 type IndexedGetter i s t a b = IndexedFold a i s t a b
+
 type IndexedGetter' i s a = IndexedGetter i s s a a
 
 -- | An indexed setter.

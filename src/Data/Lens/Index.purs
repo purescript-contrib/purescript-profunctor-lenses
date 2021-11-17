@@ -18,7 +18,6 @@ import Data.Maybe (Maybe(..), maybe, fromMaybe)
 import Data.Set as S
 import Foreign.Object as FO
 
-
 -- | `Index` is a type class whose instances are optics used when:
 -- | 1. The focus element might not be present.
 -- | 2. You either cannot or do not want to add new elements or delete existing ones.
@@ -63,47 +62,53 @@ instance indexIdentity :: Index (Identity a) Unit a where
 instance indexArray :: Index (Array a) Int a where
   ix n = affineTraversal set pre
     where
-      set :: Array a -> a -> Array a
-      set s b = fromMaybe s $ A.updateAt n b s
-      pre :: Array a -> Either (Array a) a
-      pre s = maybe (Left s) Right $ A.index s n
+    set :: Array a -> a -> Array a
+    set s b = fromMaybe s $ A.updateAt n b s
+
+    pre :: Array a -> Either (Array a) a
+    pre s = maybe (Left s) Right $ A.index s n
 
 instance indexNonEmptyArray :: Index (NEA.NonEmptyArray a) Int a where
   ix n = affineTraversal set pre
     where
-      set :: NEA.NonEmptyArray a -> a -> NEA.NonEmptyArray a
-      set s b = fromMaybe s $ NEA.updateAt n b s
-      pre :: NEA.NonEmptyArray a -> Either (NEA.NonEmptyArray a) a
-      pre s = maybe (Left s) Right $ NEA.index s n
+    set :: NEA.NonEmptyArray a -> a -> NEA.NonEmptyArray a
+    set s b = fromMaybe s $ NEA.updateAt n b s
+
+    pre :: NEA.NonEmptyArray a -> Either (NEA.NonEmptyArray a) a
+    pre s = maybe (Left s) Right $ NEA.index s n
 
 instance indexList :: Index (L.List a) Int a where
   ix n = affineTraversal set pre
     where
-      set :: L.List a -> a -> L.List a
-      set s b = fromMaybe s $ L.updateAt n b s
-      pre :: L.List a -> Either (L.List a) a
-      pre s = maybe (Left s) Right $ L.index s n
+    set :: L.List a -> a -> L.List a
+    set s b = fromMaybe s $ L.updateAt n b s
+
+    pre :: L.List a -> Either (L.List a) a
+    pre s = maybe (Left s) Right $ L.index s n
 
 instance indexSet :: Ord a => Index (S.Set a) a Unit where
   ix x = affineTraversal set pre
     where
-      set :: S.Set a -> Unit -> S.Set a
-      set xs _ = xs
-      pre :: S.Set a -> Either (S.Set a) Unit
-      pre xs = if S.member x xs then Right unit else Left xs
+    set :: S.Set a -> Unit -> S.Set a
+    set xs _ = xs
+
+    pre :: S.Set a -> Either (S.Set a) Unit
+    pre xs = if S.member x xs then Right unit else Left xs
 
 instance indexMap :: Ord k => Index (M.Map k v) k v where
   ix k = affineTraversal set pre
     where
-      set :: M.Map k v -> v -> M.Map k v
-      set s b = M.update (\_ -> Just b) k s
-      pre :: M.Map k v -> Either (M.Map k v) v
-      pre s = maybe (Left s) Right $ M.lookup k s
+    set :: M.Map k v -> v -> M.Map k v
+    set s b = M.update (\_ -> Just b) k s
+
+    pre :: M.Map k v -> Either (M.Map k v) v
+    pre s = maybe (Left s) Right $ M.lookup k s
 
 instance indexForeignObject :: Index (FO.Object v) String v where
   ix k = affineTraversal set pre
     where
-      set :: FO.Object v -> v -> FO.Object v
-      set s b = FO.update (\_ -> Just b) k s
-      pre :: FO.Object v -> Either (FO.Object v) v
-      pre s = maybe (Left s) Right $ FO.lookup k s
+    set :: FO.Object v -> v -> FO.Object v
+    set s b = FO.update (\_ -> Just b) k s
+
+    pre :: FO.Object v -> Either (FO.Object v) v
+    pre s = maybe (Left s) Right $ FO.lookup k s
