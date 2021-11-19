@@ -1,6 +1,7 @@
 module Data.Lens.Internal.Grating where
 
 import Prelude
+
 import Data.Newtype (class Newtype)
 import Data.Profunctor (class Profunctor)
 import Data.Profunctor.Closed (class Closed)

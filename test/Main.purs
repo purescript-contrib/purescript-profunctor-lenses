@@ -84,8 +84,7 @@ _0Justbar = _Bar <<< foo <<< ix 0
 _1bars :: Traversal' Bar Int
 _1bars = _0Justbar <<< _Left <<< bar <<< ix 1
 
-_2Justbared :: IndexedTraversal' BarIndex Bar
-  (Either { bar :: Array Int } String)
+_2Justbared :: IndexedTraversal' BarIndex Bar (Either { bar :: Array Int } String)
 _2Justbared = _Bar <<< foo <<< reindexed BarIndex itraversed
 
 -- Tests state using zoom
@@ -113,15 +112,15 @@ summing = zipWithOf (cloneGrate aGrateExample) (+)
 
 -- Test cloning of traversals
 cloneTraversalTest :: Maybe Int
-cloneTraversalTest =
+cloneTraversalTest = do
   let
-    t :: Traversal' (Array Int) Int
-    t = ix 1
+    ix1 :: Traversal' (Array Int) Int
+    ix1 = ix 1
 
     wrapper :: { traversal :: ATraversal' (Array Int) Int }
-    wrapper = { traversal: t }
-  in
-    preview (cloneTraversal wrapper.traversal) [ 0, 1, 2 ]
+    wrapper = { traversal: ix1 }
+
+  preview (cloneTraversal wrapper.traversal) [ 0, 1, 2 ]
 
 -- lensStore example
 data LensStoreExample = LensStoreA Int | LensStoreB (Tuple Boolean Int)

@@ -23,13 +23,13 @@ module Data.Lens
   , module Data.Lens.Common
   ) where
 
-import Data.Lens.Iso (AnIso, AnIso', Iso, Iso', Optic, Exchange(..), Re(..), au, auf, cloneIso, non, curried, flipped, iso, re, uncurried, under, withIso)
-import Data.Lens.Grate (Grate, Grate', zipWithOf, zipFWithOf, collectOf)
-import Data.Lens.Lens (ALens, ALens', Lens, Lens', cloneLens, lens, lens', withLens, lensStore)
-import Data.Lens.Prism (APrism, APrism', Prism, Prism', Review, Review', clonePrism, is, isn't, matching, nearly, only, prism, prism', review, withPrism)
-import Data.Lens.Traversal (Traversal, Traversal', element, elementsOf, failover, itraverseOf, sequenceOf, traverseOf, traversed)
-import Data.Lens.Types (class Wander, ALens, ALens', APrism, APrism', AnIso, AnIso', ATraversal, ATraversal', Fold, Fold', Getter, Getter', AGetter, AGetter', IndexedFold, IndexedFold', IndexedGetter, IndexedGetter', IndexedOptic, IndexedOptic', IndexedSetter, IndexedSetter', IndexedTraversal, IndexedTraversal', Iso, Iso', Lens, Lens', Optic, Optic', Prism, Prism', Review, Review', Setter, Setter', Traversal, Traversal', Exchange(..), Forget(..), Indexed(..), Market(..), Re(..), Shop(..), Tagged(..), wander)
-import Data.Lens.Setter (IndexedSetter, Setter, Setter', Indexed(..), addModifying, addOver, appendModifying, appendOver, assign, assignJust, conjModifying, conjOver, disjModifying, disjOver, divModifying, divOver, iover, modifying, mulModifying, mulOver, over, set, setJust, subModifying, subOver, (%=), (%~), (&&=), (&&~), (*=), (*~), (+=), (+~), (-=), (-~), (.=), (.~), (//=), (//~), (<>=), (<>~), (?=), (?~), (||=), (||~))
-import Data.Lens.Getter (Fold, Getter, IndexedFold, IndexedGetter, Optic, Indexed(..), iuse, iview, to, takeBoth, use, view, viewOn, (^.), cloneGetter)
-import Data.Lens.Fold (Fold, Fold', allOf, andOf, anyOf, elemOf, filtered, findOf, firstOf, foldMapOf, foldOf, folded, foldlOf, foldrOf, has, hasn't, iallOf, ianyOf, ifoldMapOf, ifoldlOf, ifoldrOf, itoListOf, itraverseOf_, lastOf, lengthOf, maximumOf, minimumOf, notElemOf, orOf, preview, previewOn, productOf, replicated, sequenceOf_, sumOf, toArrayOf, toArrayOfOn, toListOf, toListOfOn, unfolded, (^..), (^?))
 import Data.Lens.Common (_1, _2, _Just, _Left, _Nothing, _Right, first, left, right, second, united)
+import Data.Lens.Fold (Fold, Fold', allOf, andOf, anyOf, elemOf, filtered, findOf, firstOf, foldMapOf, foldOf, folded, foldlOf, foldrOf, has, hasn't, iallOf, ianyOf, ifoldMapOf, ifoldlOf, ifoldrOf, itoListOf, itraverseOf_, lastOf, lengthOf, maximumOf, minimumOf, notElemOf, orOf, preview, previewOn, productOf, replicated, sequenceOf_, sumOf, toArrayOf, toArrayOfOn, toListOf, toListOfOn, unfolded, (^..), (^?))
+import Data.Lens.Getter (Fold, Getter, Indexed(..), IndexedFold, IndexedGetter, Optic, cloneGetter, iuse, iview, takeBoth, to, use, view, viewOn, (^.))
+import Data.Lens.Grate (Grate, Grate', collectOf, zipFWithOf, zipWithOf)
+import Data.Lens.Iso (AnIso, AnIso', Exchange(..), Iso, Iso', Optic, Re(..), au, auf, cloneIso, curried, flipped, iso, non, re, uncurried, under, withIso)
+import Data.Lens.Lens (ALens, ALens', Lens, Lens', cloneLens, lens, lens', lensStore, withLens)
+import Data.Lens.Prism (APrism, APrism', Prism, Prism', Review, Review', clonePrism, is, isn't, matching, nearly, only, prism, prism', review, withPrism)
+import Data.Lens.Setter (Indexed(..), IndexedSetter, Setter, Setter', addModifying, addOver, appendModifying, appendOver, assign, assignJust, conjModifying, conjOver, disjModifying, disjOver, divModifying, divOver, iover, modifying, mulModifying, mulOver, over, set, setJust, subModifying, subOver, (%=), (%~), (&&=), (&&~), (*=), (*~), (+=), (+~), (-=), (-~), (.=), (.~), (//=), (//~), (<>=), (<>~), (?=), (?~), (||=), (||~))
+import Data.Lens.Traversal (Traversal, Traversal', element, elementsOf, failover, itraverseOf, sequenceOf, traverseOf, traversed)
+import Data.Lens.Types (class Wander, AGetter, AGetter', ALens, ALens', APrism, APrism', ATraversal, ATraversal', AnIso, AnIso', Exchange(..), Fold, Fold', Forget(..), Getter, Getter', Indexed(..), IndexedFold, IndexedFold', IndexedGetter, IndexedGetter', IndexedOptic, IndexedOptic', IndexedSetter, IndexedSetter', IndexedTraversal, IndexedTraversal', Iso, Iso', Lens, Lens', Market(..), Optic, Optic', Prism, Prism', Re(..), Review, Review', Setter, Setter', Shop(..), Tagged(..), Traversal, Traversal', wander)

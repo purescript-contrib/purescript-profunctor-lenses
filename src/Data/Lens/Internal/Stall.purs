@@ -6,8 +6,8 @@ import Prelude
 import Data.Bifunctor (lmap)
 import Data.Either (Either(..))
 import Data.Profunctor (class Profunctor)
-import Data.Profunctor.Strong (class Strong)
 import Data.Profunctor.Choice (class Choice)
+import Data.Profunctor.Strong (class Strong)
 import Data.Tuple (Tuple(..))
 
 -- | The `Stall` profunctor characterizes an `AffineTraversal`.

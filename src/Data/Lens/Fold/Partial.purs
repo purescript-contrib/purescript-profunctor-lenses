@@ -9,10 +9,10 @@ import Prelude
 
 import Data.Lens.Fold (Fold, ifoldMapOf, previewOn)
 import Data.Lens.Types (IndexedFold)
-import Data.Maybe (fromMaybe', Maybe(..))
+import Data.Maybe (Maybe(..), fromMaybe')
 import Data.Maybe.First (First(..))
-import Data.Tuple (Tuple(..))
 import Data.Newtype (unwrap)
+import Data.Tuple (Tuple(..))
 import Partial.Unsafe (unsafeCrashWith)
 
 unsafeView :: forall s t a b. Partial => s -> Fold (First a) s t a b -> a

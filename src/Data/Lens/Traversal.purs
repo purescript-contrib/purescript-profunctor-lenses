@@ -15,7 +15,7 @@
 -- | view traversed ["D", "a", "w", "n"] == "Dawn"
 -- | ```
 -- |
--- | Many of the functions you'll use are documented in `Data.Lens.Fold`. 
+-- | Many of the functions you'll use are documented in `Data.Lens.Fold`.
 
 module Data.Lens.Traversal
   ( traversed
@@ -38,7 +38,7 @@ import Control.Plus (empty)
 import Data.Bitraversable (class Bitraversable, bitraverse)
 import Data.Lens.Indexed (iwander, positions, unIndex)
 import Data.Lens.Internal.Bazaar (Bazaar(..), runBazaar)
-import Data.Lens.Types (ATraversal, IndexedTraversal, IndexedOptic, Indexed(..), Traversal, Optic, class Wander, wander)
+import Data.Lens.Types (class Wander, ATraversal, Indexed(..), IndexedOptic, IndexedTraversal, Optic, Traversal, wander)
 import Data.Lens.Types (Traversal, Traversal') as ExportTypes
 import Data.Monoid.Disj (Disj(..))
 import Data.Newtype (under, unwrap)
@@ -56,8 +56,7 @@ traversed :: forall t a b. Traversable t => Traversal (t a) (t b) a b
 traversed = wander traverse
 
 -- | Turn a pure profunctor `Traversal` into a `lens`-like `Traversal`.
-traverseOf
-  :: forall f s t a b. Optic (Star f) s t a b -> (a -> f b) -> s -> f t
+traverseOf :: forall f s t a b. Optic (Star f) s t a b -> (a -> f b) -> s -> f t
 traverseOf = under Star
 
 -- | Sequence the foci of an optic, pulling out an "effect".
@@ -84,8 +83,7 @@ traverseOf = under Star
 -- | [0.15556037108154985,0.28500369615270515]
 -- | unit
 -- | ```
-sequenceOf
-  :: forall f s t a. Optic (Star f) s t (f a) a -> s -> f t
+sequenceOf :: forall f s t a. Optic (Star f) s t (f a) a -> s -> f t
 sequenceOf t = traverseOf t identity
 
 -- | Tries to map over a `Traversal`; returns `empty` if the traversal did
@@ -102,7 +100,7 @@ failover t f s = case unwrap (t $ Star $ Tuple (Disj true) <<< f) s of
   Tuple (Disj false) _ -> empty
 
 -- | Combine an index and a traversal to narrow the focus to a single
--- | element. Compare to `Data.Lens.Index`. 
+-- | element. Compare to `Data.Lens.Index`.
 -- |
 -- | ```purescript
 -- | set     (element 2 traversed) 8888 [0, 0, 3] == [0, 0, 8888]

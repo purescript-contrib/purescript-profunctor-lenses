@@ -3,8 +3,8 @@ module Data.Lens.Internal.Focusing where
 
 import Prelude
 
-import Data.Tuple (Tuple)
 import Data.Newtype (class Newtype)
+import Data.Tuple (Tuple)
 
 -- | The functor used to zoom into `StateT`.
 newtype Focusing m s a = Focusing (m (Tuple s a))

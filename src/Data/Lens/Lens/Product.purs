@@ -3,7 +3,6 @@ module Data.Lens.Lens.Product where
 import Prelude
 
 import Data.Functor.Product (Product)
-
 import Data.Lens.Iso.Newtype (_Newtype)
 import Data.Lens.Lens (Lens)
 import Data.Lens.Lens.Tuple as T

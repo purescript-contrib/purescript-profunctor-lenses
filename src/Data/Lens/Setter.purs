@@ -47,8 +47,7 @@ module Data.Lens.Setter
 import Prelude
 
 import Control.Monad.State.Class (class MonadState, modify)
-
-import Data.Lens.Types (IndexedSetter, Indexed(..), Setter, Setter')
+import Data.Lens.Types (Indexed(..), IndexedSetter, Setter, Setter')
 import Data.Maybe (Maybe(..))
 import Data.Tuple (uncurry)
 

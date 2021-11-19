@@ -84,9 +84,9 @@ import Prelude
 
 import Control.MonadPlus (guard)
 import Data.Either (Either(..), either)
-import Data.HeytingAlgebra (tt, ff)
-import Data.Lens.Types (Prism, Prism', APrism, APrism', Review, Review') as ExportTypes
-import Data.Lens.Types (Prism, Prism', APrism, APrism', Market(..), Review, Tagged(..))
+import Data.HeytingAlgebra (ff, tt)
+import Data.Lens.Types (APrism, APrism', Market(..), Prism, Prism', Review, Tagged(..))
+import Data.Lens.Types (APrism, APrism', Prism, Prism', Review, Review') as ExportTypes
 import Data.Maybe (Maybe, maybe)
 import Data.Newtype (under)
 import Data.Profunctor (dimap, rmap)

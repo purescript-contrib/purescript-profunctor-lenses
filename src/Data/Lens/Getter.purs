@@ -16,7 +16,7 @@ import Prelude
 
 import Control.Monad.State.Class (class MonadState, gets)
 import Data.Lens.Internal.Forget (Forget(..))
-import Data.Lens.Types (Getter, AGetter, Fold, Optic, IndexedGetter, Indexed(..), IndexedFold)
+import Data.Lens.Types (AGetter, Fold, Getter, Indexed(..), IndexedFold, IndexedGetter, Optic)
 import Data.Newtype (unwrap)
 import Data.Profunctor.Strong ((&&&))
 import Data.Tuple (Tuple)

@@ -18,7 +18,7 @@ module Data.Lens.Iso
 
 import Prelude
 
-import Data.Lens.Types (Iso, Iso', AnIso, AnIso', Optic, Exchange(..), Re(..))
+import Data.Lens.Types (AnIso, AnIso', Exchange(..), Iso, Iso', Optic, Re(..))
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Newtype (unwrap)
 import Data.Profunctor (class Profunctor, dimap, rmap)

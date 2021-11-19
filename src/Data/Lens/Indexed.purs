@@ -2,12 +2,11 @@ module Data.Lens.Indexed where
 
 import Prelude
 
-import Control.Monad.State (modify, get, evalState)
-
+import Control.Monad.State (evalState, get, modify)
 import Data.Functor.Compose (Compose(..))
 import Data.Lens.Iso.Newtype (_Newtype)
 import Data.Lens.Setter ((%~))
-import Data.Lens.Types (wander, Optic, IndexedOptic, Indexed(..), Traversal, IndexedTraversal)
+import Data.Lens.Types (Indexed(..), IndexedOptic, IndexedTraversal, Optic, Traversal, wander)
 import Data.Newtype (unwrap)
 import Data.Profunctor (class Profunctor, dimap, lcmap)
 import Data.Profunctor.Star (Star(..))

@@ -15,22 +15,22 @@ module Data.Lens.Lens
 import Prelude
 
 import Control.Apply (lift2)
-import Data.Lens.Internal.Shop (Shop(..))
 import Data.Lens.Internal.Indexed (Indexed(..))
+import Data.Lens.Internal.Shop (Shop(..))
 import Data.Lens.Types
-  ( Lens
-  , Lens'
-  , ALens
+  ( ALens
   , ALens'
-  , IndexedLens
-  , IndexedLens'
   , AnIndexedLens
   , AnIndexedLens'
+  , IndexedLens
+  , IndexedLens'
+  , Lens
+  , Lens'
   )
+import Data.Newtype (un)
 import Data.Profunctor (dimap)
 import Data.Profunctor.Strong (first)
 import Data.Tuple (Tuple(..))
-import Data.Newtype (un)
 
 -- | Create a `Lens` from a getter/setter pair.
 -- |

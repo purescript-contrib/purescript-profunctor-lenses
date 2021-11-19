@@ -10,11 +10,11 @@ import Data.Array.NonEmpty as NEA
 import Data.Either (Either(..))
 import Data.Identity (Identity)
 import Data.Lens (_Just, lens)
-import Data.Lens.Iso.Newtype (_Newtype)
 import Data.Lens.AffineTraversal (AffineTraversal', affineTraversal)
+import Data.Lens.Iso.Newtype (_Newtype)
 import Data.List as L
 import Data.Map as M
-import Data.Maybe (Maybe(..), maybe, fromMaybe)
+import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Set as S
 import Foreign.Object as FO
 
