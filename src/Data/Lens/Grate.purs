@@ -15,13 +15,13 @@ module Data.Lens.Grate
 import Prelude
 
 import Data.Distributive (class Distributive, cotraverse)
+import Data.Functor.Costar (Costar(..))
 import Data.Lens.Internal.Grating (Grating(..))
 import Data.Lens.Internal.Zipping (Zipping(..))
-import Data.Lens.Types (Grate, Grate', Optic, AGrate)
+import Data.Lens.Types (AGrate, Grate, Grate', Optic)
 import Data.Newtype (unwrap)
 import Data.Profunctor (dimap)
 import Data.Profunctor.Closed (closed)
-import Data.Functor.Costar (Costar(..))
 
 grate :: forall s t a b. (((s -> a) -> b) -> t) -> Grate s t a b
 grate f pab = dimap (#) f (closed pab)

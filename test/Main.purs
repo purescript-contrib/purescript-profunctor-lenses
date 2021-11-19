@@ -61,7 +61,7 @@ fooBarGetter = foo <<< bar
 type Foo a = { foo :: Maybe { bar :: Array a } }
 
 doc :: Foo String
-doc = { foo: Just { bar: [ "Hello", " ", "World" ]} }
+doc = { foo: Just { bar: [ "Hello", " ", "World" ] } }
 
 bars :: forall a b. Traversal (Foo a) (Foo b) a b
 bars = foo <<< _Just <<< bar <<< traversed
@@ -76,7 +76,7 @@ _Bar :: Lens' Bar BarRec
 _Bar = lens (\(Bar rec) -> rec) (\_ -> Bar)
 
 doc2 :: Bar
-doc2 = Bar { foo: [Left { bar: [ 1, 2, 3 ] }] }
+doc2 = Bar { foo: [ Left { bar: [ 1, 2, 3 ] } ] }
 
 _0Justbar :: Traversal' Bar (Either { bar :: Array Int } String)
 _0Justbar = _Bar <<< foo <<< ix 0
@@ -84,13 +84,13 @@ _0Justbar = _Bar <<< foo <<< ix 0
 _1bars :: Traversal' Bar Int
 _1bars = _0Justbar <<< _Left <<< bar <<< ix 1
 
-_2Justbared :: IndexedTraversal' BarIndex Bar
-                                 (Either { bar :: Array Int } String)
+_2Justbared :: IndexedTraversal' BarIndex Bar (Either { bar :: Array Int } String)
 _2Justbared = _Bar <<< foo <<< reindexed BarIndex itraversed
 
 -- Tests state using zoom
 stateTest :: Tuple Int String
-stateTest = evalState go (Tuple 4 ["Foo", "Bar"]) where
+stateTest = evalState go (Tuple 4 [ "Foo", "Bar" ])
+  where
   go = Tuple <$> zoom _1 get <*> zoom (_2 <<< traversed) get
 
 --test cloning of indexed lenses
@@ -112,12 +112,15 @@ summing = zipWithOf (cloneGrate aGrateExample) (+)
 
 -- Test cloning of traversals
 cloneTraversalTest :: Maybe Int
-cloneTraversalTest =
-  let t :: Traversal' (Array Int) Int
-      t = ix 1
-      wrapper :: { traversal :: ATraversal' (Array Int) Int }
-      wrapper = { traversal: t }
-  in preview (cloneTraversal wrapper.traversal) [ 0, 1, 2 ]
+cloneTraversalTest = do
+  let
+    ix1 :: Traversal' (Array Int) Int
+    ix1 = ix 1
+
+    wrapper :: { traversal :: ATraversal' (Array Int) Int }
+    wrapper = { traversal: ix1 }
+
+  preview (cloneTraversal wrapper.traversal) [ 0, 1, 2 ]
 
 -- lensStore example
 data LensStoreExample = LensStoreA Int | LensStoreB (Tuple Boolean Int)
@@ -142,8 +145,8 @@ main = do
     , actual: doc2 ^? _1bars
     }
   assertEqual' """arrayOfNumbers $ A [(X 1.0), (X 2.0), (X 3.0)]"""
-    { expected: [1.0,2.0,3.0]
-    , actual: arrayOfNumbers $ A [(X 1.0), (X 2.0), (X 3.0)]
+    { expected: [ 1.0, 2.0, 3.0 ]
+    , actual: arrayOfNumbers $ A [ (X 1.0), (X 2.0), (X 3.0) ]
     }
   assertEqual' """unsafePartial $ doc2 ^?! _1bars"""
     { expected: 2
@@ -166,8 +169,8 @@ main = do
     , actual: summing (Tuple 1 2) (Tuple 3 4)
     }
   assertEqual' """collectOfTest (\a -> Tuple (a + a) (a * a)) [4, 5]"""
-    { expected: Tuple [8,10] [16,25]
-    , actual: collectOfTest (\a -> Tuple (a + a) (a * a)) [4, 5]
+    { expected: Tuple [ 8, 10 ] [ 16, 25 ]
+    , actual: collectOfTest (\a -> Tuple (a + a) (a * a)) [ 4, 5 ]
     }
   assertEqual' """cloneTraversalTest"""
     { expected: Just 1

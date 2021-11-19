@@ -2,12 +2,11 @@ module Data.Lens.Indexed where
 
 import Prelude
 
-import Control.Monad.State (modify, get, evalState)
-
+import Control.Monad.State (evalState, get, modify)
 import Data.Functor.Compose (Compose(..))
 import Data.Lens.Iso.Newtype (_Newtype)
 import Data.Lens.Setter ((%~))
-import Data.Lens.Types (wander, Optic, IndexedOptic, Indexed(..), Traversal, IndexedTraversal)
+import Data.Lens.Types (Indexed(..), IndexedOptic, IndexedTraversal, Optic, Traversal, wander)
 import Data.Newtype (unwrap)
 import Data.Profunctor (class Profunctor, dimap, lcmap)
 import Data.Profunctor.Star (Star(..))
@@ -31,8 +30,13 @@ asIndex
 asIndex l = l <<< Indexed <<< dimap fst identity
 
 -- | Remap the index.
-reindexed :: forall p i j r a b . Profunctor p =>
-             (i -> j) -> (Indexed p i a b -> r) -> Indexed p j a b -> r
+reindexed
+  :: forall p i j r a b
+   . Profunctor p
+  => (i -> j)
+  -> (Indexed p i a b -> r)
+  -> Indexed p j a b
+  -> r
 reindexed ij = (_ <<< _Newtype %~ lcmap (first ij))
 
 -- | Converts a `lens`-like indexed traversal to an `IndexedTraversal`.

@@ -1,7 +1,7 @@
 module Data.Lens.Iso.Newtype where
 
 import Data.Lens.Iso (Iso, Iso', iso)
-import Data.Newtype (class Newtype, wrap, unwrap)
+import Data.Newtype (class Newtype, unwrap, wrap)
 
 -- | An Iso between a newtype and its inner type.
 -- | Supports switching between different types that have instances of the

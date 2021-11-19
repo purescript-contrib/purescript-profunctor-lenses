@@ -1,33 +1,53 @@
 -- | This module defines functions for working with setters.
 module Data.Lens.Setter
-  ( (%~),  over, iover
-  , (.~),  set
-  , (+~),  addOver
-  , (-~),  subOver
-  , (*~),  mulOver
-  , (//~), divOver
-  , (||~), disjOver
-  , (&&~), conjOver
-  , (<>~), appendOver
-  , (?~),  setJust
-  , (.=),  assign
-  , (%=),  modifying
-  , (+=),  addModifying
-  , (*=),  mulModifying
-  , (-=),  subModifying
-  , (//=), divModifying
-  , (||=), disjModifying
-  , (&&=), conjModifying
-  , (<>=), appendModifying
-  , (?=),  assignJust
+  ( (%~)
+  , over
+  , iover
+  , (.~)
+  , set
+  , (+~)
+  , addOver
+  , (-~)
+  , subOver
+  , (*~)
+  , mulOver
+  , (//~)
+  , divOver
+  , (||~)
+  , disjOver
+  , (&&~)
+  , conjOver
+  , (<>~)
+  , appendOver
+  , (?~)
+  , setJust
+  , (.=)
+  , assign
+  , (%=)
+  , modifying
+  , (+=)
+  , addModifying
+  , (*=)
+  , mulModifying
+  , (-=)
+  , subModifying
+  , (//=)
+  , divModifying
+  , (||=)
+  , disjModifying
+  , (&&=)
+  , conjModifying
+  , (<>=)
+  , appendModifying
+  , (?=)
+  , assignJust
   , module Data.Lens.Types
   ) where
 
 import Prelude
 
 import Control.Monad.State.Class (class MonadState, modify)
-
-import Data.Lens.Types (IndexedSetter, Indexed(..), Setter, Setter')
+import Data.Lens.Types (Indexed(..), IndexedSetter, Setter, Setter')
 import Data.Maybe (Maybe(..))
 import Data.Tuple (uncurry)
 

@@ -6,8 +6,8 @@ import Prelude
 import Data.Either (Either(..), either)
 import Data.Lens.Internal.Wander (class Wander, wander)
 import Data.Newtype (class Newtype)
-import Data.Profunctor (class Profunctor, lcmap, dimap)
-import Data.Profunctor.Choice (class Choice, right, left)
+import Data.Profunctor (class Profunctor, dimap, lcmap)
+import Data.Profunctor.Choice (class Choice, left, right)
 import Data.Profunctor.Strong (class Strong, first, second)
 import Data.Tuple (Tuple(..))
 

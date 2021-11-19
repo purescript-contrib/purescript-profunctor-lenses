@@ -4,14 +4,13 @@ module Data.Lens.Zoom
   , module Data.Lens.Types
   ) where
 
-import Prelude ((<<<))
-
-import Control.Monad.State.Trans (StateT (..), runStateT)
-
-import Data.Lens.Internal.Focusing (Focusing(..))
 import Data.Lens.Types
-import Data.Profunctor.Star (Star(..))
+
+import Control.Monad.State.Trans (StateT(..), runStateT)
+import Data.Lens.Internal.Focusing (Focusing(..))
 import Data.Newtype (under, underF)
+import Data.Profunctor.Star (Star(..))
+import Prelude ((<<<))
 
 -- | Zooms into a substate in a `StateT` transformer.
 zoom

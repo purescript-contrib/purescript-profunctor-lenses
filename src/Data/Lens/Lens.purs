@@ -15,16 +15,22 @@ module Data.Lens.Lens
 import Prelude
 
 import Control.Apply (lift2)
-import Data.Lens.Internal.Shop (Shop(..))
 import Data.Lens.Internal.Indexed (Indexed(..))
+import Data.Lens.Internal.Shop (Shop(..))
 import Data.Lens.Types
-  ( Lens,  Lens', ALens, ALens'
-  , IndexedLens, IndexedLens', AnIndexedLens, AnIndexedLens'
+  ( ALens
+  , ALens'
+  , AnIndexedLens
+  , AnIndexedLens'
+  , IndexedLens
+  , IndexedLens'
+  , Lens
+  , Lens'
   )
+import Data.Newtype (un)
 import Data.Profunctor (dimap)
 import Data.Profunctor.Strong (first)
 import Data.Tuple (Tuple(..))
-import Data.Newtype(un)
 
 -- | Create a `Lens` from a getter/setter pair.
 -- |
@@ -50,18 +56,25 @@ withLens l f = case l (Shop identity \_ b -> b) of Shop x y -> f x y
 cloneLens :: forall s t a b. ALens s t a b -> Lens s t a b
 cloneLens l = withLens l \x y p -> lens x y p
 
-
-ilens' :: forall i s t a b.
-  (s -> Tuple (Tuple i a) (b -> t)) -> IndexedLens i s t a b
+ilens'
+  :: forall i s t a b
+   . (s -> Tuple (Tuple i a) (b -> t))
+  -> IndexedLens i s t a b
 ilens' to pab = dimap to (\(Tuple b f) -> f b) (first ((un Indexed) pab))
 
 -- create an `IndexedLens` from a getter/setter pair.
-ilens :: forall i s t a b.
-  (s -> Tuple i a) -> (s -> b -> t) -> IndexedLens i s t a b
+ilens
+  :: forall i s t a b
+   . (s -> Tuple i a)
+  -> (s -> b -> t)
+  -> IndexedLens i s t a b
 ilens get set = ilens' \s -> Tuple (get s) \b -> set s b
 
-withIndexedLens :: forall i s t a b r.
-  (AnIndexedLens i s t a b) -> ((s -> (Tuple i a)) -> (s -> b -> t) -> r) -> r
+withIndexedLens
+  :: forall i s t a b r
+   . (AnIndexedLens i s t a b)
+  -> ((s -> (Tuple i a)) -> (s -> b -> t) -> r)
+  -> r
 withIndexedLens l f = case l (Indexed (Shop identity \_ b -> b)) of Shop x y -> f x y
 
 cloneIndexedLens :: forall i s t a b. AnIndexedLens i s t a b -> IndexedLens i s t a b
@@ -83,6 +96,6 @@ cloneIndexedLens l = withIndexedLens l \x y p -> ilens x y p
 -- |   LensStoreA i -> map LensStoreA <$> lensStore identity i
 -- |   LensStoreB i -> map LensStoreB <$> lensStore _2 i
 -- | ```
-lensStore :: forall s t a b . ALens s t a b -> s -> Tuple a (b -> t)
+lensStore :: forall s t a b. ALens s t a b -> s -> Tuple a (b -> t)
 lensStore l = withLens l (lift2 Tuple)
 

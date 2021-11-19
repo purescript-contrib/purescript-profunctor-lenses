@@ -3,7 +3,6 @@ module Data.Lens.Prism.Coproduct where
 import Prelude
 
 import Data.Functor.Coproduct (Coproduct)
-
 import Data.Lens.Iso.Newtype (_Newtype)
 import Data.Lens.Prism (Prism)
 import Data.Lens.Prism.Either as E

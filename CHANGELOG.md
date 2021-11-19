@@ -12,6 +12,7 @@ New features:
 Bugfixes:
 
 Other improvements:
+- Added `purs-tidy` formatter (#138 by @thomashoneyman)
   - Replace manual tests with automated tests using `assert` (#135 by @neppord)
   - Improve documentation for `united` (#134 by @neppord)
   - Add guide on impredicativity explaining difference between `Lens` vs `ALens` (#136 by @i-am-tom and @JordanMartinez)

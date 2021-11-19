@@ -7,11 +7,11 @@ module Data.Lens.Common
   , simple
   ) where
 
-import Data.Lens.Types (Optic')
 import Data.Lens.Lens.Tuple (_1, _2, first, second)
 import Data.Lens.Lens.Unit (united)
 import Data.Lens.Prism.Either (_Left, _Right, left, right)
 import Data.Lens.Prism.Maybe (_Just, _Nothing)
+import Data.Lens.Types (Optic')
 
 -- | This is useful for when you want to restrict the type of another optic.
 -- | For example, suppose you have the following declarations:
@@ -37,6 +37,6 @@ import Data.Lens.Prism.Maybe (_Just, _Nothing)
 -- |  X 42 ^. simple _Newtype
 -- | ```
 -- | We get the expected result `42`.
-simple :: forall p s a . Optic' p s a -> Optic' p s a
+simple :: forall p s a. Optic' p s a -> Optic' p s a
 simple x = x
 

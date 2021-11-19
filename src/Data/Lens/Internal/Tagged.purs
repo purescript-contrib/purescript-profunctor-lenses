@@ -21,10 +21,12 @@ newtype Tagged a b = Tagged b
 derive instance newtypeTagged :: Newtype (Tagged a b) _
 
 derive instance eqTagged :: Eq b => Eq (Tagged a b)
-instance eq1Tagged :: Eq1 (Tagged a) where eq1 = eq
+instance eq1Tagged :: Eq1 (Tagged a) where
+  eq1 = eq
 
 derive instance ordTagged :: Ord b => Ord (Tagged a b)
-instance ord1Tagged :: Ord1 (Tagged a) where compare1 = compare
+instance ord1Tagged :: Ord1 (Tagged a) where
+  compare1 = compare
 
 derive instance functorTagged :: Functor (Tagged a)
 
@@ -32,7 +34,7 @@ instance taggedProfunctor :: Profunctor Tagged where
   dimap _ g (Tagged x) = Tagged (g x)
 
 instance taggedChoice :: Choice Tagged where
-  left  (Tagged x) = Tagged (Left x)
+  left (Tagged x) = Tagged (Left x)
   right (Tagged x) = Tagged (Right x)
 
 instance taggedCostrong :: Costrong Tagged where

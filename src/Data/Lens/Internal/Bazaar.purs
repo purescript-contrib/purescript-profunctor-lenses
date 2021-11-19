@@ -25,7 +25,7 @@ instance strongBazaar :: Strong (Bazaar p a b) where
   second (Bazaar b) = Bazaar (\pafb (Tuple x y) -> Tuple x <$> b pafb y)
 
 instance choiceBazaar :: Choice (Bazaar p a b) where
-  left  (Bazaar b) = Bazaar (\pafb e -> bitraverse (b pafb) pure e)
+  left (Bazaar b) = Bazaar (\pafb e -> bitraverse (b pafb) pure e)
   right (Bazaar b) = Bazaar (\pafb e -> traverse (b pafb) e)
 
 instance wanderBazaar :: Wander (Bazaar p a b) where
