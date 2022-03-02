@@ -13,6 +13,7 @@ module Data.Lens.Iso
   , flipped
   , mapping
   , dimapping
+  , coerced
   , module Data.Lens.Types
   ) where
 
@@ -23,6 +24,7 @@ import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Newtype (unwrap)
 import Data.Profunctor (class Profunctor, dimap, rmap)
 import Data.Tuple (Tuple, curry, uncurry)
+import Safe.Coerce (class Coercible, coerce)
 
 -- | Create an `Iso` from a pair of morphisms.
 iso :: forall s t a b. (s -> a) -> (b -> t) -> Iso s t a b
@@ -84,3 +86,18 @@ dimapping
   -> AnIso ss tt aa bb
   -> Iso (p a ss) (q b tt) (p s aa) (q t bb)
 dimapping f g = withIso f \sa bt -> withIso g \ssaa bbtt -> iso (dimap sa ssaa) (dimap bt bbtt)
+
+-- | An `Iso` between two types that are inferred to have the
+-- | same representation by the compiler. One scenario that this is
+-- | particularly useful is the case of nested newtypes:
+-- |
+-- |```purescript
+-- |  newtype UserId = UserId Int
+-- |  newtype DeletedUserId = DeletedUserId UserId
+-- |
+-- |  -- `simple` is used to aid the type inference
+-- |  deletedUser :: DeletedUserId
+-- |  deletedUser = review (simple coerced) 42
+-- |```
+coerced :: forall s t a b. Coercible s a => Coercible t b => Iso s t a b
+coerced = iso coerce coerce

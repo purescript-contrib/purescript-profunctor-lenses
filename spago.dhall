@@ -22,6 +22,7 @@
   , "profunctor"
   , "psci-support"
   , "record"
+  , "safe-coerce"
   , "transformers"
   , "tuples"
   ]
