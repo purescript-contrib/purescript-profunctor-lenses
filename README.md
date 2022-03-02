@@ -4,7 +4,6 @@
 [![Release](https://img.shields.io/github/release/purescript-contrib/purescript-profunctor-lenses.svg)](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases)
 [![Pursuit](https://pursuit.purescript.org/packages/purescript-profunctor-lenses/badge)](https://pursuit.purescript.org/packages/purescript-profunctor-lenses)
 [![Maintainer: garyb](https://img.shields.io/badge/maintainer-garyb-teal.svg)](https://github.com/garyb)
-[![Maintainer: thomashoneyman](https://img.shields.io/badge/maintainer-thomashoneyman-teal.svg)](https://github.com/thomashoneyman)
 
 Pure profunctor lenses: a mechanism for updating, viewing, and setting values within nested data structures.
 
