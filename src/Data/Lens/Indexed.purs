@@ -37,7 +37,7 @@ reindexed
   -> (Indexed p i a b -> r)
   -> Indexed p j a b
   -> r
-reindexed ij = (_ <<< _Newtype %~ lcmap (first ij))
+reindexed ij = (_ <<< (_Newtype %~ lcmap (first ij)))
 
 -- | Converts a `lens`-like indexed traversal to an `IndexedTraversal`.
 iwander
