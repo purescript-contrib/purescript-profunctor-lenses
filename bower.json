@@ -12,29 +12,30 @@
     "url": "https://github.com/purescript-contrib/purescript-profunctor-lenses.git"
   },
   "dependencies": {
-    "purescript-arrays": "^6.0.0",
-    "purescript-bifunctors": "^5.0.0",
-    "purescript-const": "^5.0.0",
-    "purescript-control": "^5.0.0",
-    "purescript-distributive": "^5.0.0",
-    "purescript-either": "^5.0.0",
-    "purescript-foldable-traversable": "^5.0.0",
-    "purescript-foreign-object": "^3.0.0",
-    "purescript-functors": "^4.0.0",
-    "purescript-identity": "^5.0.0",
-    "purescript-lists": "^6.0.0",
-    "purescript-maybe": "^5.0.0",
-    "purescript-newtype": "^4.0.0",
-    "purescript-ordered-collections": "^2.0.0",
-    "purescript-partial": "^3.0.0",
-    "purescript-prelude": "^5.0.0",
-    "purescript-profunctor": "^5.0.0",
-    "purescript-record": "^3.0.0",
-    "purescript-transformers": "^5.0.0",
-    "purescript-tuples": "^6.0.0"
+    "purescript-arrays": "master",
+    "purescript-bifunctors": "master",
+    "purescript-const": "master",
+    "purescript-control": "master",
+    "purescript-distributive": "master",
+    "purescript-either": "master",
+    "purescript-foldable-traversable": "master",
+    "purescript-foreign-object": "master",
+    "purescript-functors": "master",
+    "purescript-identity": "master",
+    "purescript-lists": "master",
+    "purescript-maybe": "master",
+    "purescript-newtype": "master",
+    "purescript-ordered-collections": "master",
+    "purescript-partial": "master",
+    "purescript-prelude": "master",
+    "purescript-profunctor": "master",
+    "purescript-record": "master",
+    "purescript-transformers": "master",
+    "purescript-tuples": "master"
   },
   "devDependencies": {
-    "purescript-console": "^5.0.0",
-    "purescript-effect": "^3.0.0"
+    "purescript-console": "master",
+    "purescript-effect": "master",
+    "purescript-assert": "master"
   }
 }
