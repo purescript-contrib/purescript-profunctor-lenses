@@ -5,6 +5,8 @@ Notable changes to this project are documented in this file. The format is based
 ## [Unreleased]
 
 Breaking changes:
+- Update project and deps to PureScript v0.15.0 (#141 by @JordanMartinez)
+- Replaced polymorphic proxies with monomorphic `Proxy` (#141 by @JordanMartinez)
 
 New features:
 - Add `coerced` (#140 by @ozkutuk)
