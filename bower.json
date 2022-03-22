@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "purescript-console": "master",
-    "purescript-effect": "master"
+    "purescript-effect": "master",
+    "purescript-assert": "master"
   }
 }
