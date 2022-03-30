@@ -17,9 +17,9 @@ Bugfixes:
 
 Other improvements:
 - Added `purs-tidy` formatter (#138 by @thomashoneyman)
-  - Replace manual tests with automated tests using `assert` (#135 by @neppord)
-  - Improve documentation for `united` (#134 by @neppord)
-  - Add guide on impredicativity explaining difference between `Lens` vs `ALens` (#136 by @i-am-tom and @JordanMartinez)
+- Replace manual tests with automated tests using `assert` (#135 by @neppord)
+- Improve documentation for `united` (#134 by @neppord)
+- Add guide on impredicativity explaining difference between `Lens` vs `ALens` (#136 by @i-am-tom and @JordanMartinez)
 
 ## [v7.0.1](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v7.0.1) - 2021-05-06
 
