@@ -4,18 +4,22 @@ import Prelude
 
 import Control.Monad.State (evalState, get)
 import Data.Either (Either(..))
+import Data.Generic.Rep (class Generic)
 import Data.Lens (Getter', Prism', _1, _2, _Just, _Left, collectOf, lens, lens', lensStore, preview, prism', takeBoth, toArrayOf, traversed, view)
+import Data.Lens.Constructor (_Ctor)
 import Data.Lens.Fold ((^?))
 import Data.Lens.Fold.Partial ((^?!), (^@?!))
 import Data.Lens.Grate (Grate, cloneGrate, grate, zipWithOf)
 import Data.Lens.Index (ix)
 import Data.Lens.Indexed (itraversed, reindexed)
 import Data.Lens.Lens (IndexedLens, cloneIndexedLens, ilens)
+import Data.Lens.Prism (Prism)
 import Data.Lens.Record (prop)
-import Data.Lens.Setter (iover)
+import Data.Lens.Setter (iover, (%~))
 import Data.Lens.Traversal (cloneTraversal)
 import Data.Lens.Zoom (ATraversal', IndexedTraversal', Lens, Lens', Traversal, Traversal', zoom)
 import Data.Maybe (Maybe(..))
+import Data.Show.Generic (genericShow)
 import Data.Tuple (Tuple(..), fst, snd)
 import Effect (Effect)
 import Partial.Unsafe (unsafePartial)
@@ -130,6 +134,27 @@ lensStoreExampleInt = lens' case _ of
   LensStoreA i -> map LensStoreA <$> lensStore identity i
   LensStoreB i -> map LensStoreB <$> lensStore _2 i
 
+-- Test generic prisms
+data AA a = BB a | CC Int | DD | EE Int String Boolean
+
+derive instance Eq a => Eq (AA a)
+derive instance Generic (AA a) _
+
+instance Show a => Show (AA a) where
+  show = genericShow
+
+_BB :: forall a b. Prism (AA a) (AA b) a b
+_BB = _Ctor (Proxy :: _ "BB")
+
+_CC :: forall a. Prism' (AA a) Int
+_CC = _Ctor (Proxy :: _ "CC")
+
+_DD :: forall a. Prism' (AA a) Unit
+_DD = _Ctor (Proxy :: _ "DD")
+
+_EE :: forall a. Prism' (AA a) (Tuple Int (Tuple String Boolean))
+_EE = _Ctor (Proxy :: _ "EE")
+
 main :: Effect Unit
 main = do
   assertEqual' """view bars doc"""
@@ -175,4 +200,12 @@ main = do
   assertEqual' """cloneTraversalTest"""
     { expected: Just 1
     , actual: cloneTraversalTest
+    }
+  assertEqual' """CC 3 ^? _CC"""
+    { expected: Just 3
+    , actual: CC 3 ^? _CC
+    }
+  assertEqual' """_BB %~ (_ == 3) $ BB 2"""
+    { expected: BB false
+    , actual: _BB %~ (_ == 3) $ BB 2
     }

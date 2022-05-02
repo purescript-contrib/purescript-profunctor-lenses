@@ -21,6 +21,7 @@ Breaking changes:
 New features:
 - Add `coerced` (#140 by @ozkutuk)
 - Add `sans` and `both` (#97 by @xgrommx)
+- Generic prisms (#137 by @amesgen)
 
 Bugfixes:
 - Fix broken `reindex` for v0.15 due to [Purescript PR #4033](https://github.com/purescript/purescript/pull/4033)
