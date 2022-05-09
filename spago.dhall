@@ -3,7 +3,6 @@
   [ "arrays"
   , "assert"
   , "bifunctors"
-  , "console"
   , "const"
   , "control"
   , "distributive"

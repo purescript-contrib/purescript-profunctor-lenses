@@ -19,6 +19,7 @@
 
 module Data.Lens.Traversal
   ( traversed
+  , filterMapped
   , element
   , traverseOf
   , sequenceOf
@@ -35,7 +36,10 @@ import Prelude
 
 import Control.Alternative (class Alternative)
 import Control.Plus (empty)
+import Data.Maybe (Maybe)
 import Data.Bitraversable (class Bitraversable, bitraverse)
+import Data.Lens.Lens.Maybe (lucky)
+import Data.Lens.Prism.Maybe (_Just)
 import Data.Lens.Indexed (iwander, positions, unIndex)
 import Data.Lens.Internal.Bazaar (Bazaar(..), runBazaar)
 import Data.Lens.Types (class Wander, ATraversal, Indexed(..), IndexedOptic, IndexedTraversal, Optic, Traversal, wander)
@@ -54,6 +58,10 @@ import Data.Tuple (Tuple(..), uncurry)
 -- | ```
 traversed :: forall t a b. Traversable t => Traversal (t a) (t b) a b
 traversed = wander traverse
+
+-- | Filter maps on a predicate.
+filterMapped :: forall t a . Traversable t => (a -> Maybe a) -> Traversal (t a) (t a) a a
+filterMapped f = traversed <<< lucky f <<< _Just
 
 -- | Turn a pure profunctor `Traversal` into a `lens`-like `Traversal`.
 traverseOf :: forall f s t a b. Optic (Star f) s t a b -> (a -> f b) -> s -> f t

@@ -4,8 +4,10 @@ import Prelude
 
 import Control.Monad.State (evalState, get)
 import Data.Either (Either(..))
-import Data.Lens (Getter', Prism', _1, _2, _Just, _Left, collectOf, lens, lens', lensStore, preview, prism', takeBoth, toArrayOf, traversed, view)
+import Data.Lens (Getter', Prism', _1, _2, _Just, _Left, collectOf, lens, lens', lensStore, preview, prism', takeBoth, toArrayOf, lucky, traversed, filterMapped, view, over)
 import Data.Lens.Fold ((^?))
+import Data.Tuple.Nested ((/\))
+import Data.Map (fromFoldable, lookup)
 import Data.Lens.Fold.Partial ((^?!), (^@?!))
 import Data.Lens.Grate (Grate, cloneGrate, grate, zipWithOf)
 import Data.Lens.Index (ix)
@@ -175,4 +177,16 @@ main = do
   assertEqual' """cloneTraversalTest"""
     { expected: Just 1
     , actual: cloneTraversalTest
+    }
+  assertEqual' """Feeling lucky"""
+    { expected: 3
+    , actual: over (lucky Just <<< _Just) (add 2) 1
+    }
+  assertEqual' """Not so lucky"""
+    { expected: 1
+    , actual: over (lucky (const Nothing) <<< _Just) (add 2) 1
+    }
+  assertEqual' """Traversal with predicated"""
+    { expected: [44,2,46,4]
+    , actual: let myMap = fromFoldable [1 /\ 2, 3 /\ 4] in over (filterMapped (flip lookup myMap)) (add 42) [1,2,3,4]
     }

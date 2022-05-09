@@ -2,6 +2,7 @@
 module Data.Lens.Common
   ( module Data.Lens.Lens.Tuple
   , module Data.Lens.Lens.Unit
+  , module Data.Lens.Lens.Maybe
   , module Data.Lens.Prism.Either
   , module Data.Lens.Prism.Maybe
   , simple
@@ -9,6 +10,7 @@ module Data.Lens.Common
 
 import Data.Lens.Lens.Tuple (_1, _2, first, second)
 import Data.Lens.Lens.Unit (united)
+import Data.Lens.Lens.Maybe (lucky)
 import Data.Lens.Prism.Either (_Left, _Right, left, right)
 import Data.Lens.Prism.Maybe (_Just, _Nothing)
 import Data.Lens.Types (Optic')
@@ -39,4 +41,3 @@ import Data.Lens.Types (Optic')
 -- | We get the expected result `42`.
 simple :: forall p s a. Optic' p s a -> Optic' p s a
 simple x = x
-
