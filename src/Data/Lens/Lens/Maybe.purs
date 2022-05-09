@@ -1,7 +1,5 @@
 module Data.Lens.Lens.Maybe where
 
-import Prelude
-
 import Data.Lens.Lens (Lens', lens)
 import Data.Maybe (Maybe, fromMaybe)
 
