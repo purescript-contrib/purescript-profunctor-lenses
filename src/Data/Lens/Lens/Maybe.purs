@@ -10,7 +10,7 @@ import Data.Maybe (Maybe, fromMaybe)
 -- | 1
 -- | > over (lucky Just <<< _Just) (add 2) 1
 -- | 3
--- | > over (lucky Nothing <<< _Just) (add 2) 1
+-- | > over (lucky (const Nothing) <<< _Just) (add 2) 1
 -- | 1
 -- | ```
 lucky :: forall a. (a -> Maybe a) -> Lens' a (Maybe a)
