@@ -86,15 +86,23 @@ type Lens s t a b = forall p. Strong p => Optic p s t a b
 
 type Lens' s a = Lens s s a a
 
--- | A prism.
+-- | Prisms are used for sum types like `Maybe` and `Either`. 
+-- | The specialized type `Prism' s a` means that the type `s` might contain a value of type `a`.
 type Prism s t a b = forall p. Choice p => Optic p s t a b
 type Prism' s a = Prism s s a a
 
--- | A generalized isomorphism.
+-- | A generalized isomorphism. 
+-- | Isos are the most constrained optic, simply enabling you to transform back and forth between two types without losing information. 
+-- | The specialized type `Iso' s a` means that `s` and `a` are isomorphic – the two types represent the same information. 
+-- | They’re especially useful when you need to unwrap a newtype or transform an array to a list or otherwise convert between types. 
+-- | This optic is also useful for backward compatibility without boilerplate.
 type Iso s t a b = forall p. Profunctor p => Optic p s t a b
 type Iso' s a = Iso s s a a
 
--- | A traversal.
+-- | The specialized type `Traversal s a` means that the type `s` contains zero, one, or many values of type `a`.
+-- | They're especially useful when working with collections like arrays, maps, and any other member of the `Traversable` type class. 
+-- | They are also a more general form of lenses and prisms. 
+-- | Traversals which focus on at most one element (like lenses, prisms, and their composition) are called affine traversals.
 type Traversal s t a b = forall p. Wander p => Optic p s t a b
 type Traversal' s a = Traversal s s a a
 
@@ -153,7 +161,6 @@ type Grate' s a = Grate s s a a
 type AGrate s t a b = Optic (Grating a b) s t a b
 type AGrate' s a = AGrate s s a a
 
--- | A getter.
 type Getter :: Type -> Type -> Type -> Type -> Type
 type Getter s t a b = forall r. Fold r s t a b
 
@@ -164,44 +171,36 @@ type AGetter s t a b = Fold a s t a b
 
 type AGetter' s a = AGetter s s a a
 
--- | A setter.
 type Setter s t a b = Optic Function s t a b
 type Setter' s a = Setter s s a a
 
--- | A review.
 type Review :: Type -> Type -> Type -> Type -> Type
 type Review s t a b = Optic Tagged s t a b
 
 type Review' s a = Review s s a a
 
--- | A fold.
 type Fold :: Type -> Type -> Type -> Type -> Type -> Type
 type Fold r s t a b = Optic (Forget r) s t a b
 
 type Fold' r s a = Fold r s s a a
 
--- | An indexed optic.
 type IndexedOptic :: (Type -> Type -> Type) -> Type -> Type -> Type -> Type -> Type -> Type
 type IndexedOptic p i s t a b = Indexed p i a b -> p s t
 
 type IndexedOptic' p i s a = IndexedOptic p i s s a a
 
--- | An indexed traversal.
 type IndexedTraversal i s t a b = forall p. Wander p => IndexedOptic p i s t a b
 type IndexedTraversal' i s a = IndexedTraversal i s s a a
 
--- | An indexed fold.
 type IndexedFold :: Type -> Type -> Type -> Type -> Type -> Type -> Type
 type IndexedFold r i s t a b = IndexedOptic (Forget r) i s t a b
 
 type IndexedFold' r i s a = IndexedFold r i s s a a
 
--- | An indexed getter.
 type IndexedGetter :: Type -> Type -> Type -> Type -> Type -> Type
 type IndexedGetter i s t a b = IndexedFold a i s t a b
 
 type IndexedGetter' i s a = IndexedGetter i s s a a
 
--- | An indexed setter.
 type IndexedSetter i s t a b = IndexedOptic Function i s t a b
 type IndexedSetter' i s a = IndexedSetter i s s a a
