@@ -86,7 +86,6 @@ type Lens s t a b = forall p. Strong p => Optic p s t a b
 
 type Lens' s a = Lens s s a a
 
--- | A prism.
 type Prism s t a b = forall p. Choice p => Optic p s t a b
 type Prism' s a = Prism s s a a
 
@@ -94,7 +93,6 @@ type Prism' s a = Prism s s a a
 type Iso s t a b = forall p. Profunctor p => Optic p s t a b
 type Iso' s a = Iso s s a a
 
--- | A traversal.
 type Traversal s t a b = forall p. Wander p => Optic p s t a b
 type Traversal' s a = Traversal s s a a
 
@@ -120,7 +118,6 @@ type AnIso' s a = AnIso s s a a
 type ALens s t a b = Optic (Shop a b) s t a b
 type ALens' s a = ALens s s a a
 
--- | An indexed lens.
 type IndexedLens i s t a b = forall p. Strong p => IndexedOptic p i s t a b
 type IndexedLens' i s a = IndexedLens i s s a a
 
@@ -153,7 +150,6 @@ type Grate' s a = Grate s s a a
 type AGrate s t a b = Optic (Grating a b) s t a b
 type AGrate' s a = AGrate s s a a
 
--- | A getter.
 type Getter :: Type -> Type -> Type -> Type -> Type
 type Getter s t a b = forall r. Fold r s t a b
 
@@ -164,44 +160,36 @@ type AGetter s t a b = Fold a s t a b
 
 type AGetter' s a = AGetter s s a a
 
--- | A setter.
 type Setter s t a b = Optic Function s t a b
 type Setter' s a = Setter s s a a
 
--- | A review.
 type Review :: Type -> Type -> Type -> Type -> Type
 type Review s t a b = Optic Tagged s t a b
 
 type Review' s a = Review s s a a
 
--- | A fold.
 type Fold :: Type -> Type -> Type -> Type -> Type -> Type
 type Fold r s t a b = Optic (Forget r) s t a b
 
 type Fold' r s a = Fold r s s a a
 
--- | An indexed optic.
 type IndexedOptic :: (Type -> Type -> Type) -> Type -> Type -> Type -> Type -> Type -> Type
 type IndexedOptic p i s t a b = Indexed p i a b -> p s t
 
 type IndexedOptic' p i s a = IndexedOptic p i s s a a
 
--- | An indexed traversal.
 type IndexedTraversal i s t a b = forall p. Wander p => IndexedOptic p i s t a b
 type IndexedTraversal' i s a = IndexedTraversal i s s a a
 
--- | An indexed fold.
 type IndexedFold :: Type -> Type -> Type -> Type -> Type -> Type -> Type
 type IndexedFold r i s t a b = IndexedOptic (Forget r) i s t a b
 
 type IndexedFold' r i s a = IndexedFold r i s s a a
 
--- | An indexed getter.
 type IndexedGetter :: Type -> Type -> Type -> Type -> Type -> Type
 type IndexedGetter i s t a b = IndexedFold a i s t a b
 
 type IndexedGetter' i s a = IndexedGetter i s s a a
 
--- | An indexed setter.
 type IndexedSetter i s t a b = IndexedOptic Function i s t a b
 type IndexedSetter' i s a = IndexedSetter i s s a a
