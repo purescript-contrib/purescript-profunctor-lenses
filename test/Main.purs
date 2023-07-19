@@ -12,6 +12,7 @@ import Data.Lens.Index (ix)
 import Data.Lens.Indexed (itraversed, reindexed)
 import Data.Lens.Lens (IndexedLens, cloneIndexedLens, ilens)
 import Data.Lens.Record (prop)
+import Data.Lens.Record.VTA as VTA
 import Data.Lens.Setter (iover)
 import Data.Lens.Traversal (cloneTraversal)
 import Data.Lens.Zoom (ATraversal', IndexedTraversal', Lens, Lens', Traversal, Traversal', zoom)
@@ -27,6 +28,12 @@ foo = prop (Proxy :: Proxy "foo")
 
 bar :: forall a b r. Lens { bar :: a | r } { bar :: b | r } a b
 bar = prop (Proxy :: Proxy "bar")
+
+foo' :: forall a b r. Lens { foo :: a | r } { foo :: b | r } a b
+foo' = VTA.prop @"foo"
+
+bar' :: forall a b r. Lens { bar :: a | r } { bar :: b | r } a b
+bar' = VTA.prop @"bar"
 
 barAndFoo :: forall a b r. Getter' { bar :: a, foo :: b | r } (Tuple a b)
 barAndFoo = takeBoth bar foo
