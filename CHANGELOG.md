@@ -7,6 +7,7 @@ Notable changes to this project are documented in this file. The format is based
 Breaking changes:
 
 New features:
+- Added a variant of `prop` in `Data.Lens.Record.VTA` that supplies the `Symbol` via VTA (visible type application) instead of via `Proxy` (#145 by @amesgen)
 
 Bugfixes:
 
