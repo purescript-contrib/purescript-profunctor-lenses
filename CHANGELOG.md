@@ -8,6 +8,7 @@ Breaking changes:
 
 New features:
 - Add `ifolded` and `imapped` (#146 by @twhitehead)
+- Add `at`/`index` instances for `purescript-unordered-collections` (HashSet & HashMap)
 
 Bugfixes:
 

@@ -6,13 +6,16 @@ module Data.Lens.At
 
 import Prelude
 
+import Data.Hashable (class Hashable)
 import Data.Identity (Identity(..))
 import Data.Lens (Lens', lens, set)
 import Data.Lens.Index (class Index)
 import Data.Map as M
+import Data.HashMap as HM
 import Data.Maybe (Maybe(..), maybe, maybe')
 import Data.Newtype (unwrap)
 import Data.Set as S
+import Data.HashSet as HS
 import Foreign.Object as FO
 
 -- | `At` is a type class whose instances let you add
@@ -50,10 +53,24 @@ instance atSet :: Ord v => At (S.Set v) v Unit where
     update Nothing = S.delete x
     update (Just _) = S.insert x
 
+instance atHashSet :: Hashable v => At (HS.HashSet v) v Unit where
+  at x = lens get (flip update)
+    where
+    get xs =
+      if HS.member x xs then Just unit
+      else Nothing
+    update Nothing = HS.delete x
+    update (Just _) = HS.insert x
+
 instance atMap :: Ord k => At (M.Map k v) k v where
   at k =
     lens (M.lookup k) \m ->
       maybe' (\_ -> M.delete k m) \v -> M.insert k v m
+
+instance atHashMap :: Hashable k => At (HM.HashMap k v) k v where
+  at k =
+    lens (HM.lookup k) \m ->
+      maybe' (\_ -> HM.delete k m) \v -> HM.insert k v m
 
 instance atForeignObject :: At (FO.Object v) String v where
   at k =

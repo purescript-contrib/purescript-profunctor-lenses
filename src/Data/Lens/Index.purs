@@ -5,6 +5,7 @@ module Data.Lens.Index
 
 import Prelude
 
+import Data.Hashable (class Hashable)
 import Data.Array as A
 import Data.Array.NonEmpty as NEA
 import Data.Either (Either(..))
@@ -14,8 +15,10 @@ import Data.Lens.AffineTraversal (AffineTraversal', affineTraversal)
 import Data.Lens.Iso.Newtype (_Newtype)
 import Data.List as L
 import Data.Map as M
+import Data.HashMap as HM
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Set as S
+import Data.HashSet as HS
 import Foreign.Object as FO
 
 -- | `Index` is a type class whose instances are optics used when:
@@ -95,6 +98,15 @@ instance indexSet :: Ord a => Index (S.Set a) a Unit where
     pre :: S.Set a -> Either (S.Set a) Unit
     pre xs = if S.member x xs then Right unit else Left xs
 
+instance indexHashSet :: Hashable a => Index (HS.HashSet a) a Unit where
+  ix x = affineTraversal set pre
+    where
+    set :: HS.HashSet a -> Unit -> HS.HashSet a
+    set xs _ = xs
+
+    pre :: HS.HashSet a -> Either (HS.HashSet a) Unit
+    pre xs = if HS.member x xs then Right unit else Left xs
+
 instance indexMap :: Ord k => Index (M.Map k v) k v where
   ix k = affineTraversal set pre
     where
@@ -103,6 +115,15 @@ instance indexMap :: Ord k => Index (M.Map k v) k v where
 
     pre :: M.Map k v -> Either (M.Map k v) v
     pre s = maybe (Left s) Right $ M.lookup k s
+
+instance indexHashMap :: Hashable k => Index (HM.HashMap k v) k v where
+  ix k = affineTraversal set pre
+    where
+    set :: HM.HashMap k v -> v -> HM.HashMap k v
+    set s b = HM.update (\_ -> Just b) k s
+
+    pre :: HM.HashMap k v -> Either (HM.HashMap k v) v
+    pre s = maybe (Left s) Right $ HM.lookup k s
 
 instance indexForeignObject :: Index (FO.Object v) String v where
   ix k = affineTraversal set pre
