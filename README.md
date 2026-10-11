@@ -38,12 +38,6 @@ spago install profunctor-lenses
 (Tuple (Tuple (Tuple "HI!" 3) 2) 1)
 ```
 
-You can try out the [examples](./examples) in the REPL by running:
-
-```
-spago -x examples.dhall repl
-```
-
 ## Documentation
 
 `profunctor-lenses` documentation is stored in a few places:
