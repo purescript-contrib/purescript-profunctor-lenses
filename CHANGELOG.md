@@ -7,11 +7,20 @@ Notable changes to this project are documented in this file. The format is based
 Breaking changes:
 
 New features:
-- Add `ifolded` and `imapped` (#146 by @twhitehead)
 
 Bugfixes:
 
 Other improvements:
+
+## [v8.1.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v8.1.0) - 2026-10-11
+
+New features:
+- Add `ifolded` and `imapped` (#147 by @twhitehead)
+
+Other improvements:
+- Improve optic documentation (#144 by @i-am-the-slime)
+- Migrate to registry-backed Spago 1.0, preserving published dependency ranges, and update repository tooling and CI (#150 by @thomashoneyman)
+- Remove the obsolete examples configuration and its README command. The examples already failed to build because `generics-rep` was absent from the package set; their source is unchanged and they are not made runnable by this release.
 
 ## [v8.0.0](https://github.com/purescript-contrib/purescript-profunctor-lenses/releases/tag/v8.0.0) - 2022-04-27
 
